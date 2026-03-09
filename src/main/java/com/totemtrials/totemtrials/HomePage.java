@@ -33,7 +33,7 @@ public class HomePage extends Application {
                     System.err.println(resource);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Une erreur est survenue au niveau du chargement du fichier");
             }
             return;
         }
