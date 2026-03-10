@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 public class HomePage extends Application {
 
     private Stage stage;
-    private Scene previousScene;
     private MediaPlayer mediaPlayer;
     private Image image;
 
@@ -86,7 +85,6 @@ public class HomePage extends Application {
         //creation de l'endroit par
         StackPane root = new StackPane(imageView);
         Scene scene = new Scene(root, 600, 500);
-        this.previousScene = scene;
 
         //creation d'une vbox pour les boutons - argument : espacement entre le boutons
         VBox fenetreBouton = new VBox(10);
