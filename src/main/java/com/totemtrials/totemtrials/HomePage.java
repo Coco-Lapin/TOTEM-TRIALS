@@ -14,17 +14,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import static javafx.application.Platform.exit;
 
 public class HomePage extends Application {
 
     private Stage stage;
     private Scene previousScene;
     private MediaPlayer mediaPlayer;
+    private Image image;
 
     @Override
     public void start(Stage stage) {
@@ -50,6 +49,7 @@ public class HomePage extends Application {
             return;
         }
 
+        // ------------------- SOUND -------------------
         try {
             String musicFile = getClass().getResource("sounds/Agrual.mp3").toURI().toString();
             Media sound = new Media(musicFile);
@@ -60,7 +60,7 @@ public class HomePage extends Application {
         }
 
         //creation de l'object image
-        Image image = new Image(is);
+        image = new Image(is);
         ImageView imageView = new ImageView(image);
 
         //definition de la position + taille du l'image
@@ -89,14 +89,14 @@ public class HomePage extends Application {
         this.previousScene = scene;
 
         //creation d'une vbox pour les boutons - argument : espacement entre le boutons
-        VBox fenetre = new VBox(10);
+        VBox fenetreBouton = new VBox(10);
         //ajout des boutons dans la vbox
-        fenetre.getChildren().addAll(playbutton, optionbutton, quitbutton);
-        fenetre.setAlignment(Pos.CENTER); // Centre les enfants dans le VBox
-        fenetre.setFillWidth(false);      // Empêche les boutons de s'étirer sur toute la largeur
+        fenetreBouton.getChildren().addAll(playbutton, optionbutton, quitbutton);
+        fenetreBouton.setAlignment(Pos.CENTER); // Centre les enfants dans le VBox
+        fenetreBouton.setFillWidth(false);      // Empêche les boutons de s'étirer sur toute la largeur
 
         //ajout de la vbox dans stackpane
-        root.getChildren().add(fenetre);
+        root.getChildren().add(fenetreBouton);
         //creation de la scene
         stage.setScene(scene);
 
@@ -109,13 +109,48 @@ public class HomePage extends Application {
         //setOnAction - permet de faire l'action quand le bouton est cliqué
         //e est l'event
         //stage.setScene(scene) - remplace la scene actuelle par scene
-        backbutton.setOnAction(e -> stage.setScene(scene));
+        backbutton.setOnAction(e -> {
+            stage.setScene(scene);
+            stage.setFullScreen(true); //ne fonctionne pas le full screen en retour
+        });
+
+        Scene optionsScene = option(scene);
+        optionbutton.setOnAction(e -> {
+            stage.setScene(optionsScene);
+            stage.setTitle("OPTIONS");
+            stage.setFullScreen(true);
+        });
 
         // ------------------- STAGE -------------------
         stage.setTitle("Menu principal - demarrage du jeu");
         //permet de mettre la box en full screen
         stage.setFullScreen(true);
         stage.show();
+    }
+
+    public Scene option(Scene menuScene) {
+
+        // nouvelle imageview avec la meme image
+        ImageView imageViewOption = new ImageView(image);
+        imageViewOption.fitWidthProperty().bind(stage.widthProperty());
+        imageViewOption.fitHeightProperty().bind(stage.heightProperty());
+        imageViewOption.setPreserveRatio(false);
+        //creation du bouton back + future slider
+        Button backButton = new Button("BACK");
+        //creation du vbox
+        VBox fenetreOption = new VBox(10);
+        fenetreOption.getChildren().add(backButton);
+        fenetreOption.setAlignment(Pos.CENTER);
+        fenetreOption.setFillWidth(false);
+        //ajout de l'image et de la vbox dans le stackpane
+        StackPane rootOption = new StackPane(imageViewOption);
+        rootOption.getChildren().add(fenetreOption);
+        //creation de la scene options
+        Scene optionsScene = new Scene(rootOption, 600, 500);
+        //donne l'action au bouton back
+        backButton.setOnAction(e -> stage.setScene(menuScene));
+        stage.setFullScreen(true);
+        return optionsScene;
     }
 
     public void quit(ActionEvent e) {
