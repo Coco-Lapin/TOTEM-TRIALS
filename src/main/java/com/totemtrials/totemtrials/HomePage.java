@@ -7,12 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.*;
 import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -135,21 +135,44 @@ public class HomePage extends Application {
         imageViewOption.fitWidthProperty().bind(stage.widthProperty());
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
         imageViewOption.setPreserveRatio(false);
+
         //creation du bouton back + future slider
         Button backButton = new Button("BACK");
+
+        // Create a slider with min=0, max=100, and value=25
+        Slider volumeSlider = new Slider();
+        //donne les différentes valeur au slider que l'on peut passer en argument (min,max,default value)
+        volumeSlider.setMin(0);
+        volumeSlider.setMax(100);
+        volumeSlider.setValue(25);
+        volumeSlider.prefWidthProperty().bind(stage.widthProperty().multiply(0.2));
+        volumeSlider.setShowTickLabels(true); //affiche les valeurs sur le slider
+        //slider.setShowTickMarks(true);  //affiche les traits pour ses valeurs
+        //slider.setMajorTickUnit(25); //affiche l'espacement visuel entre chaque trait
+        volumeSlider.setBlockIncrement(1); //change la valeur d'increment du slider
+
         //creation du vbox
         VBox fenetreOption = new VBox(10);
-        fenetreOption.getChildren().add(backButton);
+        fenetreOption.getChildren().addAll(volumeSlider, backButton);
         fenetreOption.setAlignment(Pos.CENTER);
         fenetreOption.setFillWidth(false);
+
         //ajout de l'image et de la vbox dans le stackpane
         StackPane rootOption = new StackPane(imageViewOption);
         rootOption.getChildren().add(fenetreOption);
+
         //creation de la scene options
         Scene optionsScene = new Scene(rootOption, 600, 500);
+
+        // Lier le slider au volume du MediaPlayer
+        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100));
+
         //donne l'action au bouton back
-        backButton.setOnAction(e -> stage.setScene(menuScene));
-        stage.setFullScreen(true);
+        backButton.setOnAction(e -> {
+            stage.setScene(menuScene);
+            Platform.runLater(() -> stage.setFullScreen(true));
+        });
+
         return optionsScene;
     }
 
