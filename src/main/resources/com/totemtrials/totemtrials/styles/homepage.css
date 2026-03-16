@@ -1,0 +1,60 @@
+/* ---- BOUTON MENU ---- */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-opacity: 0.8;
+}
+
+/* ---- SLIDER ---- */
+.slider .track {
+    -fx-background-color: #3d2008;
+    -fx-background-radius: 5;
+    -fx-pref-height: 10px;
+}
+
+.slider .thumb {
+    -fx-background-color: #c8860a;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4, 0, 0, 1);
+}
+
+.slider .thumb:hover {
+    -fx-background-color: #f0a820;
+}
+
+.slider .colored-track {
+    -fx-background-color: #c8860a;
+    -fx-background-radius: 5;
+}
+
+.slider .tick-label {
+    -fx-text-fill: #f0d080;
+    -fx-font-size: 11px;
+}
+
+/* ---- BOUTON BACK ---- */
+.back-button {
+    -fx-background-color: #3d2008;
+    -fx-text-fill: #f0d080;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: #c8860a;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8 24 8 24;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #5a3010;
+    -fx-border-color: #f0a820;
+}
