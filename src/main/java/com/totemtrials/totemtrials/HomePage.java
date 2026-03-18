@@ -12,6 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.*;
@@ -210,7 +211,20 @@ public class HomePage extends Application {
     }
 
     public Scene choixJetons(Scene menuScene){
+        //----------------- Creation des images jeton ------------------
+        ImageView jetonTigre = createCroppedImageView("Images/tokkens/jetonTigre.png",0.10);
+        ImageView jetonElephant = createCroppedImageView("Images/tokkens/jetonElephant.png",0.10);
+        ImageView jetonSerpent = createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10);
+        ImageView jetonAigle = createCroppedImageView("Images/tokkens/jetonAigle.png",0.10);
 
+        //----------------- Animation quand le curseur passe dessus ------------
+        for (ImageView iv : new ImageView[]{jetonTigre, jetonElephant, jetonSerpent,jetonAigle}) {
+            iv.setCursor(Cursor.HAND);
+            iv.setOnMouseEntered(_ -> iv.setOpacity(0.8));
+            iv.setOnMouseExited(_  -> iv.setOpacity(1.0));
+        }
+
+        //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
         imageViewOption.fitWidthProperty().bind(stage.widthProperty());
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
@@ -219,8 +233,13 @@ public class HomePage extends Application {
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
+        //----------------- Layout -------------------------------------
+        HBox alignementJeton = new HBox(5);
+        alignementJeton.getChildren().addAll(jetonTigre,jetonElephant,jetonSerpent,jetonAigle);
+        alignementJeton.setAlignment(Pos.TOP_CENTER);
+
         VBox fenetreChoix = new VBox(10);
-        fenetreChoix.getChildren().addAll(backButton);
+        fenetreChoix.getChildren().addAll(alignementJeton,backButton);
         fenetreChoix.setAlignment(Pos.CENTER);
         fenetreChoix.setFillWidth(false);
 
