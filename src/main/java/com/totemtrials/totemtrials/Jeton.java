@@ -20,12 +20,12 @@ public class Jeton {
         return nom;
     }
 
-    public Node getImageBase() {
+    public ImageView getImageBase() {
         return imageBase;
     }
 
-    public Image getImageAnimation() {
-        return imageAnimation.getImage();
+    public ImageView getImageAnimation() {
+        return imageAnimation;
     }
 
 }

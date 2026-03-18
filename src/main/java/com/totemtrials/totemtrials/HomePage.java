@@ -246,6 +246,31 @@ public class HomePage extends Application {
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
+        //----------------- Animation des jetons -----------------------
+        for (Jeton j : mesJetons) {
+            // On récupère l'ImageView qui contient le PNG (fixe)
+            ImageView vueAffichee = j.getImageBase();
+
+            // On stocke l'image PNG et son Viewport une fois pour toutes
+            Image imageFixe = j.getImageBase().getImage();
+            Rectangle2D viewportFixe = j.getImageBase().getViewport();
+
+            // On stocke l'image GIF
+            Image imageAnimée = j.getImageAnimation().getImage();
+
+            vueAffichee.setOnMouseEntered(_ -> {
+                // PASSAGE AU GIF
+                vueAffichee.setImage(imageAnimée);
+                vueAffichee.setViewport(null); // On enlève le crop pour voir tout le GIF
+            });
+
+            vueAffichee.setOnMouseExited(_ -> {
+                // RETOUR AU PNG (L'animation s'arrête visuellement ici)
+                vueAffichee.setImage(imageFixe);
+                vueAffichee.setViewport(viewportFixe); // On remet le crop du PNG
+            });
+        }
+
         //----------------- Layout -------------------------------------
         HBox alignementJeton = new HBox(10);
         //--------Ajout des images dans la HBox ------------------------
