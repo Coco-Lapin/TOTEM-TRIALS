@@ -16,6 +16,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.*;
 import javafx.stage.Stage;
+
+import javax.lang.model.type.NullType;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -95,7 +97,7 @@ public class HomePage extends Application {
         // ------------------- ACTIONS -------------------
         quitbutton.setOnMouseClicked(_ -> Platform.exit());
 
-        Scene choixPersoScene = option(scene);
+        Scene choixPersoScene = choixJetons(scene);
         playbutton.setOnMouseClicked(_->{
             stage.setScene(choixPersoScene);
             stage.setTitle("Choix des jetons");
@@ -205,5 +207,39 @@ public class HomePage extends Application {
         });
 
         return optionsScene;
+    }
+
+    public Scene choixJetons(Scene menuScene){
+
+        ImageView imageViewOption = new ImageView(image);
+        imageViewOption.fitWidthProperty().bind(stage.widthProperty());
+        imageViewOption.fitHeightProperty().bind(stage.heightProperty());
+        imageViewOption.setPreserveRatio(false);
+
+        Button backButton = new Button("BACK");
+        backButton.getStyleClass().add("back-button");
+
+        VBox fenetreChoix = new VBox(10);
+        fenetreChoix.getChildren().addAll(backButton);
+        fenetreChoix.setAlignment(Pos.CENTER);
+        fenetreChoix.setFillWidth(false);
+
+        StackPane rootChoix = new StackPane(imageViewOption);
+        rootChoix.getChildren().add(fenetreChoix);
+
+        Scene choixJetonScene = new Scene(rootChoix,600,500);
+
+        var cssUrl = getClass().getResource("styles/homepage.css");
+        if (cssUrl != null) choixJetonScene.getStylesheets().add(cssUrl.toExternalForm());
+
+        backButton.setOnAction(_ -> {
+            stage.setScene(menuScene);
+            Platform.runLater(() -> {
+                stage.setFullScreenExitHint("");
+                stage.setFullScreen(true);
+            });
+        });
+
+        return choixJetonScene;
     }
 }
