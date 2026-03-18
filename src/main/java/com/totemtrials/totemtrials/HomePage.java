@@ -29,6 +29,8 @@ public class HomePage extends Application {
     private MediaPlayer mediaPlayer;
     private Image image;
 
+    //-------- Création des images ---------
+
     @Override
     public void start(Stage stage) {
         this.stage = stage;
