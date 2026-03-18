@@ -28,14 +28,26 @@ public class HomePage extends Application {
     private Stage stage;
     private MediaPlayer mediaPlayer;
     private Image image;
-
-    //-------- Création des images ---------
+    private Jeton tigre;
+    private Jeton aigle;
+    private Jeton serpent;
+    private Jeton elephant;
+    private Jeton[] mesJetons;
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
 
+        //-------- Création des jetons ---------
+        tigre = new Jeton("tigre",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
+        aigle = new Jeton("aigle",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
+        serpent = new Jeton("serpent",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
+        elephant = new Jeton("elephant",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
+        //---------Mettre les jetons dans une liste--------
+        mesJetons = new Jeton[]{tigre, aigle, serpent, elephant};
+
         // ------------------- BACKGROUND -------------------
+
         String path = "Images/backgroundMenu.png";
         InputStream is = getClass().getResourceAsStream(path);
 
@@ -134,7 +146,18 @@ public class HomePage extends Application {
         }
 
         Image img = new Image(is);
+
+        // --- PROTECTION POUR LES GIFS ---
+        // Si c'est un GIF ou si le PixelReader est indisponible, on saute le crop
         PixelReader pr = img.getPixelReader();
+        if (imagePath.endsWith(".gif") || pr == null) {
+            iv.setImage(img);
+            // On lie quand même la largeur pour que le GIF ait la bonne taille
+            iv.fitWidthProperty().bind(stage.widthProperty().multiply(widthRatio));
+            iv.setPreserveRatio(true);
+            return iv;
+        }
+
         int w = (int) img.getWidth();
         int h = (int) img.getHeight();
         int top = 0;
@@ -213,18 +236,6 @@ public class HomePage extends Application {
     }
 
     public Scene choixJetons(Scene menuScene){
-        //----------------- Creation des images jeton ------------------
-        ImageView jetonTigre = createCroppedImageView("Images/tokkens/jetonTigre.png",0.10);
-        ImageView jetonElephant = createCroppedImageView("Images/tokkens/jetonElephant.png",0.10);
-        ImageView jetonSerpent = createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10);
-        ImageView jetonAigle = createCroppedImageView("Images/tokkens/jetonAigle.png",0.10);
-
-        //----------------- Animation quand le curseur passe dessus ------------
-        for (ImageView iv : new ImageView[]{jetonTigre, jetonElephant, jetonSerpent,jetonAigle}) {
-            iv.setCursor(Cursor.HAND);
-            iv.setOnMouseEntered(_ -> iv.setOpacity(0.8));
-            iv.setOnMouseExited(_  -> iv.setOpacity(1.0));
-        }
 
         //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
@@ -237,7 +248,11 @@ public class HomePage extends Application {
 
         //----------------- Layout -------------------------------------
         HBox alignementJeton = new HBox(10);
-        alignementJeton.getChildren().addAll(jetonTigre,jetonElephant,jetonSerpent,jetonAigle);
+        //--------Ajout des images dans la HBox ------------------------
+        for(Jeton j : mesJetons){
+            alignementJeton.getChildren().add(j.getImageBase());
+        }
+
         alignementJeton.setAlignment(Pos.TOP_CENTER);
 
         VBox fenetreChoix = new VBox(10);
