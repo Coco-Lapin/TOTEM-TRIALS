@@ -95,6 +95,14 @@ public class HomePage extends Application {
         // ------------------- ACTIONS -------------------
         quitbutton.setOnMouseClicked(_ -> Platform.exit());
 
+        Scene choixPersoScene = option(scene);
+        playbutton.setOnMouseClicked(_->{
+            stage.setScene(choixPersoScene);
+            stage.setTitle("Choix des jetons");
+            stage.setFullScreenExitHint("");
+            stage.setFullScreen(true);
+        });
+
         Scene optionsScene = option(scene);
         optionbutton.setOnMouseClicked(_ -> {
             stage.setScene(optionsScene);
