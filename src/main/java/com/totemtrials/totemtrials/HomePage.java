@@ -234,7 +234,7 @@ public class HomePage extends Application {
         backButton.getStyleClass().add("back-button");
 
         //----------------- Layout -------------------------------------
-        HBox alignementJeton = new HBox(5);
+        HBox alignementJeton = new HBox(10);
         alignementJeton.getChildren().addAll(jetonTigre,jetonElephant,jetonSerpent,jetonAigle);
         alignementJeton.setAlignment(Pos.TOP_CENTER);
 
