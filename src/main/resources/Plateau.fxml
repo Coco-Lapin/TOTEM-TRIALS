@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.totemtrials.totemtrials.plateau.BoardGameController">
+
+    <children>
+        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <right>
+                <VBox fx:id="PlateauInfoLeft" prefWidth="200.0" style="-fx-background-color: #7d6115;">
+               <children>
+                  <Pane prefHeight="620.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 3;">
+                     <children>
+                        <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#919191" height="172.0" layoutX="13.0" layoutY="120.0" stroke="BLACK" strokeType="INSIDE" width="175.0" />
+                        <Label layoutX="6.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Your Items : " textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font name="Impact" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label graphicTextGap="10.0" layoutX="24.0" layoutY="130.0" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3; -fx-background-radius: 4; -fx-padding: 2;" text="Abilitie :" textAlignment="JUSTIFY" textFill="#fffefe">
+                           <font>
+                              <Font name="Impact" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="28.0" layoutY="160.0" text="...">
+                           <font>
+                              <Font name="Impact" size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btnDetailsItem" layoutX="97.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#infoItem" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Rubis protecteur" textAlignment="JUSTIFY" textFill="#fffbfb">
+                           <font>
+                              <Font name="Impact" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnStopGame" layoutX="38.0" layoutY="526.0" mnemonicParsing="false" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Stop the game " textFill="WHITE">
+                           <font>
+                              <Font name="Impact" size="16.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnSettings" layoutX="62.0" layoutY="477.0" mnemonicParsing="false" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Settings" textFill="WHITE">
+                           <font>
+                              <Font name="Impact" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children></VBox>
+            </right>
+
+            <center>
+                <StackPane fx:id="zoneCentrale" minHeight="0" minWidth="0" style="-fx-background-color: blue;">
+                    <children>
+                        <Group>
+                            <children>
+                                <Pane fx:id="plateauJeu" prefHeight="3584.0" prefWidth="6144.0">
+                                    <children>
+
+                                        <ImageView fx:id="imageFond" fitHeight="3584.0" fitWidth="6144.0">
+                                            <Image url="@images\plateau-jeu-javaFX.png"/>
+                                        </ImageView>
+
+                                        <Rectangle fx:id="RStart" fill="deeppink" height="140.0" layoutX="585.0" layoutY="1040.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv1" fill="DODGERBLUE" height="140.0" layoutX="810.0" layoutY="850.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo1" fill="DODGERBLUE" height="140.0" layoutX="1375.0" layoutY="1030.0" opacity="1.0" stroke="BLACK" width="140.0" />
+
+                                        <Rectangle fx:id="RMyst1" fill="DODGERBLUE" height="140.0" layoutX="1585.0" layoutY="1245.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour1" fill="DODGERBLUE" height="140.0" layoutX="1580.0" layoutY="1475.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RVersus1" fill="yellow" height="140.0" layoutX="1130.0" layoutY="1835.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RHop1" fill="green" height="140.0" layoutX="945.0" layoutY="2260.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv2" fill="DODGERBLUE" height="140.0" layoutX="1300.0" layoutY="2630.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo2" fill="DODGERBLUE" height="140.0" layoutX="1890.0" layoutY="2765.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst2" fill="DODGERBLUE" height="140.0" layoutX="2340.0" layoutY="2770.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour2" fill="DODGERBLUE" height="140.0" layoutX="2760.0" layoutY="2640.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RHop2" fill="green" height="140.0" layoutX="3130.0" layoutY="2130.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RVersus2" fill="yellow" height="140.0" layoutX="3115.0" layoutY="1780.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv3" fill="DODGERBLUE" height="140.0" layoutX="2790.0" layoutY="1235.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo3" fill="DODGERBLUE" height="140.0" layoutX="2375.0" layoutY="1165.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst3" fill="DODGERBLUE" height="140.0" layoutX="1950.0" layoutY="875.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour3" fill="DODGERBLUE" height="140.0" layoutX="2025.0" layoutY="530.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv4" fill="DODGERBLUE" height="140.0" layoutX="2370.0" layoutY="365.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo4" fill="DODGERBLUE" height="140.0" layoutX="3100.0" layoutY="330.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst4" fill="DODGERBLUE" height="140.0" layoutX="3495.0" layoutY="410.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour4" fill="DODGERBLUE" height="140.0" layoutX="3690.0" layoutY="560.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv5" fill="DODGERBLUE" height="140.0" layoutX="3845.0" layoutY="910.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo5" fill="DODGERBLUE" height="140.0" layoutX="3655.0" layoutY="1225.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RHop3" fill="green" height="140.0" layoutX="3430.0" layoutY="1505.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst5" fill="DODGERBLUE" height="140.0" layoutX="3390.0" layoutY="1800.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour5" fill="DODGERBLUE" height="140.0" layoutX="3485.0" layoutY="2415.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv6" fill="DODGERBLUE" height="140.0" layoutX="3750.0" layoutY="2645.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo6" fill="DODGERBLUE" height="140.0" layoutX="4025.0" layoutY="2730.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RVersus3" fill="yellow" height="140.0" layoutX="4550.0" layoutY="2685.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RHop4" fill="green" height="140.0" layoutX="4835.0" layoutY="2385.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst6" fill="DODGERBLUE" height="140.0" layoutX="4880.0" layoutY="2065.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour6" fill="DODGERBLUE" height="140.0" layoutX="4730.0" layoutY="1670.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv7" fill="DODGERBLUE" height="140.0" layoutX="4605.0" layoutY="1350.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo7" fill="DODGERBLUE" height="140.0" layoutX="4485.0" layoutY="1040.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst7" fill="DODGERBLUE" height="140.0" layoutX="4595.0" layoutY="690.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour7" fill="DODGERBLUE" height="140.0" layoutX="5080.0" layoutY="630.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RDiv8" fill="DODGERBLUE" height="140.0" layoutX="5340.0" layoutY="1160.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RVersus4" fill="yellow" height="140.0" layoutX="5220.0" layoutY="1540.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RInfo8" fill="DODGERBLUE" height="140.0" layoutX="5130.0" layoutY="2035.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RMyst8" fill="DODGERBLUE" height="140.0" layoutX="5275.0" layoutY="2300.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RTour8" fill="DODGERBLUE" height="140.0" layoutX="5785.0" layoutY="2320.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RFinish" fill="deeppink" height="140.0" layoutX="6000.0" layoutY="2080.0" opacity="1.0" stroke="BLACK" width="140.0" />
+
+                                    </children>
+                                </Pane>
+                            </children>
+                        </Group>
+                    </children>
+                </StackPane>
+            </center>
+         <top>
+            <Pane prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" layoutX="17.0" layoutY="23.0" prefHeight="40.0" prefWidth="213.0" style="-fx-background-color: #7d6115; -fx-font-family: Impact; -fx-border-color: black; -fx-border-radius: 3;" text="Totem Trials" textFill="WHITE">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="550.0" layoutY="25.0" prefHeight="34.0" prefWidth="92.0" style="-fx-background-color: #7d6115; -fx-font-family: Impact; -fx-border-color: black; -fx-border-radius: 3;" text="Round :" textFill="WHITE">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelRound" alignment="CENTER" layoutX="650.0" layoutY="25.0" prefHeight="34.0" prefWidth="32.0" style="-fx-background-color: #7d6115; -fx-font-family: Impact; -fx-border-color: black; -fx-border-radius: 3;" text="X" textFill="WHITE">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </top>
+
+        </BorderPane>
+    </children>
+</AnchorPane>
