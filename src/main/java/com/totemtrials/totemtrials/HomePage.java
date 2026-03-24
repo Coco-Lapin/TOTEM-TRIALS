@@ -268,10 +268,7 @@ public class HomePage extends Application {
         rootChoix.getChildren().add(fenetreOption);
 
         backButton.setOnAction(_ -> {
-            j1 = new Joueur("Joueur 1");
-            j2 = new Joueur("Joueur 2");
-            mesJoueurs = new Joueur[]{j1, j2};
-            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            stage.setScene(menuScene);
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
@@ -281,8 +278,7 @@ public class HomePage extends Application {
         bj2.setOnAction(_ -> {
             j1 = new Joueur("Joueur 1");
             j2 = new Joueur("Joueur 2");
-            j3 = new Joueur("Joueur 3");
-            mesJoueurs = new Joueur[]{j1, j2, j3};
+            mesJoueurs = new Joueur[]{j1, j2};
             stage.setScene(choixJetons(menuScene,mesJoueurs));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
@@ -294,7 +290,7 @@ public class HomePage extends Application {
             j1 = new Joueur("Joueur 1");
             j2 = new Joueur("Joueur 2");
             j3 = new Joueur("Joueur 3");
-            mesJoueurs = new Joueur[]{j1, j2, j3, j4};
+            mesJoueurs = new Joueur[]{j1, j2, j3};
             stage.setScene(choixJetons(menuScene,mesJoueurs));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
@@ -303,7 +299,12 @@ public class HomePage extends Application {
         });
 
         bj4.setOnAction(_ -> {
-            stage.setScene(menuScene);
+            j1 = new Joueur("Joueur 1");
+            j2 = new Joueur("Joueur 2");
+            j3 = new Joueur("Joueur 3");
+            j4 = new Joueur("Joueur 4");
+            mesJoueurs = new Joueur[]{j1, j2, j3, j4};
+            stage.setScene(choixJetons(menuScene,mesJoueurs));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
@@ -369,6 +370,10 @@ public class HomePage extends Application {
 
         var cssUrl = getClass().getResource("styles/homepage.css");
         if (cssUrl != null) choixJetonScene.getStylesheets().add(cssUrl.toExternalForm());
+
+        /*for(Jeton j : mesJetons){
+
+        }*/
 
         backButton.setOnAction(_ -> {
             mesJoueurs = new Joueur[]{};
