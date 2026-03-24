@@ -7,7 +7,9 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,7 @@ import javax.lang.model.type.NullType;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 public class HomePage extends Application {
 
@@ -32,6 +35,11 @@ public class HomePage extends Application {
     private Jeton aigle;
     private Jeton serpent;
     private Jeton elephant;
+    private Joueur j1;
+    private Joueur j2;
+    private Joueur j3;
+    private Joueur j4;
+    private Joueur[] mesJoueurs;
     private Jeton[] mesJetons;
 
     @Override
@@ -118,6 +126,14 @@ public class HomePage extends Application {
             stage.setTitle("Choix des jetons");
             stage.setFullScreenExitHint("");
             stage.setFullScreen(true);
+
+            //----------------- Création Alerte choix des Joueurs ----------
+            ButtonType j1 = new ButtonType("J1");
+            ButtonType j2 = new ButtonType("J2");
+            ButtonType j3 = new ButtonType("J3");
+            ButtonType j4 = new ButtonType("J4");
+            ButtonType cancel = new ButtonType("Cancel");
+
         });
 
         Scene optionsScene = option(scene);
@@ -235,6 +251,22 @@ public class HomePage extends Application {
         return optionsScene;
     }
 
+    public Scene choixJoueurs(Scene menuScene) {
+
+        //-----------------Creation de la scène-------------------------
+        ImageView imageViewOption = new ImageView(image);
+        imageViewOption.fitWidthProperty().bind(stage.widthProperty());
+        imageViewOption.fitHeightProperty().bind(stage.heightProperty());
+        imageViewOption.setPreserveRatio(false);
+        Button backButton = new Button("BACK");
+        Button j2 = new Button("2 Joueurs");
+        Button j3 = new Button("3 Joueurs");
+        Button j4 = new Button("4 Joueurs");
+
+
+        return menuScene;
+    }
+
     public Scene choixJetons(Scene menuScene){
 
         //-----------------Creation de la scène-------------------------
@@ -242,7 +274,6 @@ public class HomePage extends Application {
         imageViewOption.fitWidthProperty().bind(stage.widthProperty());
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
         imageViewOption.setPreserveRatio(false);
-
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
