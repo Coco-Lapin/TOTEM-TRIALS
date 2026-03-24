@@ -5,9 +5,8 @@ public class Joueur {
     private String nom;
     private Jeton jetonJoueur;
 
-    public Joueur(String nom, Jeton jetonJoueur) {
+    public Joueur(String nom) {
         this.nom = nom;
-        this.jetonJoueur = jetonJoueur;
     }
 
 

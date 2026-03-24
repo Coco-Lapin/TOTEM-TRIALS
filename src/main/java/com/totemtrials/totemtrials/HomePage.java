@@ -120,19 +120,12 @@ public class HomePage extends Application {
         // ------------------- ACTIONS -------------------
         quitbutton.setOnMouseClicked(_ -> Platform.exit());
 
-        Scene choixPersoScene = choixJetons(scene);
+        Scene choixJoueursScene = choixJoueurs(scene);
         playbutton.setOnMouseClicked(_->{
-            stage.setScene(choixPersoScene);
+            stage.setScene(choixJoueursScene);
             stage.setTitle("Choix des jetons");
             stage.setFullScreenExitHint("");
             stage.setFullScreen(true);
-
-            //----------------- Création Alerte choix des Joueurs ----------
-            ButtonType j1 = new ButtonType("J1");
-            ButtonType j2 = new ButtonType("J2");
-            ButtonType j3 = new ButtonType("J3");
-            ButtonType j4 = new ButtonType("J4");
-            ButtonType cancel = new ButtonType("Cancel");
 
         });
 
@@ -259,15 +252,68 @@ public class HomePage extends Application {
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
         imageViewOption.setPreserveRatio(false);
         Button backButton = new Button("BACK");
-        Button j2 = new Button("2 Joueurs");
-        Button j3 = new Button("3 Joueurs");
-        Button j4 = new Button("4 Joueurs");
+        backButton.getStyleClass().add("back-button");
+        Button bj2 = new Button("2 Joueurs");
+        Button bj3 = new Button("3 Joueurs");
+        Button bj4 = new Button("4 Joueurs");
+        HBox boutons = new HBox(10);
+        boutons.getChildren().addAll(bj2, bj3, bj4);
+        boutons.setAlignment(Pos.CENTER);
 
+        VBox fenetreOption = new VBox(10);
+        fenetreOption.setAlignment(Pos.CENTER);
+        fenetreOption.getChildren().addAll(backButton, boutons);
 
-        return menuScene;
+        StackPane rootChoix = new StackPane(imageViewOption);
+        rootChoix.getChildren().add(fenetreOption);
+
+        backButton.setOnAction(_ -> {
+            j1 = new Joueur("Joueur 1");
+            j2 = new Joueur("Joueur 2");
+            mesJoueurs = new Joueur[]{j1, j2};
+            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            Platform.runLater(() -> {
+                stage.setFullScreenExitHint("");
+                stage.setFullScreen(true);
+            });
+        });
+
+        bj2.setOnAction(_ -> {
+            j1 = new Joueur("Joueur 1");
+            j2 = new Joueur("Joueur 2");
+            j3 = new Joueur("Joueur 3");
+            mesJoueurs = new Joueur[]{j1, j2, j3};
+            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            Platform.runLater(() -> {
+                stage.setFullScreenExitHint("");
+                stage.setFullScreen(true);
+            });
+        });
+
+        bj3.setOnAction(_ -> {
+            j1 = new Joueur("Joueur 1");
+            j2 = new Joueur("Joueur 2");
+            j3 = new Joueur("Joueur 3");
+            mesJoueurs = new Joueur[]{j1, j2, j3, j4};
+            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            Platform.runLater(() -> {
+                stage.setFullScreenExitHint("");
+                stage.setFullScreen(true);
+            });
+        });
+
+        bj4.setOnAction(_ -> {
+            stage.setScene(menuScene);
+            Platform.runLater(() -> {
+                stage.setFullScreenExitHint("");
+                stage.setFullScreen(true);
+            });
+        });
+
+        return new Scene(rootChoix,600,500);
     }
 
-    public Scene choixJetons(Scene menuScene){
+    public Scene choixJetons(Scene menuScene, Joueur[] joueur){
 
         //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
@@ -325,7 +371,8 @@ public class HomePage extends Application {
         if (cssUrl != null) choixJetonScene.getStylesheets().add(cssUrl.toExternalForm());
 
         backButton.setOnAction(_ -> {
-            stage.setScene(menuScene);
+            mesJoueurs = new Joueur[]{};
+            stage.setScene(choixJoueurs(menuScene));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
