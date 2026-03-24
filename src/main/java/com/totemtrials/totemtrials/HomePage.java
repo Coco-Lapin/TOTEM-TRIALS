@@ -7,10 +7,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -324,8 +321,23 @@ public class HomePage extends Application {
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
-        //----------------- Animation des jetons -----------------------
+        // --- RÉINITIALISATION DES JETONS ---
         for (Jeton j : mesJetons) {
+            j.getImageBase().setVisible(true);
+            j.getImageBase().setDisable(false);
+            j.getImageBase().setOpacity(1.0); // Au cas où vous auriez touché à l'opacité
+        }
+
+        // On utilise un tableau d'une case pour pouvoir modifier l'index dans les événements
+        int[] tourActuel = {0};
+
+        // Label pour indiquer qui doit choisir
+        Label instruction = new Label("C'est au tour de : " + joueur[tourActuel[0]].getNom());
+        instruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
+
+        //----------------- Animation et sélection des jetons -----------------------
+        for (Jeton j : mesJetons) {
+
             // On récupère l'ImageView qui contient le PNG (fixe)
             ImageView vueAffichee = j.getImageBase();
 
@@ -347,6 +359,31 @@ public class HomePage extends Application {
                 vueAffichee.setImage(imageFixe);
                 vueAffichee.setViewport(viewportFixe); // On remet le crop du PNG
             });
+
+            vueAffichee.setOnMouseClicked(_ -> {
+                if (tourActuel[0] < joueur.length) {
+                    // 1. Assigner le jeton au joueur actuel
+                    joueur[tourActuel[0]].setJetonJoueur(j);
+                    System.out.println(joueur[tourActuel[0]].getNom() + " a choisi " + j.getNom());
+
+                    // 2. Faire disparaître le jeton (le retirer du layout ou le rendre invisible)
+                    vueAffichee.setVisible(false);
+                    vueAffichee.setDisable(true); // Empêche de cliquer sur un jeton invisible
+
+                    // 3. Passer au joueur suivant
+                    tourActuel[0]++;
+
+                    // 4. Mettre à jour le texte ou passer à la suite
+                    if (tourActuel[0] < joueur.length) {
+                        instruction.setText("C'est au tour de : " + joueur[tourActuel[0]].getNom());
+                    } else {
+                        instruction.setText("Tous les joueurs ont choisi !");
+                        stage.setScene(menuScene);
+                        stage.setFullScreen(true);
+                    }
+                }
+            });
+
         }
 
         //----------------- Layout -------------------------------------
@@ -359,9 +396,8 @@ public class HomePage extends Application {
         alignementJeton.setAlignment(Pos.TOP_CENTER);
 
         VBox fenetreChoix = new VBox(10);
-        fenetreChoix.getChildren().addAll(alignementJeton,backButton);
+        fenetreChoix.getChildren().addAll(instruction,alignementJeton,backButton);
         fenetreChoix.setAlignment(Pos.CENTER);
-        fenetreChoix.setFillWidth(false);
 
         StackPane rootChoix = new StackPane(imageViewOption);
         rootChoix.getChildren().add(fenetreChoix);
@@ -370,10 +406,6 @@ public class HomePage extends Application {
 
         var cssUrl = getClass().getResource("styles/homepage.css");
         if (cssUrl != null) choixJetonScene.getStylesheets().add(cssUrl.toExternalForm());
-
-        /*for(Jeton j : mesJetons){
-
-        }*/
 
         backButton.setOnAction(_ -> {
             mesJoueurs = new Joueur[]{};
