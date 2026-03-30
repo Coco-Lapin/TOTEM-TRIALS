@@ -1,0 +1,200 @@
+/* ================================================
+   finpartie.css — Thème Jungle / Jumanji
+   ================================================ */
+
+/* ---- Racine ---- */
+.root {
+    -fx-font-family: 'Georgia', serif;
+    -fx-background-color: transparent;
+}
+
+/* ---- Titre principal ---- */
+.titre-fin {
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700;
+    -fx-effect: dropshadow(gaussian, #000000CC, 18, 0.6, 0, 4);
+    -fx-letter-spacing: 4px;
+}
+
+/* ---- Sous-titre (temps de partie) ---- */
+.sous-titre {
+    -fx-font-size: 18px;
+    -fx-text-fill: #C8A96E;
+    -fx-effect: dropshadow(gaussian, #000000AA, 8, 0.4, 0, 2);
+}
+
+/* ---- Conteneur podium global ---- */
+.podium-container {
+    -fx-background-color: transparent;
+    -fx-padding: 20 0 0 0;
+}
+
+/* ---- Blocs des marches ---- */
+.marche {
+    -fx-background-radius: 8 8 0 0;
+    -fx-border-radius: 8 8 0 0;
+    -fx-border-width: 2 2 0 2;
+    -fx-alignment: bottom-center;
+    -fx-padding: 10 20 10 20;
+}
+
+.marche-or {
+    -fx-background-color: linear-gradient(to bottom, #7B5A1E, #5C3D10, #4A2E08);
+    -fx-border-color: #C8960A #8B6500 #8B6500 #C8960A;
+    -fx-effect: dropshadow(gaussian, #FFD70066, 20, 0.5, 0, 0);
+}
+
+.marche-argent {
+    -fx-background-color: linear-gradient(to bottom, #5A5A5A, #3A3A3A, #2A2A2A);
+    -fx-border-color: #A0A0A0 #606060 #606060 #A0A0A0;
+    -fx-effect: dropshadow(gaussian, #FFFFFF33, 12, 0.4, 0, 0);
+}
+
+.marche-bronze {
+    -fx-background-color: linear-gradient(to bottom, #7B4A1E, #5C3010, #4A2008);
+    -fx-border-color: #C87040 #8B4000 #8B4000 #C87040;
+    -fx-effect: dropshadow(gaussian, #CD7F3266, 12, 0.4, 0, 0);
+}
+
+/* ---- Médailles ---- */
+.medaille {
+    -fx-font-size: 36px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, #00000099, 6, 0.5, 0, 2);
+}
+
+/* ---- Noms sur le podium ---- */
+.nom-podium {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #EED9A0;
+    -fx-effect: dropshadow(gaussian, #000000CC, 6, 0.6, 0, 2);
+}
+
+/* ---- Chiffre de position ---- */
+.rang-podium-or     { -fx-font-size: 40px; -fx-text-fill: #FFD700; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #00000099, 8, 0.6, 0, 2); }
+.rang-podium-argent { -fx-font-size: 34px; -fx-text-fill: #C0C0C0; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #00000099, 6, 0.5, 0, 2); }
+.rang-podium-bronze { -fx-font-size: 30px; -fx-text-fill: #CD7F32; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #00000099, 6, 0.5, 0, 2); }
+
+/* ---- Panel statistiques global ---- */
+.stats-panel {
+    -fx-background-color: linear-gradient(to bottom, #1A2E0A99, #0D1A0599);
+    -fx-background-radius: 16;
+    -fx-border-color: #4A7A1E88;
+    -fx-border-width: 2;
+    -fx-border-radius: 16;
+    -fx-padding: 20 30 20 30;
+    -fx-effect: dropshadow(gaussian, #000000AA, 20, 0.5, 0, 4);
+}
+
+/* ---- Titre section stats ---- */
+.stats-section-title {
+    -fx-font-size: 13px;
+    -fx-text-fill: #8DC84A;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+}
+
+/* ---- Ligne stats globales ---- */
+.stat-globale-valeur {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700;
+    -fx-effect: dropshadow(gaussian, #00000099, 6, 0.5, 0, 1);
+}
+
+.stat-globale-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #A0B880;
+    -fx-letter-spacing: 1px;
+}
+
+/* ---- Séparateur vertical ---- */
+.separateur-stats {
+    -fx-background-color: #4A7A1E55;
+    -fx-pref-width: 2;
+    -fx-pref-height: 50;
+}
+
+/* ---- En-tête tableau joueurs ---- */
+.table-header {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8DC84A;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1.5px;
+    -fx-padding: 0 8 6 8;
+}
+
+/* ---- Ligne joueur dans le tableau ---- */
+.row-joueur {
+    -fx-background-color: #1E3A0A66;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12 8 12;
+}
+
+.row-joueur:hover {
+    -fx-background-color: #2A5010AA;
+}
+
+.row-joueur-winner {
+    -fx-background-color: linear-gradient(to right, #3A2800AA, #5C3D0AAA);
+    -fx-background-radius: 8;
+    -fx-border-color: #FFD70044;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 8 12 8 12;
+}
+
+.cell-nom {
+    -fx-font-size: 14px;
+    -fx-text-fill: #EED9A0;
+    -fx-font-weight: bold;
+}
+
+.cell-valeur {
+    -fx-font-size: 14px;
+    -fx-text-fill: #C8D8A0;
+}
+
+.cell-bon  { -fx-font-size: 14px; -fx-text-fill: #7EC850; -fx-font-weight: bold; }
+.cell-mauvais { -fx-font-size: 14px; -fx-text-fill: #E05050; -fx-font-weight: bold; }
+.cell-pct  { -fx-font-size: 14px; -fx-text-fill: #FFD700; -fx-font-weight: bold; }
+
+/* ---- Boutons ---- */
+.btn-rejouer {
+    -fx-background-color: linear-gradient(to bottom, #5C8A10, #3A5C08);
+    -fx-text-fill: #FFD700;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Georgia', serif;
+    -fx-background-radius: 10;
+    -fx-border-color: #8DC84A;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-padding: 12 30 12 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000000AA, 10, 0.5, 0, 3);
+}
+
+.btn-rejouer:hover {
+    -fx-background-color: linear-gradient(to bottom, #7AB018, #4A7A0A);
+    -fx-effect: dropshadow(gaussian, #8DC84A99, 16, 0.6, 0, 0);
+}
+
+.btn-quitter {
+    -fx-background-color: linear-gradient(to bottom, #5A1010, #3A0808);
+    -fx-text-fill: #FFAAAA;
+    -fx-font-size: 14px;
+    -fx-font-family: 'Georgia', serif;
+    -fx-background-radius: 10;
+    -fx-border-color: #AA4040;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-padding: 10 24 10 24;
+    -fx-cursor: hand;
+}
+
+.btn-quitter:hover {
+    -fx-background-color: linear-gradient(to bottom, #7A1818, #500A0A);
+}
