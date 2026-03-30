@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,7 @@ import javax.lang.model.type.NullType;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.Optional;
 
 public class HomePage extends Application {
@@ -242,6 +244,10 @@ public class HomePage extends Application {
     }
 
     public Scene choixJoueurs(Scene menuScene) {
+        //----------------Creation des images pour les boutons----------
+        ImageView btn2 = createCroppedImageView("Images/buttons/2-joueurs.png",0.2);
+        ImageView btn3 = createCroppedImageView("Images/buttons/3-joueurs.png",0.3);
+        ImageView btn4 = createCroppedImageView("Images/buttons/4-joueurs.png",0.25);
 
         //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
@@ -250,9 +256,15 @@ public class HomePage extends Application {
         imageViewOption.setPreserveRatio(false);
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
-        Button bj2 = new Button("2 Joueurs");
-        Button bj3 = new Button("3 Joueurs");
-        Button bj4 = new Button("4 Joueurs");
+        Button bj2 = new Button();
+        bj2.setBackground(Background.EMPTY);
+        bj2.setGraphic(btn2);
+        bj2.setBackground(Background.EMPTY);
+        Button bj3 = new Button();
+        bj2.setBackground(Background.EMPTY);
+        bj3.setGraphic(btn3);
+        Button bj4 = new Button();
+        bj4.setGraphic(btn4);
         HBox boutons = new HBox(10);
         boutons.getChildren().addAll(bj2, bj3, bj4);
         boutons.setAlignment(Pos.CENTER);
