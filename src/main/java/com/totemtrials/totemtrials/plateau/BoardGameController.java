@@ -1,5 +1,7 @@
 package com.totemtrials.totemtrials.plateau;
 
+import com.totemtrials.totemtrials.controller.movementController;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -12,13 +14,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class BoardGameController {
-
+    private movementController MC;
     public Label labelRound;
     public ImageView imageFond;
     @FXML
@@ -35,7 +39,7 @@ public class BoardGameController {
 
 
         // Ma liste de cases "logiques"
-        private List<Case> listeCases = new ArrayList<>();
+        private final List<Case> listeCases = new ArrayList<>();
 
         // Dimensions fixes et réelles de ton terrain de jeu
         private final double LARGEUR_REELLE = 6144.0;
@@ -58,8 +62,13 @@ public class BoardGameController {
 
         @FXML
         public void initialize() {
-            Platform.runLater(() -> {
+            // CRUCIAL : On crée l'objet ici
+            this.MC = new movementController();
 
+            // 3. Maintenant on peut appeler les méthodes dessus sans erreur
+            this.MC.setBoardGame(this);
+            this.MC.setPlateauJeu(this.plateauJeu); // <-- TRANSFÈRE LA RÉFÉRENCE ICI
+            Platform.runLater(() -> {
 
                 Rectangle [] cheminDuJeu={RStart , RDiv1, RInfo1, RMyst1,RTour1,RVersus1,RHop1,
                         RDiv2,RInfo2,RMyst2,RTour2,RHop2,RVersus2,RDiv3,RInfo3,RMyst3,RTour3,
@@ -136,59 +145,7 @@ public class BoardGameController {
                 for(Rectangle r : Hop){
                     r.setFill(patternHop);
                 }
-                /*
-                // On crée les objets Case en reliant le visuel au logique
-                // Ici on passe l'ID, le Type et la référence au Rectangle FXML
-                // case START ND FINISH
-                listeCases.add(new Case("START", "DEPART", RStart));
-                listeCases.add(new Case("FINISH", "FINISH", RFinish));
-                // cases Divertissement
-                listeCases.add(new Case("DIV1", "Divertissement", RDiv1));
-                listeCases.add(new Case("DIV2", "Divertissement", RDiv2));
-                listeCases.add(new Case("DIV3", "Divertissement", RDiv3));
-                listeCases.add(new Case("DIV4", "Divertissement", RDiv4));
-                listeCases.add(new Case("DIV5", "Divertissement", RDiv5));
-                listeCases.add(new Case("DIV6", "Divertissement", RDiv6));
-                listeCases.add(new Case("DIV7", "Divertissement", RDiv7));
-                listeCases.add(new Case("DIV8", "Divertissement", RDiv8));
-                // cases Informatic
-                listeCases.add(new Case("INFO1", "INFO", RInfo1));
-                listeCases.add(new Case("INFO2", "INFO", RInfo2));
-                listeCases.add(new Case("INFO3", "INFO", RInfo3));
-                listeCases.add(new Case("INFO4", "INFO", RInfo4));
-                listeCases.add(new Case("INFO5", "INFO", RInfo5));
-                listeCases.add(new Case("INFO6", "INFO", RInfo6));
-                listeCases.add(new Case("INFO7", "INFO", RInfo7));
-                listeCases.add(new Case("INFO8", "INFO", RInfo8));
-                // cases Tourism
-                listeCases.add(new Case("TOUR1","TOURISM", RTour1));
-                listeCases.add(new Case("TOUR2","TOURISM", RTour2));
-                listeCases.add(new Case("TOUR3","TOURISM", RTour3));
-                listeCases.add(new Case("TOUR4","TOURISM", RTour4));
-                listeCases.add(new Case("TOUR5","TOURISM", RTour5));
-                listeCases.add(new Case("TOUR6","TOURISM", RTour6));
-                listeCases.add(new Case("TOUR7","TOURISM", RTour7));
-                listeCases.add(new Case("TOUR8","TOURISM", RTour8));
-                //case Mystery
-                listeCases.add(new Case("Myst1","MYSTERY", RMyst1));
-                listeCases.add(new Case("Myst2", "MYSTERY", RMyst2));
-                listeCases.add(new Case("Myst3", "MYSTERY", RMyst3));
-                listeCases.add(new Case("Myst4", "MYSTERY", RMyst4));
-                listeCases.add(new Case("Myst5", "MYSTERY", RMyst5));
-                listeCases.add(new Case("Myst6", "MYSTERY", RMyst6));
-                listeCases.add(new Case("Myst7", "MYSTERY", RMyst7));
-                listeCases.add(new Case("Myst8", "MYSTERY", RMyst8));
-                // cases HOP et VERSUS
-                listeCases.add(new Case("HOP1", "HOP", RHop1));
-                listeCases.add(new Case("HOP2", "HOP", RHop2));
-                listeCases.add(new Case("HOP3", "HOP", RHop3));
-                listeCases.add(new Case("HOP4", "HOP", RHop4));
-                listeCases.add(new Case("VERS1", "VERSUS", RVersus1));
-                listeCases.add(new Case("VERS2", "VERSUS", RVersus2));
-                listeCases.add(new Case("VERS3", "VERSUS", RVersus3));
-                listeCases.add(new Case("VERS4", "VERSUS", RVersus4));
 
-            */
                 // Dans ton initialize, tu boucles sur CE tableau
                 for (int i = 0; i < cheminDuJeu.length; i++) {
                     Rectangle r = cheminDuJeu[i];
@@ -205,9 +162,29 @@ public class BoardGameController {
                     k++;
                 }
 
+                PauseTransition pause = new PauseTransition(Duration.seconds(1)); // Attend 1 seconde
+                pause.setOnFinished(event -> {
+                    MC.initialiserPion();
+                   int nbCases= MC.nbCasesAParcourir();
+                    MC.deplacerPion(nbCases); // Déplace de 3 cases
+                });
+                pause.play();
+
             });
         }
+    public List<Case> getListeCases() {
+        return listeCases;
+    }
 
+    public int DeterminerCase(double x , double y){
+            int NumCase = 0;
+            for (int i = 0; i < listeCases.size(); i++) {
+                if (listeCases.get(i).getCenterX() == x && listeCases.get(i).getCenterY() == y) {
+                    NumCase= i;
+                }
+            }
+            return NumCase;
+    }
     public void infoItem(ActionEvent actionEvent) {
     }
 }
