@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.totemtrials.totemtrials.plateau.BoardGameController">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.totemtrials.totemtrials.plateau.BoardGameController">
 
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -34,7 +34,7 @@
                               <Font name="Impact" size="20.0" />
                            </font>
                         </Label>
-                        <Label layoutX="28.0" layoutY="160.0" text="...">
+                        <Label fx:id="ItemDescription" layoutX="28.0" layoutY="160.0" text="...">
                            <font>
                               <Font name="Impact" size="20.0" />
                            </font>
@@ -44,12 +44,12 @@
                               <Font name="Impact" size="10.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnStopGame" layoutX="38.0" layoutY="526.0" mnemonicParsing="false" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Stop the game " textFill="WHITE">
+                        <Button fx:id="btnStopGame" layoutX="38.0" layoutY="526.0" mnemonicParsing="false" onAction="#StopGame" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Stop the game " textFill="WHITE">
                            <font>
                               <Font name="Impact" size="16.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnSettings" layoutX="62.0" layoutY="477.0" mnemonicParsing="false" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Settings" textFill="WHITE">
+                        <Button fx:id="btnSettings" layoutX="62.0" layoutY="477.0" mnemonicParsing="false" onAction="#OpenSettings" style="-fx-background-color: darkgreen; -fx-border-color: black; -fx-border-radius: 3;" text="Settings" textFill="WHITE">
                            <font>
                               <Font name="Impact" size="16.0" />
                            </font>
@@ -68,7 +68,7 @@
                                     <children>
 
                                         <ImageView fx:id="imageFond" fitHeight="3584.0" fitWidth="6144.0">
-                                            <Image url="@images\plateau-jeu-javaFX.png"/>
+                                            <Image url="@images\plateau-jeu-javaFX.png" />
                                         </ImageView>
 
                                         <Rectangle fx:id="RStart" fill="deeppink" height="140.0" layoutX="585.0" layoutY="1040.0" opacity="1.0" stroke="BLACK" width="140.0" />
