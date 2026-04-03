@@ -1,11 +1,11 @@
 package com.totemtrials.totemtrials;
 
-public class Joueur {
+public class Player {
 
     private String nom;
-    private Jeton jetonJoueur;
+    private Token jetonJoueur;
 
-    public Joueur(String nom) {
+    public Player(String nom) {
         this.nom = nom;
     }
 
@@ -15,10 +15,10 @@ public class Joueur {
     public void setNom(String nom) {
         this.nom = nom;
     }
-    public Jeton getJetonJoueur() {
+    public Token getJetonJoueur() {
         return jetonJoueur;
     }
-    public void setJetonJoueur(Jeton jetonJoueur) {
+    public void setJetonJoueur(Token jetonJoueur) {
         this.jetonJoueur = jetonJoueur;
     }
 

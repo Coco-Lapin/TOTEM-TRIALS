@@ -1,6 +1,5 @@
 package com.totemtrials.totemtrials;
 
-import java.io.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -18,40 +17,37 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.*;
 import javafx.stage.Stage;
 
-import javax.lang.model.type.NullType;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Objects;
-import java.util.Optional;
 
 public class HomePage extends Application {
 
     private Stage stage;
     private MediaPlayer mediaPlayer;
     private Image image;
-    private Jeton tigre;
-    private Jeton aigle;
-    private Jeton serpent;
-    private Jeton elephant;
-    private Joueur j1;
-    private Joueur j2;
-    private Joueur j3;
-    private Joueur j4;
-    private Joueur[] mesJoueurs;
-    private Jeton[] mesJetons;
+    private Token tiger;
+    private Token eagle;
+    private Token snake;
+    private Token elephant;
+    private Player p1;
+    private Player p2;
+    private Player p3;
+    private Player p4;
+    private Player[] myPlayers;
+    private Token[] myTokens;
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
 
         //-------- Création des jetons ---------
-        tigre = new Jeton("tigre",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
-        aigle = new Jeton("aigle",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
-        serpent = new Jeton("serpent",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
-        elephant = new Jeton("elephant",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
+        tiger = new Token("tiger",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
+        eagle = new Token("aigle",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
+        snake = new Token("serpent",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
+        elephant = new Token("elephant",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
         //---------Mettre les jetons dans une liste--------
-        mesJetons = new Jeton[]{tigre, aigle, serpent, elephant};
+        myTokens = new Token[]{tiger, eagle, snake, elephant};
 
         // ------------------- BACKGROUND -------------------
 
@@ -111,17 +107,17 @@ public class HomePage extends Application {
         if (cssUrl != null) scene.getStylesheets().add(cssUrl.toExternalForm());
 
         // ------------------- LAYOUT -------------------
-        VBox fenetreBouton = new VBox(10);
-        fenetreBouton.getChildren().addAll(titre, playbutton, optionbutton, quitbutton);
-        fenetreBouton.setAlignment(Pos.CENTER);
-        root.getChildren().add(fenetreBouton);
+        VBox windowButton = new VBox(10);
+        windowButton.getChildren().addAll(titre, playbutton, optionbutton, quitbutton);
+        windowButton.setAlignment(Pos.CENTER);
+        root.getChildren().add(windowButton);
 
         // ------------------- ACTIONS -------------------
         quitbutton.setOnMouseClicked(_ -> Platform.exit());
 
-        Scene choixJoueursScene = choixJoueurs(scene);
+        Scene choicePlayerScene = choicePlayerScene(scene);
         playbutton.setOnMouseClicked(_->{
-            stage.setScene(choixJoueursScene);
+            stage.setScene(choicePlayerScene);
             stage.setTitle("Choix des jetons");
             stage.setFullScreenExitHint("");
             stage.setFullScreen(true);
@@ -243,7 +239,7 @@ public class HomePage extends Application {
         return optionsScene;
     }
 
-    public Scene choixJoueurs(Scene menuScene) {
+    public Scene choicePlayerScene(Scene menuScene) {
         //----------------Creation des images pour les boutons----------
         ImageView btn2 = createCroppedImageView("Images/buttons/2-joueurs.png",0.2);
         ImageView btn3 = createCroppedImageView("Images/buttons/3-joueurs.png",0.3);
@@ -285,10 +281,10 @@ public class HomePage extends Application {
         });
 
         bj2.setOnAction(_ -> {
-            j1 = new Joueur("Joueur 1");
-            j2 = new Joueur("Joueur 2");
-            mesJoueurs = new Joueur[]{j1, j2};
-            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            p1 = new Player("Joueur 1");
+            p2 = new Player("Joueur 2");
+            myPlayers = new Player[]{p1, p2};
+            stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
@@ -296,11 +292,11 @@ public class HomePage extends Application {
         });
 
         bj3.setOnAction(_ -> {
-            j1 = new Joueur("Joueur 1");
-            j2 = new Joueur("Joueur 2");
-            j3 = new Joueur("Joueur 3");
-            mesJoueurs = new Joueur[]{j1, j2, j3};
-            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            p1 = new Player("Joueur 1");
+            p2 = new Player("Joueur 2");
+            p3 = new Player("Joueur 3");
+            myPlayers = new Player[]{p1, p2, p3};
+            stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
@@ -308,12 +304,12 @@ public class HomePage extends Application {
         });
 
         bj4.setOnAction(_ -> {
-            j1 = new Joueur("Joueur 1");
-            j2 = new Joueur("Joueur 2");
-            j3 = new Joueur("Joueur 3");
-            j4 = new Joueur("Joueur 4");
-            mesJoueurs = new Joueur[]{j1, j2, j3, j4};
-            stage.setScene(choixJetons(menuScene,mesJoueurs));
+            p1 = new Player("Joueur 1");
+            p2 = new Player("Joueur 2");
+            p3 = new Player("Joueur 3");
+            p4 = new Player("Joueur 4");
+            myPlayers = new Player[]{p1, p2, p3, p4};
+            stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
@@ -323,7 +319,7 @@ public class HomePage extends Application {
         return new Scene(rootChoix,600,500);
     }
 
-    public Scene choixJetons(Scene menuScene, Joueur[] joueur){
+    public Scene tokenChoice(Scene menuScene, Player[] joueur){
 
         //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
@@ -334,7 +330,7 @@ public class HomePage extends Application {
         backButton.getStyleClass().add("back-button");
 
         // --- RÉINITIALISATION DES JETONS ---
-        for (Jeton j : mesJetons) {
+        for (Token j : myTokens) {
             j.getImageBase().setVisible(true);
             j.getImageBase().setDisable(false);
             j.getImageBase().setOpacity(1.0); // Au cas où vous auriez touché à l'opacité
@@ -348,7 +344,7 @@ public class HomePage extends Application {
         instruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
 
         //----------------- Animation et sélection des jetons -----------------------
-        for (Jeton j : mesJetons) {
+        for (Token j : myTokens) {
 
             // On récupère l'ImageView qui contient le PNG (fixe)
             ImageView vueAffichee = j.getImageBase();
@@ -399,35 +395,35 @@ public class HomePage extends Application {
         }
 
         //----------------- Layout -------------------------------------
-        HBox alignementJeton = new HBox(10);
+        HBox tokenAlignement = new HBox(10);
         //--------Ajout des images dans la HBox ------------------------
-        for(Jeton j : mesJetons){
-            alignementJeton.getChildren().add(j.getImageBase());
+        for(Token j : myTokens){
+            tokenAlignement.getChildren().add(j.getImageBase());
         }
 
-        alignementJeton.setAlignment(Pos.TOP_CENTER);
+        tokenAlignement.setAlignment(Pos.TOP_CENTER);
 
         VBox fenetreChoix = new VBox(10);
-        fenetreChoix.getChildren().addAll(instruction,alignementJeton,backButton);
+        fenetreChoix.getChildren().addAll(instruction,tokenAlignement,backButton);
         fenetreChoix.setAlignment(Pos.CENTER);
 
         StackPane rootChoix = new StackPane(imageViewOption);
         rootChoix.getChildren().add(fenetreChoix);
 
-        Scene choixJetonScene = new Scene(rootChoix,600,500);
+        Scene tokenChoiceScene = new Scene(rootChoix,600,500);
 
         var cssUrl = getClass().getResource("styles/homepage.css");
-        if (cssUrl != null) choixJetonScene.getStylesheets().add(cssUrl.toExternalForm());
+        if (cssUrl != null) tokenChoiceScene.getStylesheets().add(cssUrl.toExternalForm());
 
         backButton.setOnAction(_ -> {
-            mesJoueurs = new Joueur[]{};
-            stage.setScene(choixJoueurs(menuScene));
+            myPlayers = new Player[]{};
+            stage.setScene(choicePlayerScene(menuScene));
             Platform.runLater(() -> {
                 stage.setFullScreenExitHint("");
                 stage.setFullScreen(true);
             });
         });
 
-        return choixJetonScene;
+        return tokenChoiceScene;
     }
 }
