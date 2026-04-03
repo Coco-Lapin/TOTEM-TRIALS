@@ -241,9 +241,9 @@ public class HomePage extends Application {
 
     public Scene choicePlayerScene(Scene menuScene) {
         //----------------Creation des images pour les boutons----------
-        ImageView btn2 = createCroppedImageView("Images/buttons/2-joueurs.png",0.2);
-        ImageView btn3 = createCroppedImageView("Images/buttons/3-joueurs.png",0.3);
-        ImageView btn4 = createCroppedImageView("Images/buttons/4-joueurs.png",0.25);
+        ImageView btn2 = createCroppedImageView("Images/buttons/2Players.png",0.2);
+        ImageView btn3 = createCroppedImageView("Images/buttons/3Players.png",0.3);
+        ImageView btn4 = createCroppedImageView("Images/buttons/4Players.png",0.25);
 
         //-----------------Creation de la scène-------------------------
         ImageView imageViewOption = new ImageView(image);
