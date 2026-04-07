@@ -13,19 +13,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class GestionQuiz {
     private List<Question> listeComplete; // Toutes les questions du JSON
     private Question questionActuelle;    // La question que l'on pose
     private String themeChoisi;           // Le thème pioché au hasard
     private int niveauChoisi;             // Le niveau cliqué par l'utilisateur
-
+    private Consumer<VBox> end;
     private VBox vue; // Le conteneur principal
 
-    public GestionQuiz() {
+    public GestionQuiz(String themeChoix, Consumer<VBox> end) {
         vue = new VBox(20);
         vue.setAlignment(Pos.CENTER);
-
+        this.themeChoisi = themeChoix;
+        this.end=end;
         chargerQuestionsDuFichier();
         afficherMenuSelection(); // On commence par le menu
     }
@@ -49,11 +51,11 @@ public class GestionQuiz {
     private void afficherMenuSelection() {
         vue.getChildren().clear(); // On efface l'écran précédent
 
-        // On choisit un thème au hasard dans la liste
+        /*On choisit un thème au hasard dans la liste (TEMPORAIRE)
         if (listeComplete != null && !listeComplete.isEmpty()) {
             int hasard = new Random().nextInt(listeComplete.size());
             themeChoisi = listeComplete.get(hasard).getTheme();
-        }
+        }*/
         Label themeLabel = new Label("Thème pioché : " + themeChoisi);
         Label instruction = new Label("Choisissez une difficulté :");
 
@@ -128,10 +130,14 @@ public class GestionQuiz {
             resultat.setStyle("-fx-text-fill: red;");
         }
 
-        // Bouton pour recommencer le cycle (Nouveau thème + Choix niveau)
-        Button boutonSuivant = new Button("Continuer");
-        boutonSuivant.setOnAction(e -> afficherMenuSelection());
-
+        Button boutonSuivant = new Button("Retour au jeu");
+        boutonSuivant.setOnAction(e -> {
+            if (this.end != null) {
+                // On "donne" la vue au consumer pour qu'il la nettoie
+                this.end.accept(this.vue);
+            }
+        });
         vue.getChildren().addAll(resultat, boutonSuivant);
+
     }
 }

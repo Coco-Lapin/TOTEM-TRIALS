@@ -1,12 +1,14 @@
 package com.totemtrials.totemtrials.plateau;
 
 import com.totemtrials.totemtrials.controller.movementController;
+import com.totemtrials.totemtrials.models.GameManager;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -16,12 +18,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
+// import du quiz
+import com.totemtrials.totemtrials.questions.GestionQuiz;
+import com.totemtrials.totemtrials.HelloApplication;
 
 public class BoardGameController {
     public VBox PlateauInfoLeft;
@@ -32,6 +37,7 @@ public class BoardGameController {
     private movementController MC;
     public Label labelRound;
     public ImageView imageFond;
+
 
 
     @FXML
@@ -56,10 +62,10 @@ public class BoardGameController {
         public String determinerType(Rectangle r) {
             String id = r.getId(); // Récupère par exemple "RDiv1" ou "RTour3"
 
-            if (id.startsWith("RDiv"))   return "Divertissement";
+            if (id.startsWith("RDiv"))   return "entertainment";
             if (id.startsWith("RTour"))  return "Tourism";
-            if (id.startsWith("RInfo"))  return "INFO";
-            if (id.startsWith("RMyst"))  return "MYSTERY";
+            if (id.startsWith("RInfo"))  return "Informatics";
+            if (id.startsWith("RMyst"))  return "Mystery (Jumanji)";
             if (id.startsWith("RVersus")) return "VERSUS";
             if (id.startsWith("RHop"))    return "HOP";
             if (id.equals("RStart"))     return "DEPART";
@@ -67,7 +73,7 @@ public class BoardGameController {
 
             return "INCONNU"; // Sécurité
         }
-
+        List<Rectangle> cheminDuJeu;
 
         @FXML
         public void initialize() {
@@ -76,7 +82,7 @@ public class BoardGameController {
 
             // 3. Maintenant on peut appeler les méthodes dessus sans erreur
             this.MC.setBoardGame(this);
-            this.MC.setPlateauJeu(this.plateauJeu); // <-- TRANSFÈRE LA RÉFÉRENCE ICI
+            this.MC.setPlateauJeu(this.plateauJeu);
             Platform.runLater(() -> {
 
                 Rectangle [] cheminDuJeu={RStart , RDiv1, RInfo1, RMyst1,RTour1,RVersus1,RHop1,
@@ -171,41 +177,36 @@ public class BoardGameController {
                     k++;
                 }
 
-                PauseTransition pause = new PauseTransition(Duration.seconds(2)); // Attend 1 seconde
-                pause.setOnFinished(event -> {
-                    MC.initialiserPion();
-
-                    // Premier déplacement
-                    MC.deplacerPion(MC.nbCasesAParcourir(), () -> {
-                        // Ce code ne s'exécute que quand le 1er est FINI
-
-                        MC.deplacerPion(MC.nbCasesAParcourir(), () -> {
-                            // Ce code ne s'exécute que quand le 2ème est FINI
-                            MC.deplacerPion(MC.nbCasesAParcourir(), null);
-                        });
-                    });
-                });
-                pause.play();
-
-
-
-
 
             });
+            GameManager gm = new GameManager(this, this.MC, this.listeCases);
+            gm.demarrerPartie();
         }
+    public void afficherPopUpQuiz(VBox quizVue) {
+        // 1. On définit la taille
+        quizVue.setMaxSize(400, 400);
+        // Applique le style de pop-up ici si tu veux
+        quizVue.setStyle(
+                "-fx-background-color: #F4F4F4; " + // Gris très clair ou blanc
+                        "-fx-background-radius: 15; " +      // Bords arrondis
+                        "-fx-border-color: #333333; " +      // Bordure foncée
+                        "-fx-border-radius: 15; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-padding: 30; " +                // Espace interne
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);" // Ombre
+        );
+        zoneCentrale.getChildren().add(quizVue);
+    }
 
+    public void fermerPopUpQuiz(VBox quizVue) {
+        zoneCentrale.getChildren().remove(quizVue);
+    }
     public List<Case> getListeCases() {
         return listeCases;
     }
 
-    public int DeterminerCase(double x , double y){
-            int NumCase = 0;
-            for (int i = 0; i < listeCases.size(); i++) {
-                if (listeCases.get(i).getCenterX() == x && listeCases.get(i).getCenterY() == y) {
-                    NumCase= i;
-                }
-            }
-            return NumCase;
+    public String getTileTheme(int nb){
+        return listeCases.get(nb).getType();
     }
     public void infoItem(ActionEvent actionEvent) {
     }

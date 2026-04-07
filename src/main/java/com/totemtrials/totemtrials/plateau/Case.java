@@ -12,7 +12,7 @@ public class Case {
         private double centerY; // Position Y du milieu
         private String type;
         private Rectangle rectangle; // Référence vers l'objet visuel
-
+        public Case() {}
         public Case(String id, String type, Rectangle rectangle) {
             this.id = id;
             this.type = type;
@@ -39,5 +39,7 @@ public class Case {
         public String getId() { return id; }
         public String getType() { return type; }
         public Rectangle getRectangle() { return rectangle; }
+
+        public Case getCase() { return this; }
     }
 

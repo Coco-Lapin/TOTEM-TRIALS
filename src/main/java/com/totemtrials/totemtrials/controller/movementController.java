@@ -95,9 +95,13 @@ public class movementController {
     public int nbCasesAParcourir(){
         // création d'un objet Random
         Random rand = new Random();
-        int alea=rand.nextInt(-10,10);
+        int alea=rand.nextInt(10);
         System.out.println(alea);
         return alea;
+    }
+
+    //this method is use to determine the theme of your box
+    public void displayQuestion(Case c){
     }
 
 
