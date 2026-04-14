@@ -20,77 +20,99 @@ import java.util.Random;
 public class movementController {
 
     private BoardGameController boardGame;
-    private int indiceCaseActuelle = 0; // Remonté ici !
+    private int indiceCaseActuelle = 0;
 
     @FXML private Pane plateauJeu; // Injecte le même Pane que dans BoardGameController
-    private Circle sprite = new Circle(60); // Rayon de 25, pas besoin de X, Y ici
+    // RETIRER LES INITIALISATIONS PLUS TARD
+    private int[] indicesCasesActuelles = {0, 0, 0, 0};
+    private Circle[] sprites = new Circle[4];
 
+    // On définit 4 couleurs différentes pour les joueurs
+    private Color[] couleursJoueurs = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};
 
+    //méthodes à  implémenter plus tard
+    public void setupPlayers(int param) {
+        // 1. Initialisation des tableaux à la taille exacte demandée
+        this.indicesCasesActuelles = new int[param];
+        this.sprites = new Circle[param];
+        // 2. Remplissage par défaut (optionnel car un int[] est à 0 par défaut)
+        for (int i = 0; i < param; i++) {
+            indicesCasesActuelles[i] = 0;
+        }
+    }
     //Initialisation du plateau et du Pane qui contient les cases ect ( NullPointerException)
     public void setBoardGame(BoardGameController bg) {this.boardGame = bg; }
     //-----------------------------------------------------------**
     public void setPlateauJeu(Pane p) {this.plateauJeu = p;}
 
-    // À appeler une fois au début pour faire apparaître le pion
-    public void initialiserPion() {
-        // Place le pion sur la case départ
-        this.sprite = new Circle(60);
-        this.sprite.setFill(Color.BLUE);
-        this.sprite.setStroke(Color.BLACK);
-        this.sprite.setStrokeWidth(3); // Epaisseur des bords du cercle
-        Case depart = boardGame.getListeCases().get(0);// on détermine la case de départ en prenant l'index 0 de la liste qui contient les cases
-        sprite.setTranslateX(depart.getCenterX());// on positionne le cercle "sprite" sur le centre de la case de départ
-        sprite.setTranslateY(depart.getCenterY());
-        // 2. Sécurité : on ne l'ajoute que s'il n'est pas déjà sur le plateau
-        if (!plateauJeu.getChildren().contains(sprite)) {
-            plateauJeu.getChildren().add(sprite);
+
+    // 2. On initialise 4 pions au lieu d'un seul
+    public void initialiserPions() {
+        Case depart = boardGame.getListeCases().get(0);
+
+        // A CHANGER ALLER DE I A SPRITES.LENGTHS
+        for (int i = 0; i < 4; i++) {
+            sprites[i] = new Circle(40); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
+            sprites[i].setFill(couleursJoueurs[i]);
+            sprites[i].setStroke(Color.BLACK);
+            sprites[i].setStrokeWidth(3);
+
+            // PETITE ASTUCE : Décalage pour qu'ils ne se superposent pas tous au millimètre près
+            // Joueur 0 (Bleu) : Haut-Gauche | Joueur 1 (Rouge) : Haut-Droit, etc.
+            double posX = (i % 2 == 0) ? -20 : 20;
+            double posY = (i < 2) ? -20 : 20;
+
+            sprites[i].setTranslateX(depart.getCenterX() + posX);
+            sprites[i].setTranslateY(depart.getCenterY() + posY);
+
+            if (!plateauJeu.getChildren().contains(sprites[i])) {
+                plateauJeu.getChildren().add(sprites[i]);
+            }
         }
-
     }
-
-    public void deplacerPion(int nbCasesAAvancer,Runnable auFini) {
-        // Objet boardGame ( la classe ) on y extrait la liste des Cases ( chemin )
+    // 3. On ajoute l'argument "idJoueur" (de 0 à 3) pour savoir QUI bouge
+    public void deplacerPion(int idJoueur, int nbCasesAAvancer, Runnable auFini) {
         List<Case> cases = boardGame.getListeCases();
-        // Permet de créer des transitions fluides adapté à nos besoins
         SequentialTransition trajetComplet = new SequentialTransition();
-        if (nbCasesAAvancer >= 0) {
-            // Boucle qui part de 0 jusqu'au nombre de cases à avancer
-            for (int i = 0; i < nbCasesAAvancer; i++) {
-                if (indiceCaseActuelle + 1 < cases.size()) {
-                    indiceCaseActuelle++;
-                    Case destination = cases.get(indiceCaseActuelle);
 
-                    TranslateTransition saut = new TranslateTransition(Duration.millis(1000), sprite);
-                    saut.setToX(destination.getCenterX());
-                    saut.setToY(destination.getCenterY());
+        // On recalcule le même décalage pour que le pion garde sa place relative sur la case
+        double posX = (idJoueur % 2 == 0) ? -20 : 20;
+        double posY = (idJoueur < 2) ? -20 : 20;
+
+        if (nbCasesAAvancer >= 0) {
+            for (int i = 0; i < nbCasesAAvancer; i++) {
+                // On utilise le tableau d'indices avec l'idJoueur
+                if (indicesCasesActuelles[idJoueur] + 1 < cases.size()) {
+                    indicesCasesActuelles[idJoueur]++;
+                    Case destination = cases.get(indicesCasesActuelles[idJoueur]);
+
+                    // On anime le bon sprite
+                    TranslateTransition saut = new TranslateTransition(Duration.millis(1000), sprites[idJoueur]);
+                    saut.setToX(destination.getCenterX() + posX);
+                    saut.setToY(destination.getCenterY() + posY);
                     trajetComplet.getChildren().add(saut);
                 }
             }
         } else {
-            // Si c'est négatif, on convertit en distance positive avec Math.abs
             int sautsEnArriere = Math.abs(nbCasesAAvancer);
-
             for (int i = 0; i < sautsEnArriere; i++) {
-                if (indiceCaseActuelle - 1 >= 0) {
-                    indiceCaseActuelle--;
-                    Case destination = cases.get(indiceCaseActuelle);
+                if (indicesCasesActuelles[idJoueur] - 1 >= 0) {
+                    indicesCasesActuelles[idJoueur]--;
+                    Case destination = cases.get(indicesCasesActuelles[idJoueur]);
 
-                    TranslateTransition saut = new TranslateTransition(Duration.millis(1000), sprite);
-                    saut.setToX(destination.getCenterX());
-                    saut.setToY(destination.getCenterY());
+                    TranslateTransition saut = new TranslateTransition(Duration.millis(1000), sprites[idJoueur]);
+                    saut.setToX(destination.getCenterX() + posX);
+                    saut.setToY(destination.getCenterY() + posY);
                     trajetComplet.getChildren().add(saut);
                 }
-                // Retirer le "else { indiceCaseActuelle = 0; }" ici car ça casse l'animation
             }
         }
 
         trajetComplet.setOnFinished(e -> {
             if (auFini != null) auFini.run();
         });
-
         trajetComplet.play();
     }
-
     // METHODE PROVISOIRE permet de simuler le potentiel déplacement d'un joueur après réponse
     public int nbCasesAParcourir(){
         // création d'un objet Random
@@ -99,10 +121,4 @@ public class movementController {
         System.out.println(alea);
         return alea;
     }
-
-    //this method is use to determine the theme of your box
-    public void displayQuestion(Case c){
-    }
-
-
 }

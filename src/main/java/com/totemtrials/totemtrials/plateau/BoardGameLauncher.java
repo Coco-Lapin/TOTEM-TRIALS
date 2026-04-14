@@ -12,12 +12,10 @@ import static javafx.application.Application.launch;
 
 public class BoardGameLauncher extends Application {
 
-
-
-
- //lien à MODIF
+private Stage mainStage;
 
         public void start(Stage primaryStage) throws Exception {
+            this.mainStage = primaryStage;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Plateau.fxml"));
             AnchorPane root = loader.load();
 
@@ -34,6 +32,12 @@ public class BoardGameLauncher extends Application {
             primaryStage.setTitle("Mon Plateau de Jeu");
             primaryStage.show();
         }
+
+    public void stopGame() {
+        if (mainStage != null) {
+            mainStage.close();
+        }
+    }
 
         public static void main(String[] args) {
             launch(args);

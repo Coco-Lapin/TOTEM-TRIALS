@@ -19,17 +19,22 @@ public class GestionQuiz {
     private List<Question> listeComplete; // Toutes les questions du JSON
     private Question questionActuelle;    // La question que l'on pose
     private String themeChoisi;           // Le thème pioché au hasard
-    private int niveauChoisi;             // Le niveau cliqué par l'utilisateur
-    private Consumer<VBox> end;
+    private int niveauChoisi=1;             // Le niveau cliqué par l'utilisateur
+    private Consumer<GestionQuiz> onFinishAction;
     private VBox vue; // Le conteneur principal
+    private boolean correcte = false;
 
-    public GestionQuiz(String themeChoix, Consumer<VBox> end) {
+    public GestionQuiz(String themeChoix) {
         vue = new VBox(20);
         vue.setAlignment(Pos.CENTER);
         this.themeChoisi = themeChoix;
-        this.end=end;
+        //this.end=end;
         chargerQuestionsDuFichier();
         afficherMenuSelection(); // On commence par le menu
+    }
+
+    public void setOnFinish(Consumer<GestionQuiz> action) {
+        this.onFinishAction = action;
     }
 
     public VBox getVue() { return vue; }
@@ -120,24 +125,38 @@ public class GestionQuiz {
     // --- ÉCRAN 3 : LE RÉSULTAT ---
     private void verifierLaReponse(String reponseCliquee) {
         vue.getChildren().clear(); // On efface la question
-
+        setCorrecte(false);
         Label resultat = new Label();
         if (reponseCliquee.equals(questionActuelle.getReponse())) {
             resultat.setText("BRAVO ! C'est juste.");
             resultat.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+            setCorrecte(true);
         } else {
             resultat.setText("FAUX... La réponse était : " + questionActuelle.getReponse());
             resultat.setStyle("-fx-text-fill: red;");
+            setCorrecte(false);
         }
 
         Button boutonSuivant = new Button("Retour au jeu");
         boutonSuivant.setOnAction(e -> {
-            if (this.end != null) {
-                // On "donne" la vue au consumer pour qu'il la nettoie
-                this.end.accept(this.vue);
+            if (this.onFinishAction != null) {
+                // On s'envoie soi-même (this) à l'action
+                this.onFinishAction.accept(this);
             }
         });
         vue.getChildren().addAll(resultat, boutonSuivant);
 
+    }
+
+    public boolean isCorrecte() {
+        return correcte;
+    }
+
+    public void setCorrecte(boolean correcte) {
+        this.correcte = correcte;
+    }
+
+    public int getNiveauChoisi() {
+        return niveauChoisi;
     }
 }

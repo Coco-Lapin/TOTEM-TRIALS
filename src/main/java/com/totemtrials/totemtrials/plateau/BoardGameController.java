@@ -8,6 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,7 +38,7 @@ public class BoardGameController {
     private movementController MC;
     public Label labelRound;
     public ImageView imageFond;
-
+    private BoardGameLauncher BoardGameLauncher;
 
 
     @FXML
@@ -51,7 +52,6 @@ public class BoardGameController {
         @FXML private Rectangle RTour1, RTour2, RTour3, RTour4, RTour5, RTour6, RTour7, RTour8;
         @FXML private Rectangle RMyst1, RMyst2, RMyst3, RMyst4, RMyst5, RMyst6, RMyst7, RMyst8;
         @FXML private Rectangle RVersus1, RVersus2,RVersus3,RVersus4, RHop1 , RHop2 , RHop3 , RHop4 ;
-
 
         // Ma liste de cases "logiques"
         private final List<Case> listeCases = new ArrayList<>();
@@ -96,18 +96,13 @@ public class BoardGameController {
                     // Combien de fois l'écran est plus petit que l'image ?
                     double ratioX = zoneCentrale.getWidth() / LARGEUR_REELLE;
                     double ratioY = zoneCentrale.getHeight() / HAUTEUR_REELLE;
-
                     // On prend le plus petit des deux ratios pour ne pas déborder (équivalent du PreserveRatio)
                     return Math.min(ratioX, ratioY);
-
                 }, zoneCentrale.widthProperty(), zoneCentrale.heightProperty());
 
                 // 2. On applique ce zoom au plateau entier (Image + Cases en même temps !)
                 plateauJeu.scaleXProperty().bind(ratioZoom);
                 plateauJeu.scaleYProperty().bind(ratioZoom);
-
-
-
 
                 Image imgTour = new Image(getClass().getResource("/images/Tourism.png").toExternalForm());
                 ImagePattern patternTour = new ImagePattern(imgTour);
@@ -121,7 +116,6 @@ public class BoardGameController {
                         r.setFill(patternTour);
                     }
                 }
-
                 Image imgDiv = new Image(getClass().getResource("/images/Divert.png").toExternalForm());
                 ImagePattern patternDiv = new ImagePattern(imgDiv);
                 Rectangle[] Divert ={RDiv1, RDiv2, RDiv3, RDiv4, RDiv5, RDiv6, RDiv7, RDiv8};
@@ -130,7 +124,6 @@ public class BoardGameController {
                         r.setFill(patternDiv);
                     }
                 }
-
                 Image imgMyst = new Image(getClass().getResource("/images/Mistery.png").toExternalForm());
                 ImagePattern patternMyst = new ImagePattern(imgMyst);
                 Rectangle[] Myst ={RMyst1, RMyst2, RMyst3, RMyst4, RMyst5, RMyst6, RMyst7, RMyst8};
@@ -139,7 +132,6 @@ public class BoardGameController {
                         r.setFill(patternMyst);
                     }
                 }
-
                 Image imgInfo = new Image(getClass().getResource("/images/Informatic.png").toExternalForm());
                 ImagePattern patternInfo = new ImagePattern(imgInfo);
                 Rectangle[] Info ={RInfo1, RInfo2, RInfo3, RInfo4, RInfo5, RInfo6, RInfo7, RInfo8};
@@ -168,16 +160,12 @@ public class BoardGameController {
                     String type = determinerType(r);
                     listeCases.add(new Case("Case" + i, type, r));
                 }
-
                 int k = 1;
                 // Exemple : Vérifier que le calcul du centre fonctionne
                 for (Case c : listeCases) {
-
                     System.out.println("Case n°: "+ k + c.getId() + " centrée en : " + c.getCenterX() + ", " + c.getCenterY());
                     k++;
                 }
-
-
             });
             GameManager gm = new GameManager(this, this.MC, this.listeCases);
             gm.demarrerPartie();
@@ -212,6 +200,11 @@ public class BoardGameController {
     }
 
     public void StopGame(ActionEvent actionEvent) {
+        // le node permet de dire au getSource que c'est un objet JAVAFX
+        // et permet d'accèder au méthodes spécifiques ( getScene())
+        // getWindow() récupère l'objet Window qui contient tout
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     public void OpenSettings(ActionEvent actionEvent) {
