@@ -83,7 +83,7 @@
                                         <Rectangle fx:id="RInfo2" fill="DODGERBLUE" height="140.0" layoutX="1890.0" layoutY="2765.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RMyst2" fill="DODGERBLUE" height="140.0" layoutX="2340.0" layoutY="2770.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RTour2" fill="DODGERBLUE" height="140.0" layoutX="2760.0" layoutY="2640.0" opacity="1.0" stroke="BLACK" width="140.0" />
-                                        <Rectangle fx:id="RHop2" fill="green" height="140.0" layoutX="3130.0" layoutY="2130.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RBonus1" fill="green" height="140.0" layoutX="3130.0" layoutY="2130.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RVersus2" fill="yellow" height="140.0" layoutX="3115.0" layoutY="1780.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RDiv3" fill="DODGERBLUE" height="140.0" layoutX="2790.0" layoutY="1235.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RInfo3" fill="DODGERBLUE" height="140.0" layoutX="2375.0" layoutY="1165.0" opacity="1.0" stroke="BLACK" width="140.0" />
@@ -101,7 +101,7 @@
                                         <Rectangle fx:id="RDiv6" fill="DODGERBLUE" height="140.0" layoutX="3750.0" layoutY="2645.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RInfo6" fill="DODGERBLUE" height="140.0" layoutX="4025.0" layoutY="2730.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RVersus3" fill="yellow" height="140.0" layoutX="4550.0" layoutY="2685.0" opacity="1.0" stroke="BLACK" width="140.0" />
-                                        <Rectangle fx:id="RHop4" fill="green" height="140.0" layoutX="4835.0" layoutY="2385.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RBonus2" fill="green" height="140.0" layoutX="4835.0" layoutY="2385.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RMyst6" fill="DODGERBLUE" height="140.0" layoutX="4880.0" layoutY="2065.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RTour6" fill="DODGERBLUE" height="140.0" layoutX="4730.0" layoutY="1670.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RDiv7" fill="DODGERBLUE" height="140.0" layoutX="4605.0" layoutY="1350.0" opacity="1.0" stroke="BLACK" width="140.0" />
