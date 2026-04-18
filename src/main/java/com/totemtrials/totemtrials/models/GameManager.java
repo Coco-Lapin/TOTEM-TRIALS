@@ -68,7 +68,8 @@ public class GameManager {
     }
 
     private GestionQuiz setupQuiz(String tileTheme) {
-        GestionQuiz quiz = new GestionQuiz(tileTheme);
+        // On passe zoneCentrale pour le binding adaptatif
+        GestionQuiz quiz = new GestionQuiz(tileTheme, boardGameController.getZoneCentrale());
 
         quiz.setOnFinish(q -> {
             // On ferme la fenêtre d'abord

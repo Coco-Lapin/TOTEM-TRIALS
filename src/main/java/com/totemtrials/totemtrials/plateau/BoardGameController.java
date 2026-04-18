@@ -8,6 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -153,6 +154,12 @@ public class BoardGameController {
                     r.setFill(patternHop);
                 }
 
+                Image imgStart = new Image(getClass().getResource("/images/start.png").toExternalForm());
+                RStart.setFill(new ImagePattern(imgStart));
+
+                Image imgEnd = new Image(getClass().getResource("/images/end.png").toExternalForm());
+                RFinish.setFill(new ImagePattern(imgEnd));
+
                 // Dans ton initialize, tu boucles sur CE tableau
                 for (int i = 0; i < cheminDuJeu.length; i++) {
                     Rectangle r = cheminDuJeu[i];
@@ -170,23 +177,23 @@ public class BoardGameController {
             GameManager gm = new GameManager(this, this.MC, this.listeCases);
             gm.demarrerPartie();
         }
-    public void afficherPopUpQuiz(VBox quizVue) {
+    public void afficherPopUpQuiz(StackPane quizVue) {
         // 1. On définit la taille
-        quizVue.setMaxSize(400, 400);
+        quizVue.setMaxSize(400, 500);
+        StackPane.setAlignment(quizVue, Pos.CENTER);
         // Applique le style de pop-up ici si tu veux
-        quizVue.setStyle(
-                "-fx-background-color: #F4F4F4; " + // Gris très clair ou blanc
-                        "-fx-background-radius: 15; " +      // Bords arrondis
-                        "-fx-border-color: #333333; " +      // Bordure foncée
-                        "-fx-border-radius: 15; " +
-                        "-fx-border-width: 3; " +
-                        "-fx-padding: 30; " +                // Espace interne
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);" // Ombre
-        );
+//        quizVue.setStyle(
+//                "-fx-background-radius: 15; " +      // Bords arrondis
+//                "-fx-border-color: #333333; " +      // Bordure foncée
+//                "-fx-border-radius: 15; " +
+//                "-fx-border-width: 3; " +
+//                "-fx-padding: 30; " +                // Espace interne
+//                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);" // Ombre
+//        );
         zoneCentrale.getChildren().add(quizVue);
     }
 
-    public void fermerPopUpQuiz(VBox quizVue) {
+    public void fermerPopUpQuiz(StackPane quizVue) {
         zoneCentrale.getChildren().remove(quizVue);
     }
     public List<Case> getListeCases() {
@@ -208,6 +215,11 @@ public class BoardGameController {
     }
 
     public void OpenSettings(ActionEvent actionEvent) {
+    }
+
+    // Expose zoneCentrale pour le binding adaptatif dans GestionQuiz
+    public StackPane getZoneCentrale() {
+        return zoneCentrale;
     }
 }
 
