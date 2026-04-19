@@ -33,6 +33,9 @@ public class GestionQuiz {
     private static final double PARCHEMIN_W = POPUP_W * 0.60; // zone utile sans bordures pierre
     private static final double PARCHEMIN_H = POPUP_H * 0.70;
 
+    public  StackPane getZoneCentrale() {
+        return zoneCentrale;
+    }
     public GestionQuiz(String themeChoix, StackPane zoneCentrale) {
         this.zoneCentrale = zoneCentrale;
 

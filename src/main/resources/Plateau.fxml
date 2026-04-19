@@ -95,7 +95,7 @@
                                         <Rectangle fx:id="RTour4" fill="DODGERBLUE" height="140.0" layoutX="3690.0" layoutY="560.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RDiv5" fill="DODGERBLUE" height="140.0" layoutX="3845.0" layoutY="910.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RInfo5" fill="DODGERBLUE" height="140.0" layoutX="3655.0" layoutY="1225.0" opacity="1.0" stroke="BLACK" width="140.0" />
-                                        <Rectangle fx:id="RHop3" fill="green" height="140.0" layoutX="3430.0" layoutY="1505.0" opacity="1.0" stroke="BLACK" width="140.0" />
+                                        <Rectangle fx:id="RHop2" fill="green" height="140.0" layoutX="3430.0" layoutY="1505.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RMyst5" fill="DODGERBLUE" height="140.0" layoutX="3390.0" layoutY="1800.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RTour5" fill="DODGERBLUE" height="140.0" layoutX="3485.0" layoutY="2415.0" opacity="1.0" stroke="BLACK" width="140.0" />
                                         <Rectangle fx:id="RDiv6" fill="DODGERBLUE" height="140.0" layoutX="3750.0" layoutY="2645.0" opacity="1.0" stroke="BLACK" width="140.0" />
