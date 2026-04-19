@@ -29,7 +29,7 @@ private Stage mainStage;
             primaryStage.setMinWidth(800);
             primaryStage.setMinHeight(600);
 
-            primaryStage.setTitle("Mon Plateau de Jeu");
+            primaryStage.setTitle("Game set");
             primaryStage.show();
         }
 

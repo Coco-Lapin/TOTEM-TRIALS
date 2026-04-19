@@ -46,19 +46,19 @@ public class movementController {
     public void setPlateauJeu(Pane p) {this.plateauJeu = p;}
 
 
-    // 2. Initialize 4 players
+    // 2. On initialise 4 pions au lieu d'un seul
     public void initialiserPions() {
         Case depart = boardGame.getListeCases().get(0);
 
-        // set the lenghts and positions for each players
+        // A CHANGER ALLER DE I A SPRITES.LENGTHS
         for (int i = 0; i < 4; i++) {
-            sprites[i] = new Circle(40);
+            sprites[i] = new Circle(40); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
             sprites[i].setFill(couleursJoueurs[i]);
             sprites[i].setStroke(Color.BLACK);
             sprites[i].setStrokeWidth(3);
 
-
-            // player1 : TOP-LEFT , 2 : TOP-RIGHT , 3 : BOTTOM-LEFT , 4 : BOTTOM-RIGHT
+            // PETITE ASTUCE : Décalage pour qu'ils ne se superposent pas tous au millimètre près
+            // Joueur 0 (Bleu) : Haut-Gauche | Joueur 1 (Rouge) : Haut-Droit, etc.
             double posX = (i % 2 == 0) ? -20 : 20;
             double posY = (i < 2) ? -20 : 20;
 
@@ -107,6 +107,7 @@ public class movementController {
                 }
             }
         }
+
         trajetComplet.setOnFinished(e -> {
             if (auFini != null) auFini.run();
         });

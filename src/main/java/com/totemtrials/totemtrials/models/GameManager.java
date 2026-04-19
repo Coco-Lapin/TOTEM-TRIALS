@@ -5,7 +5,6 @@ import com.totemtrials.totemtrials.plateau.BoardGameController;
 import com.totemtrials.totemtrials.plateau.Case;
 import com.totemtrials.totemtrials.questions.GestionQuiz;
 import javafx.animation.PauseTransition;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -13,9 +12,7 @@ import java.util.List;
 public class GameManager {
     private BoardGameController boardGameController;
     private movementController MC;
-    private Shortcut Shortcut;
     private List<Case> listeCases;
-
 
     // 1. Nouvelles variables pour le multijoueur
     private int[] positionsJoueurs = {0, 0, 0, 0}; // La position exacte de chaque joueur
@@ -38,15 +35,9 @@ public class GameManager {
 
     public void jouerUnTour() {
         System.out.println("--- C'EST AU TOUR DU JOUEUR " + joueurActuel + " ---");
-        int distance;
-        if(positionsJoueurs[joueurActuel] == 0) {
 
-             distance = 1;
-
-        }else{
-             distance=0;
-        }
-
+        // Ici, tu pourras brancher ton lancer de dé (ex: MC.nbCasesAParcourir())
+        int distance = 2;
 
         // 2. On met à jour la position mathématique du joueur actuel
         positionsJoueurs[joueurActuel] += distance;
@@ -64,32 +55,19 @@ public class GameManager {
     }
 
     public void analyserCaseArrivee(int positionActuelle) {
-
+        // Petite optimisation : tu as déjà "listeCases" dans la classe, pas besoin de repasser par le controller
         Case c = this.listeCases.get(positionActuelle);
         String tileTheme = c.getType();
 
-        if(tileTheme.equals("VERSUS") ) {
+        if(tileTheme.equals("VERSUS") || tileTheme.equals("HOP")) {
             tileTheme = "Mystery (Jumanji)";
-        }
-        if(tileTheme.equals("Bonus") ) {
-            tileTheme = "Mystery (Jumanji)";
-        }
-        if(tileTheme.equals("HOP")){
-            // On passe le boardGameController ET le GameManager (this)
-            Shortcut sc = new Shortcut(boardGameController, this);
-
-            VBox HopView = sc.displayBox();
-            this.boardGameController.displayPopUpQuizHOP(HopView);
-
-            // On s'arrête ici ! C'est Shortcut qui rappellera GameManager plus tard.
-            return;
         }
 
         GestionQuiz nouveauQuiz = setupQuiz(tileTheme);
         this.boardGameController.afficherPopUpQuiz(nouveauQuiz.getVue());
     }
 
-    public GestionQuiz setupQuiz(String tileTheme) {
+    private GestionQuiz setupQuiz(String tileTheme) {
         GestionQuiz quiz = new GestionQuiz(tileTheme);
 
         quiz.setOnFinish(q -> {
@@ -134,46 +112,5 @@ public class GameManager {
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(e -> jouerUnTour());
         pause.play();
-    }
-
-    // Méthode appelée depuis Shortcut quand l'action est terminée
-    public void terminerHop(boolean aJoue, boolean victoire) {
-        if (!aJoue) {
-            // Le joueur a cliqué sur "No", il ne se passe rien, on passe au suivant
-            System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
-            positionsJoueurs[joueurActuel] += 1;
-
-            // Sécurité : ne pas dépasser la fin... ni le début !
-            if (positionsJoueurs[joueurActuel] >= listeCases.size()) {
-                positionsJoueurs[joueurActuel] = listeCases.size() - 1;
-            } else if (positionsJoueurs[joueurActuel] < 0) {
-                positionsJoueurs[joueurActuel] = 0; // Empêche de reculer avant la case Départ
-            }
-
-            // On déplace le pion, puis on passe au joueur suivant
-            MC.deplacerPion(joueurActuel, 1, () -> {
-                passerAuJoueurSuivant();
-            });
-
-            return;
-        }
-
-        // Le joueur a fait le quiz, on calcule la distance
-        int steps = victoire ? 7 : -3;
-        System.out.println("Résultat du raccourci : le joueur avance de " + steps);
-
-        positionsJoueurs[joueurActuel] += steps;
-
-        // Sécurité : ne pas dépasser la fin... ni le début !
-        if (positionsJoueurs[joueurActuel] >= listeCases.size()) {
-            positionsJoueurs[joueurActuel] = listeCases.size() - 1;
-        } else if (positionsJoueurs[joueurActuel] < 0) {
-            positionsJoueurs[joueurActuel] = 0; // Empêche de reculer avant la case Départ
-        }
-
-        // On déplace le pion, puis on passe au joueur suivant
-        MC.deplacerPion(joueurActuel, steps, () -> {
-            passerAuJoueurSuivant();
-        });
     }
 }

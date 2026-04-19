@@ -51,7 +51,7 @@ public class BoardGameController {
         @FXML private Rectangle RInfo1, RInfo2, RInfo3, RInfo4, RInfo5, RInfo6, RInfo7, RInfo8;
         @FXML private Rectangle RTour1, RTour2, RTour3, RTour4, RTour5, RTour6, RTour7, RTour8;
         @FXML private Rectangle RMyst1, RMyst2, RMyst3, RMyst4, RMyst5, RMyst6, RMyst7, RMyst8;
-        @FXML private Rectangle RVersus1, RVersus2,RVersus3,RVersus4, RHop1 , RBonus1 , RHop3 , RBonus2;
+        @FXML private Rectangle RVersus1, RVersus2,RVersus3,RVersus4, RHop1 , RHop2 , RHop3 , RHop4 ;
 
         // Ma liste de cases "logiques"
         private final List<Case> listeCases = new ArrayList<>();
@@ -68,7 +68,6 @@ public class BoardGameController {
             if (id.startsWith("RMyst"))  return "Mystery (Jumanji)";
             if (id.startsWith("RVersus")) return "VERSUS";
             if (id.startsWith("RHop"))    return "HOP";
-            if (id.startsWith("RBonus"))  return "Bonus";
             if (id.equals("RStart"))     return "DEPART";
             if (id.equals("RFinish"))    return "FINISH";
 
@@ -87,9 +86,9 @@ public class BoardGameController {
             Platform.runLater(() -> {
 
                 Rectangle [] cheminDuJeu={RStart , RDiv1, RInfo1, RMyst1,RTour1,RVersus1,RHop1,
-                        RDiv2,RInfo2,RMyst2,RTour2,RBonus1,RVersus2,RDiv3,RInfo3,RMyst3,RTour3,
+                        RDiv2,RInfo2,RMyst2,RTour2,RHop2,RVersus2,RDiv3,RInfo3,RMyst3,RTour3,
                         RDiv4,RInfo4,RMyst4,RTour4,RDiv5,RInfo5,RHop3,RMyst5,RTour5,
-                        RDiv6,RInfo6,RVersus3,RBonus2,RMyst6,RTour6,RDiv7,RInfo7,RMyst7,RTour7,
+                        RDiv6,RInfo6,RVersus3,RHop4,RMyst6,RTour6,RDiv7,RInfo7,RMyst7,RTour7,
                         RDiv8,RVersus4,RInfo8,RMyst8,RTour8,RFinish
                 };
                 // 1. On calcule le ratio parfait pour que tout rentre dans l'écran
@@ -149,7 +148,7 @@ public class BoardGameController {
                 }
                 Image imgHop = new Image(getClass().getResource("/images/HOP.png").toExternalForm());
                 ImagePattern patternHop = new ImagePattern(imgHop);
-                Rectangle[] Hop ={RHop1,RBonus1,RHop3,RBonus2};
+                Rectangle[] Hop ={RHop1, RHop2,RHop3,RHop4};
                 for(Rectangle r : Hop){
                     r.setFill(patternHop);
                 }
@@ -172,22 +171,6 @@ public class BoardGameController {
             gm.demarrerPartie();
         }
     public void afficherPopUpQuiz(VBox quizVue) {
-        // 1. On définit la taille
-        quizVue.setMaxSize(400, 400);
-        // Applique le style de pop-up ici si tu veux
-        quizVue.setStyle(
-                "-fx-background-color: #F4F4F4; " + // Gris très clair ou blanc
-                        "-fx-background-radius: 15; " +      // Bords arrondis
-                        "-fx-border-color: #333333; " +      // Bordure foncée
-                        "-fx-border-radius: 15; " +
-                        "-fx-border-width: 3; " +
-                        "-fx-padding: 30; " +                // Espace interne
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);" // Ombre
-        );
-        zoneCentrale.getChildren().add(quizVue);
-    }
-
-    public void displayPopUpQuizHOP(VBox quizVue) {
         // 1. On définit la taille
         quizVue.setMaxSize(400, 400);
         // Applique le style de pop-up ici si tu veux
