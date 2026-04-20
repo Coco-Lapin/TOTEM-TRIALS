@@ -73,6 +73,42 @@ public class GestionQuiz {
         chargerQuestionsDuFichier();
         afficherMenuSelection(); // On commence par le menu
     }
+    //Constructor for Versus
+    public GestionQuiz(String themeChoix,int niveauChoisi, StackPane zoneCentrale) {
+        this.zoneCentrale = zoneCentrale;
+
+        // ImageView comme vrai fond — taille bindée sur zoneCentrale, 100% adaptatif
+        ImageView bgView = new ImageView(
+                new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
+        );
+        bgView.fitWidthProperty().bind(zoneCentrale.widthProperty().multiply(POPUP_W));
+        bgView.fitHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
+        bgView.setPreserveRatio(false);
+
+        // VBox pour le contenu dynamique par dessus l'image
+        // maxWidth contraint au parchemin réel — exclut les bordures pierre gauche/droite
+        contenu = new VBox(12);
+        contenu.setAlignment(Pos.CENTER);
+        contenu.prefWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W));
+        contenu.maxWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W));
+        contenu.prefHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
+        contenu.styleProperty().bind(
+                Bindings.concat("-fx-padding: ")
+                        .concat(zoneCentrale.heightProperty().multiply(0.15))
+                        .concat(" 0 ")
+                        .concat(zoneCentrale.heightProperty().multiply(0.05))
+                        .concat(" 0;")
+        );
+        // StackPane empile ImageView (fond) + VBox (contenu)
+        vue = new StackPane();
+        vue.prefWidthProperty().bind(zoneCentrale.widthProperty().multiply(POPUP_W));
+        vue.prefHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
+        vue.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);");
+        vue.getChildren().addAll(bgView, contenu);
+
+        this.themeChoisi = themeChoix;
+        chargerQuestionsDuFichier();
+    }
 
     public void setOnFinish(Consumer<GestionQuiz> action) {
         this.onFinishAction = action;
@@ -108,6 +144,9 @@ public class GestionQuiz {
         );
         return label;
     }
+
+
+
 
     // --- ÉCRAN 1 : CHOIX DU NIVEAU ---
     private void afficherMenuSelection() {
@@ -152,7 +191,7 @@ public class GestionQuiz {
     }
 
     // --- ÉCRAN 2 : LA QUESTION ---
-    private void preparerEtAfficherQuestion() {
+    public void preparerEtAfficherQuestion() {
         contenu.getChildren().clear(); // On efface le menu
 
         // 1. Filtrer les questions qui ont le bon thème et le bon niveau
@@ -242,4 +281,12 @@ public class GestionQuiz {
     public boolean isCorrecte() { return correcte; }
     public void setCorrecte(boolean correcte) { this.correcte = correcte; }
     public int getNiveauChoisi() { return niveauChoisi; }
+
+    public void setNiveauChoisi(int niveauChoisi) {
+        if(niveauChoisi > 4 && niveauChoisi <= 0) {
+            this.niveauChoisi = 4;
+        }else{
+            this.niveauChoisi = niveauChoisi;
+        }
+    }
 }

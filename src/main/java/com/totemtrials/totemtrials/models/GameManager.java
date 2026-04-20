@@ -5,6 +5,7 @@ import com.totemtrials.totemtrials.plateau.BoardGameController;
 import com.totemtrials.totemtrials.plateau.Case;
 import com.totemtrials.totemtrials.questions.GestionQuiz;
 import javafx.animation.PauseTransition;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class GameManager {
     private movementController MC;
     private List<Case> listeCases;
     private Shortcut shortcut;
+    private StackPane zoneCentrale;
 
     // 1. Nouvelles variables pour le multijoueur
     private int[] positionsJoueurs = {0, 0, 0, 0}; // La position exacte de chaque joueur
@@ -25,6 +27,7 @@ public class GameManager {
         this.listeCases = cases;
         // CORRECTION 1 : Initialiser l'objet Shortcut ici !
         this.shortcut = new Shortcut(this.boardGameController, this);
+
     }
 
     public void demarrerPartie() {
@@ -68,7 +71,13 @@ public class GameManager {
         String tileTheme = c.getType();
 
         if(tileTheme.equals("VERSUS") ) {
-            tileTheme = "Mystery (Jumanji)";
+            Versus v = new Versus(boardGameController.getZoneCentrale());
+            v.setGameManager(this); // On lie le GameManager
+            v.setBoardGameController(this.boardGameController);
+            // ... set les controllers ...
+            v.choosePlayer(); // Prépare les boutons
+            this.boardGameController.afficherPopUpQuiz(v.getContenu()); // Affiche la liste des adversaires
+            return;
         }
 
         if(tileTheme.equals("HOP")){
@@ -161,5 +170,9 @@ public class GameManager {
         MC.deplacerPion(joueurActuel, distance, () -> {
             passerAuJoueurSuivant();
         });
+    }
+
+    public int getJoueurActuel() {
+        return joueurActuel;
     }
 }
