@@ -10,11 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -42,10 +40,10 @@ public class HomePage extends Application {
         this.stage = stage;
 
         //-------- Création des jetons ---------
-        tiger = new Token("tiger",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
-        eagle = new Token("aigle",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
-        snake = new Token("serpent",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
-        elephant = new Token("elephant",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
+        tiger = new Token("tiger","Avance d'une case en plus en cas de victoire d'un versus",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
+        eagle = new Token("aigle","Avance d'une case en plus en cas de bonne réponse",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
+        snake = new Token("serpent","Recule d'une case en moins en cas de défaites d'un versus",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
+        elephant = new Token("elephant","Recule d'une case en moins en cas de mauvaise réponse",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
         //---------Mettre les jetons dans une liste--------
         myTokens = new Token[]{tiger, eagle, snake, elephant};
 
@@ -319,6 +317,8 @@ public class HomePage extends Application {
         return new Scene(rootChoix,600,500);
     }
 
+
+    // A RECUPERER ET A INTEGRER
     public Scene tokenChoice(Scene menuScene, Player[] joueur){
 
         //-----------------Creation de la scène-------------------------
@@ -343,29 +343,41 @@ public class HomePage extends Application {
         Label instruction = new Label("C'est au tour de : " + joueur[tourActuel[0]].getNom());
         instruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
 
+
         //----------------- Animation et sélection des jetons -----------------------
         for (Token j : myTokens) {
 
             // On récupère l'ImageView qui contient le PNG (fixe)
             ImageView vueAffichee = j.getImageBase();
 
+            Label labelPouvoir = new Label("");
+            labelPouvoir.setTextFill(Color.WHITE); // Plus fiable que setStyle pour un test
+            labelPouvoir.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);"); // Fond semi-transparent
+            labelPouvoir.setMinWidth(Region.USE_PREF_SIZE);
+            labelPouvoir.setMinHeight(30);
+
+            VBox groupement = new VBox(10); // 10 pixels d'écart entre image et texte
+            groupement.getChildren().addAll(vueAffichee, labelPouvoir);
+            groupement.setAlignment(Pos.CENTER);
+
             // On stocke l'image PNG et son Viewport une fois pour toutes
             Image imageFixe = j.getImageBase().getImage();
             Rectangle2D viewportFixe = j.getImageBase().getViewport();
-
-            // On stocke l'image GIF
             Image imageAnimée = j.getImageAnimation().getImage();
 
             vueAffichee.setOnMouseEntered(_ -> {
                 // PASSAGE AU GIF
                 vueAffichee.setImage(imageAnimée);
                 vueAffichee.setViewport(null); // On enlève le crop pour voir tout le GIF
+                // affiche le passif
+                labelPouvoir.setText(j.getPassif());
             });
 
             vueAffichee.setOnMouseExited(_ -> {
                 // RETOUR AU PNG (L'animation s'arrête visuellement ici)
                 vueAffichee.setImage(imageFixe);
                 vueAffichee.setViewport(viewportFixe); // On remet le crop du PNG
+                labelPouvoir.setText("");
             });
 
             vueAffichee.setOnMouseClicked(_ -> {
@@ -377,6 +389,9 @@ public class HomePage extends Application {
                     // 2. Faire disparaître le jeton (le retirer du layout ou le rendre invisible)
                     vueAffichee.setVisible(false);
                     vueAffichee.setDisable(true); // Empêche de cliquer sur un jeton invisible
+
+                    groupement.setVisible(false);
+                    groupement.setManaged(false);
 
                     // 3. Passer au joueur suivant
                     tourActuel[0]++;

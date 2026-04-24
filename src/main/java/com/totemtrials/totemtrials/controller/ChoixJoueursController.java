@@ -13,9 +13,9 @@ public class ChoixJoueursController {
             SceneManager.show(homeView.getScene(), "Menu principal")
         );
 
-        view.getBtn2Joueurs().setOnAction(_ -> goChoixJetons(2, model, view, homeView));
-        view.getBtn3Joueurs().setOnAction(_ -> goChoixJetons(3, model, view, homeView));
-        view.getBtn4Joueurs().setOnAction(_ -> goChoixJetons(4, model, view, homeView));
+        view.getBtn2Joueurs().setOnMouseClicked(_ -> goChoixJetons(2, model, view, homeView));
+        view.getBtn3Joueurs().setOnMouseClicked(_ -> goChoixJetons(3, model, view, homeView));
+        view.getBtn4Joueurs().setOnMouseClicked(_ -> goChoixJetons(4, model, view, homeView));
     }
 
     private void goChoixJetons(int count, Partie model, ChoixJoueursView view, HomePageView homeView) {

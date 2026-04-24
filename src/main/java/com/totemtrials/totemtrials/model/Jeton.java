@@ -3,11 +3,13 @@ package com.totemtrials.totemtrials.model;
 public class Jeton {
 
     private final String nom;
+    private final String passif;
     private final String imagePath;
     private final String animationPath;
 
-    public Jeton(String nom, String imagePath, String animationPath) {
+    public Jeton(String nom, String passif, String imagePath, String animationPath) {
         this.nom           = nom;
+        this.passif = passif;
         this.imagePath     = imagePath;
         this.animationPath = animationPath;
     }
@@ -15,4 +17,5 @@ public class Jeton {
     public String getNom()           { return nom; }
     public String getImagePath()     { return imagePath; }
     public String getAnimationPath() { return animationPath; }
+    public String getPassif()       { return passif; }
 }
