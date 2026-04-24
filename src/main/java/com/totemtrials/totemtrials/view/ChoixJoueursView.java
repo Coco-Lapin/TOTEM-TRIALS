@@ -25,9 +25,9 @@ public class ChoixJoueursView {
         bg.setPreserveRatio(false);
 
         //----------------Creation des images pour les boutons----------
-        btn2Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/2Players.png",0.3);
-        btn3Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
-        btn4Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);
+        btn2Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/2Players.png",0.25);
+        btn3Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
+        btn4Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);
 
         backButton   = new Button("BACK");
 
@@ -36,7 +36,7 @@ public class ChoixJoueursView {
         HBox boutons = new HBox(10, btn2Joueurs, btn3Joueurs, btn4Joueurs);
         boutons.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(10, backButton, boutons);
+        VBox layout = new VBox(10,boutons ,backButton );
         layout.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(bg, layout);
