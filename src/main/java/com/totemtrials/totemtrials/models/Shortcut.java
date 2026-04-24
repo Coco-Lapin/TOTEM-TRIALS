@@ -77,7 +77,7 @@ public class Shortcut {
         btnNo.setOnAction(e -> {
             // view est un StackPane
             this.boardGameController.fermerPopUpQuiz(view);
-            this.gameManager.terminerHop(false, false);
+            this.gameManager.EndingHop(false, false);
         });
 
         return view;
@@ -102,7 +102,7 @@ public class Shortcut {
             this.boardGameController.fermerPopUpQuiz(q.getVue());
 
             boolean estVictorieux = q.isCorrecte();
-            this.gameManager.terminerHop(true, estVictorieux);
+            this.gameManager.EndingHop(true, estVictorieux);
         });
 
         return quiz;

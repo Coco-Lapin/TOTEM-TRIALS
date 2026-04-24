@@ -183,8 +183,8 @@ public class BoardGameController {
         zoneCentrale.getChildren().add(quizVue);
     }
 
-    public void fermerPopUpQuiz(StackPane quizVue) {
-        zoneCentrale.getChildren().remove(quizVue);
+    public void fermerPopUpQuiz(StackPane window) {
+        zoneCentrale.getChildren().remove(window);
     }
     public List<Case> getListeCases() {
         return listeCases;

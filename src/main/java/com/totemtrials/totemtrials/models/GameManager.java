@@ -16,7 +16,7 @@ public class GameManager {
     private List<Case> listeCases;
     private Shortcut shortcut;
     private StackPane zoneCentrale;
-
+    private int ActualRound=0 ;
     // 1. Nouvelles variables pour le multijoueur
     private int[] positionsJoueurs = {0, 0, 0, 0}; // La position exacte de chaque joueur
     private int joueurActuel = 0; // 0 = Bleu, 1 = Rouge, 2 = Vert, 3 = Jaune
@@ -69,7 +69,9 @@ public class GameManager {
         // Petite optimisation : tu as déjà "listeCases" dans la classe, pas besoin de repasser par le controller
         Case c = this.listeCases.get(positionActuelle);
         String tileTheme = c.getType();
-
+        //-------------------------------------------------------------------------------------
+        // --------------------------------VERSUS GAMEPLAY ------------------------------------
+        //-------------------------------------------------------------------------------------
         if(tileTheme.equals("VERSUS") ) {
             Versus v = new Versus(boardGameController.getZoneCentrale());
             v.setGameManager(this); // On lie le GameManager
@@ -79,7 +81,9 @@ public class GameManager {
             this.boardGameController.afficherPopUpQuiz(v.getContenu()); // Affiche la liste des adversaires
             return;
         }
-
+        //-------------------------------------------------------------------------------------
+        // --------------------------------SHORTCUT GAMEPLAY ----------------------------------
+        //-------------------------------------------------------------------------------------
         if(tileTheme.equals("HOP")){
             // CORRECTION 2 : Afficher la pop-up de raccourci à l'écran
             this.boardGameController.afficherPopUpQuiz(shortcut.displayBox());
@@ -133,6 +137,7 @@ public class GameManager {
         // Si on dépasse le joueur 3 (le 4ème joueur), on revient au joueur 0
         if (joueurActuel > 3) {
             joueurActuel = 0;
+            setLabelRound();
         }
 
         // On met une petite pause d'une seconde pour que les joueurs respirent avant le prochain tour
@@ -141,7 +146,7 @@ public class GameManager {
         pause.play();
     }
 
-    public void terminerHop(boolean aJoue, boolean estVictorieux) {
+    public void EndingHop(boolean aJoue, boolean estVictorieux) {
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
             System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
@@ -174,5 +179,39 @@ public class GameManager {
 
     public int getJoueurActuel() {
         return joueurActuel;
+    }
+
+    public void EndingVersus(int idChallenger, int idOpponent, boolean challengerOk, boolean adversaireOk) {
+        System.out.println("Versus result");
+        int distChallenger = challengerOk ? 4 : -4;
+        int distOpponent = adversaireOk ? 4 : -4;
+
+        // 2. Update of the different positions
+        positionsJoueurs[idChallenger] += distChallenger;
+        positionsJoueurs[idOpponent] += distOpponent;
+
+        // 3. SECURITY : the player cannot go further back than the starting tile
+        if (positionsJoueurs[idChallenger] < 0) positionsJoueurs[idChallenger] = 0;
+        if (positionsJoueurs[idOpponent] < 0) positionsJoueurs[idOpponent] = 0;
+        // SECURITY : the player cannot go further than the ending tile
+        int Maxtile = listeCases.size() - 1;
+        if (positionsJoueurs[idChallenger] > Maxtile) positionsJoueurs[idChallenger] = Maxtile;
+        if (positionsJoueurs[idOpponent] > Maxtile) positionsJoueurs[idOpponent] = Maxtile;
+       // ONE BY ONE
+        //The challenger moves first
+        MC.deplacerPion(idChallenger, distChallenger, () -> {
+            // when the challenger finish his move then the opponent can be deplaced
+            MC.deplacerPion(idOpponent, distOpponent, () -> {
+                // when the two players moved then the game continues
+                passerAuJoueurSuivant();
+            });
+        });
+
+
+
+    }
+    public void setLabelRound(){
+        this.ActualRound++;
+        boardGameController.labelRound.setText(""+ActualRound);
     }
 }

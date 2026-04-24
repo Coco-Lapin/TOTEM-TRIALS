@@ -8,14 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class Versus {
@@ -29,6 +26,10 @@ public class Versus {
     private static final double POPUP_H = 0.85;
     private static final double PARCHEMIN_W = POPUP_W * 0.60; // zone utile sans bordures pierre
     private static final double PARCHEMIN_H = POPUP_H * 0.70;
+    private int idChallenger;
+    private int idAdversaire;
+    private boolean challengerCorrect;
+    private boolean adversaireCorrect;
 
     private int VersusLevel = 4;
     public Versus (StackPane ZC) {
@@ -77,27 +78,22 @@ public class Versus {
                 int adversaireId = i;
                 Button btnAdversaire = new Button("Joueur " + nomsCouleurs[i]);
 
-                // Style du bouton pour coller à l'UI
+
                 btnAdversaire.setStyle("-fx-background-color: rgba(0,0,0,0.5); -fx-text-fill: white; -fx-cursor: hand;");
                 btnAdversaire.prefWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.8));
 
                 btnAdversaire.setOnAction(e -> {
-                    System.out.println("Défi lancé contre le joueur " + adversaireId);
-
-                    // On ferme d'abord la sélection d'adversaire
+                    this.idChallenger = gameManager.getJoueurActuel();
+                    this.idAdversaire = adversaireId; // L'index du joueur cliqué
+                    System.out.println("Défi lancé ! " + idChallenger + " VS " + idAdversaire);
+                    // On ferme la sélection d'adversaire
                     boardGameController.fermerPopUpQuiz(contenu);
-
-                    // On lance le quiz Versus
-                    GestionQuiz versusQuiz = setupQuizVersus();
-                    boardGameController.afficherPopUpQuiz(versusQuiz.getVue());
+                    // On lance la séquence
+                    lancerTourChallenger();
                 });
-
                 box.getChildren().add(btnAdversaire);
             }
-
-            // 5. Ajout du fond (si tu veux réutiliser l'image de fond)
-            // On peut l'ajouter dynamiquement si ce n'est pas fait dans le constructeur
-            if (contenu.getChildren().size() == 1) { // Si seule la VBox est présente
+            if (contenu.getChildren().size() == 1) {
                 ImageView bgView = new ImageView(
                         new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
                 );
@@ -108,7 +104,6 @@ public class Versus {
                 // On insère l'image à l'index 0 (en dessous de la box)
                 contenu.getChildren().add(0, bgView);
             }
-
     }
 
     // Crée un Label bold dont la taille de police est bindée sur la largeur du parchemin
@@ -128,7 +123,7 @@ public class Versus {
     }
 
 
-    public GestionQuiz setupQuizVersus() {
+    public GestionQuiz setupQuizVersus(String playerName) {
         String tileTheme = "";
         Random rand = new Random();
         int alea = rand.nextInt(1,5);
@@ -139,24 +134,49 @@ public class Versus {
             case 3 -> tileTheme="Informatics";
             case 4 -> tileTheme="Mystery (Jumanji)";
         }
-
-        GestionQuiz quiz = new GestionQuiz(tileTheme,4, boardGameController.getZoneCentrale());
-
+        GestionQuiz quiz = new GestionQuiz(tileTheme,4, boardGameController.getZoneCentrale(),playerName);
         quiz.setOnFinish(q -> {
             gestionQuiz.preparerEtAfficherQuestion();
             this.boardGameController.fermerPopUpQuiz(q.getVue());
-
-
-
         });
-
         return quiz;
     }
 
+    private void lancerTourChallenger() {
+        GestionQuiz quizChallenger = setupQuizVersus("Challenger");
+        quizChallenger.setOnFinish(q -> {
+            // On sauvegarde la réponse du challenger
+            this.challengerCorrect = q.isCorrecte();
+            this.boardGameController.fermerPopUpQuiz(q.getVue());
+
+            // On enchaîne directement avec le tour de l'adversaire
+            lancerTourAdversaire();
+        });
+
+        this.boardGameController.afficherPopUpQuiz(quizChallenger.getVue());
+    }
+    private void lancerTourAdversaire() {
+
+        GestionQuiz quizAdversaire = setupQuizVersus("Opponent");
+        quizAdversaire.setOnFinish(q -> {
+            // On sauvegarde la réponse du défenseur
+            this.adversaireCorrect = q.isCorrecte();
+            this.boardGameController.fermerPopUpQuiz(q.getVue());
+
+            // Les deux ont joué, on résout le combat !
+            resoudreVersus();
+        });
+
+        this.boardGameController.afficherPopUpQuiz(quizAdversaire.getVue());
+    }
 
     public void setGameManager(GameManager gameManager) { this.gameManager = gameManager; }
 
-    public void setBoardGameController(BoardGameController boardGameController) {this.boardGameController = boardGameController;
+    public void setBoardGameController(BoardGameController boardGameController) {this.boardGameController = boardGameController;}
+
+    private void resoudreVersus() {
+        // On délègue au GameManager la responsabilité de déplacer les pions
+        gameManager.EndingVersus(idChallenger, idAdversaire, challengerCorrect, adversaireCorrect);
     }
 }
 

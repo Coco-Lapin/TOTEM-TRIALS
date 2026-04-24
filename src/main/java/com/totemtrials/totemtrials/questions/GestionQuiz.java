@@ -26,7 +26,7 @@ public class GestionQuiz {
     private VBox contenu;  // Contenu dynamique (labels, boutons)
     private boolean correcte = false;
     private StackPane zoneCentrale; // Référence pour les bindings adaptatifs
-
+    private Label LabelPlayerRound;
     // Largeur réelle du parchemin = 40% de zoneCentrale (popup) * 0.60 (zone sans bordures pierre)
     private static final double POPUP_W = 0.40;
     private static final double POPUP_H = 0.85;
@@ -74,9 +74,9 @@ public class GestionQuiz {
         afficherMenuSelection(); // On commence par le menu
     }
     //Constructor for Versus
-    public GestionQuiz(String themeChoix,int niveauChoisi, StackPane zoneCentrale) {
+    public GestionQuiz(String themeChoix,int niveauChoisi, StackPane zoneCentrale,String playerName) {
         this.zoneCentrale = zoneCentrale;
-
+        this.LabelPlayerRound = creerLabel("", 0.08);
         // ImageView comme vrai fond — taille bindée sur zoneCentrale, 100% adaptatif
         ImageView bgView = new ImageView(
                 new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
@@ -107,7 +107,12 @@ public class GestionQuiz {
         vue.getChildren().addAll(bgView, contenu);
 
         this.themeChoisi = themeChoix;
+        this.niveauChoisi = niveauChoisi;
+
         chargerQuestionsDuFichier();
+
+        // CORRECTION 2 : Lancer la génération de l'affichage de la question
+        preparerEtAfficherQuestion(playerName);
     }
 
     public void setOnFinish(Consumer<GestionQuiz> action) {
@@ -219,6 +224,53 @@ public class GestionQuiz {
         contenu.getChildren().add(qLabel);
 
         // 5. Affichage des boutons de réponses (mélangés)
+        List<String> choix = new ArrayList<>(questionActuelle.getChoix());
+        Collections.shuffle(choix);
+
+        for (String texte : choix) {
+            Button btnR = creerBoutonTexte(texte);
+            btnR.setOnAction(e -> verifierLaReponse(texte));
+            contenu.getChildren().add(btnR);
+        }
+    }
+    public void preparerEtAfficherQuestion(String titreJoueur) {
+        contenu.getChildren().clear();
+        if (titreJoueur != null) {
+            LabelPlayerRound.setText(titreJoueur+" It's your turn !");
+            LabelPlayerRound.setStyle(" -fx-font-weight: bold;");
+
+            VBox.setMargin(LabelPlayerRound, new javafx.geometry.Insets(-50, 0, 20, 0));
+            if (!contenu.getChildren().contains(LabelPlayerRound)) {
+                contenu.getChildren().add(0, LabelPlayerRound);
+            }
+
+        }
+
+        // 1. Filtrer les questions qui ont le bon thème et le bon niveau
+        List<Question> possibles = new ArrayList<>();
+        for (Question q : listeComplete) {
+            if (q.getTheme().equalsIgnoreCase(themeChoisi) && q.getDifficulty() == niveauChoisi) {
+                possibles.add(q);
+            }
+        }
+
+        // 2. Si on ne trouve rien...
+        if (possibles.isEmpty()) {
+            contenu.getChildren().add(creerLabel("No question available for this level", 0.06));
+            Button retour = creerBoutonTexte("Back to the menu");
+            retour.setOnAction(e -> afficherMenuSelection());
+            contenu.getChildren().add(retour);
+            return;
+        }
+
+        // 3. On en prend une au hasard
+        questionActuelle = possibles.get(new Random().nextInt(possibles.size()));
+
+        // 4. Affichage du texte de la question (en dessous du titre s'il y en a un)
+        Label qLabel = creerLabel(questionActuelle.getTexte(), 0.065);
+        contenu.getChildren().add(qLabel);
+
+        // 5. Affichage des boutons de réponses
         List<String> choix = new ArrayList<>(questionActuelle.getChoix());
         Collections.shuffle(choix);
 
