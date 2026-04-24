@@ -5,13 +5,16 @@ import javafx.scene.image.ImageView;
 public class Token {
 
     private String nom;
+    private String passif;
     private final ImageView imageBase;
     private final ImageView imageAnimation;
 
-    public Token(String nom, ImageView image, ImageView animation){
+
+    public Token(String nom, String passif, ImageView image, ImageView animation) {
         this.nom = nom;
         this.imageBase = image;
         this.imageAnimation = animation;
+        this.passif = passif;
     }
 
     public String getNom() {
@@ -26,4 +29,7 @@ public class Token {
         return imageAnimation;
     }
 
+    public String getPassif() {
+        return passif;
+    }
 }
