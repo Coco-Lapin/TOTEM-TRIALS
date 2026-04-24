@@ -99,15 +99,18 @@ public class FinPartieView {
         //  ASSEMBLAGE
         // ══════════════════════════════════════════
         VBox content = new VBox(0, headerBox, podium, statsZone, btnBox);
-        content.setAlignment(Pos.TOP_CENTER);
+// On change TOP_CENTER par CENTER pour le centrage vertical interne
+        content.setAlignment(Pos.CENTER);
         content.setMaxWidth(900);
-        content.setPadding(new Insets(0, 20, 0, 20));
 
-        // Scroll implicite via un VBox scrollable si la fenêtre est petite
+        VBox.setVgrow(statsZone, Priority.ALWAYS);
+        content.setPadding(new Insets(20));
+
         ScrollableStackWrapper wrapper = new ScrollableStackWrapper(content);
 
         StackPane root = new StackPane(bg, overlay, wrapper.getNode());
-        StackPane.setAlignment(wrapper.getNode(), Pos.TOP_CENTER);
+
+        StackPane.setAlignment(wrapper.getNode(), Pos.CENTER);
 
         scene = new Scene(root, 1000, 700);
 
@@ -133,6 +136,8 @@ public class FinPartieView {
 
         HBox row = new HBox(0);
         row.setAlignment(Pos.BOTTOM_CENTER);
+
+        row.setFillHeight(false);
 
         for (int i = 0; i < 3; i++) {
             int idx = ordre[i];
@@ -175,6 +180,11 @@ public class FinPartieView {
         marche.setAlignment(Pos.CENTER);
         marche.setPrefWidth(W_MARCHE);
         marche.setPrefHeight(hauteur);
+
+        // AJOUTEZ CES DEUX LIGNES POUR FORCER LA HAUTEUR :
+        marche.setMinHeight(hauteur);
+        marche.setMaxHeight(hauteur);
+
         marche.getStyleClass().addAll("marche", marcheStyle);
 
         VBox colonne = new VBox(0, dessus, marche);
@@ -249,10 +259,10 @@ public class FinPartieView {
         col.setAlignment(Pos.TOP_CENTER);
         col.setPrefWidth(160);
 
+        // On garde uniquement la Durée et les Tours
         col.getChildren().addAll(
-            statGlobale(stats.getDureeFormatee(),     "DURÉE"),
-            statGlobale(String.valueOf(stats.getTotalTours()),     "TOURS"),
-            statGlobale(String.valueOf(stats.getTotalQuestions()), "QUESTIONS")
+                statGlobale(stats.getDureeFormatee(), "DURÉE"),
+                statGlobale(String.valueOf(stats.getTotalTours()), "TOURS")
         );
         return col;
     }
@@ -271,14 +281,10 @@ public class FinPartieView {
         Label titre = new Label("JOUEURS");
         titre.getStyleClass().add("stats-section-title");
 
-        // En-tête
+        // En-tête : on garde uniquement NOM et TOURS (j'ai élargi un peu les largeurs)
         HBox header = new HBox(
-            colHeader("#",    35),
-            colHeader("NOM",       160),
-            colHeader("TOURS",      65),
-            colHeader("✔ BON",      70),
-            colHeader("✘ RATÉ",     70),
-            colHeader("RÉUSSITE",   80)
+                colHeader("NOM",   200),
+                colHeader("TOURS", 150)
         );
         header.setAlignment(Pos.CENTER_LEFT);
 
@@ -288,15 +294,11 @@ public class FinPartieView {
         for (StatistiquesJoueur sj : classement) {
             boolean winner = sj.getPosition() == 1;
 
-            Label rang   = styledCell(sj.getPosition() == 1 ? "🏆" :
-                                      sj.getPosition() == 2 ? "🥈" : "🥉", "cell-valeur", 35);
-            Label nom    = styledCell(sj.getJoueur().getNom(), "cell-nom", 160);
-            Label tours  = styledCell(String.valueOf(sj.getNombreTours()),         "cell-valeur", 65);
-            Label bon    = styledCell(String.valueOf(sj.getBonnesReponses()),       "cell-bon",    70);
-            Label mauvais= styledCell(String.valueOf(sj.getMauvaisesReponses()),    "cell-mauvais",70);
-            Label pct    = styledCell(sj.getPourcentageReussite() + "%",            "cell-pct",    80);
+            // Lignes : on garde uniquement le nom et le nombre de tours
+            Label nom   = styledCell(sj.getJoueur().getNom(), "cell-nom", 200);
+            Label tours = styledCell(String.valueOf(sj.getNombreTours()), "cell-valeur", 150);
 
-            HBox row = new HBox(rang, nom, tours, bon, mauvais, pct);
+            HBox row = new HBox(nom, tours);
             row.setAlignment(Pos.CENTER_LEFT);
             row.getStyleClass().add(winner ? "row-joueur-winner" : "row-joueur");
             VBox.setMargin(row, new Insets(2, 0, 2, 0));
@@ -359,12 +361,17 @@ public class FinPartieView {
         private final javafx.scene.control.ScrollPane sp;
 
         ScrollableStackWrapper(VBox content) {
-            sp = new javafx.scene.control.ScrollPane(content);
+            // On place le VBox dans un StackPane intermédiaire pour forcer le centrage
+            StackPane centerWrapper = new StackPane(content);
+            centerWrapper.setAlignment(Pos.CENTER);
+            centerWrapper.setMinHeight(700); // Hauteur minimale de votre scène
+
+            sp = new javafx.scene.control.ScrollPane(centerWrapper);
             sp.setFitToWidth(true);
+            sp.setFitToHeight(true); // TRÈS IMPORTANT pour le centrage vertical
             sp.setHbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER);
             sp.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);
             sp.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-            sp.setMaxWidth(Double.MAX_VALUE);
         }
 
         javafx.scene.Node getNode() { return sp; }
