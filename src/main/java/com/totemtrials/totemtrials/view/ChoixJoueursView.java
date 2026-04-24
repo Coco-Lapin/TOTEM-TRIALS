@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 public class ChoixJoueursView {
 
     private final Button backButton;
-    private final Button btn2Joueurs;
-    private final Button btn3Joueurs;
-    private final Button btn4Joueurs;
+    private final ImageView btn2Joueurs;
+    private final ImageView btn3Joueurs;
+    private final ImageView btn4Joueurs;
     private final Scene  scene;
 
     public ChoixJoueursView(Stage stage, Image background) {
@@ -24,10 +24,12 @@ public class ChoixJoueursView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
+        //----------------Creation des images pour les boutons----------
+        btn2Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/2Players.png",0.3);
+        btn3Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
+        btn4Joueurs = ViewUtils.createCroppedImageView(stage,"/com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);
+
         backButton   = new Button("BACK");
-        btn2Joueurs  = new Button("2 Joueurs");
-        btn3Joueurs  = new Button("3 Joueurs");
-        btn4Joueurs  = new Button("4 Joueurs");
 
         backButton.getStyleClass().add("back-button");
 
@@ -46,7 +48,8 @@ public class ChoixJoueursView {
 
     public Scene  getScene()       { return scene; }
     public Button getBackButton()  { return backButton; }
-    public Button getBtn2Joueurs() { return btn2Joueurs; }
-    public Button getBtn3Joueurs() { return btn3Joueurs; }
-    public Button getBtn4Joueurs() { return btn4Joueurs; }
+    public ImageView getBtn2Joueurs() { return btn2Joueurs; }
+    public ImageView getBtn3Joueurs() { return btn3Joueurs; }
+    public ImageView getBtn4Joueurs() { return btn4Joueurs; }
+
 }
