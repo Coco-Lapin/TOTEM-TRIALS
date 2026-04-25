@@ -131,7 +131,7 @@ public class FinPartieView {
             ImageView token = buildTokenView(sj, stage);
 
             Label medaille = new Label(medailles[i]);
-            medaille.setStyle("-fx-font-size: 30px;");
+            medaille.setStyle("-fx-font-size: 31px;");
 
             Label nom = new Label(sj.getJoueur().getNom());
             nom.getStyleClass().add("nom-podium");
