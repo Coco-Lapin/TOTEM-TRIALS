@@ -1,6 +1,7 @@
 package com.totemtrials.totemtrials.plateau;
 
 import com.totemtrials.totemtrials.controller.movementController;
+import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.models.GameManager;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -84,6 +85,8 @@ public class BoardGameController {
             // 3. Maintenant on peut appeler les méthodes dessus sans erreur
             this.MC.setBoardGame(this);
             this.MC.setPlateauJeu(this.plateauJeu);
+            this.MC.setupPlayers(GameConfig.getInstance().getNbJoueurs());
+
             Platform.runLater(() -> {
 
                 Rectangle [] cheminDuJeu={RStart , RDiv1, RInfo1, RMyst1,RTour1,RVersus1,RHop1,

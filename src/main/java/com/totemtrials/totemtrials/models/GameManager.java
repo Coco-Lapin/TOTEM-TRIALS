@@ -18,7 +18,7 @@ public class GameManager {
     private StackPane zoneCentrale;
     private int ActualRound=0 ;
     // 1. Nouvelles variables pour le multijoueur
-    private int[] positionsJoueurs = {0, 0, 0, 0}; // La position exacte de chaque joueur
+    private int[] positionsJoueurs = new int[GameConfig.getInstance().getNbJoueurs()]; // La position exacte de chaque joueur
     private int joueurActuel = 0; // 0 = Bleu, 1 = Rouge, 2 = Vert, 3 = Jaune
 
     public GameManager(BoardGameController bg, movementController mc, List<Case> cases) {
@@ -135,7 +135,7 @@ public class GameManager {
         joueurActuel++;
 
         // Si on dépasse le joueur 3 (le 4ème joueur), on revient au joueur 0
-        if (joueurActuel > 3) {
+        if (joueurActuel >= GameConfig.getInstance().getNbJoueurs()) {
             joueurActuel = 0;
             setLabelRound();
         }

@@ -72,7 +72,7 @@ public class Versus {
             String[] nomsCouleurs = {"Bleu", "Rouge", "Vert", "Jaune"};
 
             // 4. Création des boutons pour les autres joueurs
-            for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < GameConfig.getInstance().getNbJoueurs(); i++) {
                 if (i == actualPlayer) continue; // On ne peut pas se défier soi-même
 
                 int adversaireId = i;

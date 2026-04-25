@@ -1,5 +1,6 @@
 package com.totemtrials.totemtrials.controller;
 
+import com.totemtrials.totemtrials.models.GameConfig;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import com.totemtrials.totemtrials.plateau.Case;
@@ -21,12 +22,7 @@ import java.util.Random;
 
 public class movementController {
 
-    private String[] cheminImages = {
-            "/images/tokens/jetonElephan.png",
-            "/images/tokens/jetonSnake.png",
-            "/images/tokens/jetonAigle.png",
-            "/images/tokens/jetonTigre.png"
-    };
+    private String[] cheminImages = GameConfig.getInstance().getJetonsChoisis();
 
     private BoardGameController boardGame;
     private int indiceCaseActuelle = 0;
@@ -60,7 +56,7 @@ public class movementController {
         Case depart = boardGame.getListeCases().get(0);
 
         // A CHANGER ALLER DE I A SPRITES.LENGTHS
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < GameConfig.getInstance().getNbJoueurs(); i++) {
             sprites[i] = new Circle(40); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
             Image imgJeton = new Image(getClass().getResource(cheminImages[i]).toExternalForm());
             sprites[i].setFill(new ImagePattern(imgJeton));
