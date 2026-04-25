@@ -33,17 +33,13 @@ public class FinPartieView {
 
     // =========================================================
     // RATIOS VERTICAUX
-    // Plus la valeur est grande, plus le jeton monte sur l'écran.
     // =========================================================
     private static final double RATIO_ARGENT = 0.38;
     private static final double RATIO_OR     = 0.48;
     private static final double RATIO_BRONZE = 0.33;
 
     // =========================================================
-    // RATIOS HORIZONTAUX — position du centre de chaque pilier
-    // en pourcentage de la largeur totale de l'écran (0.0 = gauche, 1.0 = droite).
-    // C'est LA seule valeur à ajuster si un jeton n'est pas centré sur son pilier.
-    // Exemple : pilier Argent est à 30% depuis la gauche → POS_X_ARGENT = 0.30
+    // POSITIONS HORIZONTALES
     // =========================================================
     private static final double POS_X_ARGENT = 0.31;
     private static final double POS_X_OR     = 0.51;
@@ -51,8 +47,14 @@ public class FinPartieView {
 
     public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
 
-        InputStream isPodium = FinPartieView.class.getResourceAsStream("/com/totemtrials/totemtrials/Images/fond-podium.jpg");
-        ImageView bg = new ImageView((isPodium != null) ? new Image(isPodium) : fallbackBackground);
+        InputStream isPodium = FinPartieView.class.getResourceAsStream(
+                "/com/totemtrials/totemtrials/Images/fond-podium.jpg"
+        );
+
+        ImageView bg = new ImageView(
+                (isPodium != null) ? new Image(isPodium) : fallbackBackground
+        );
+
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
@@ -87,63 +89,68 @@ public class FinPartieView {
         root = new StackPane(bg, mainContent, statsOverlay);
         scene = new Scene(root, 1100, 750);
 
-        var css = FinPartieView.class.getResource("/com/totemtrials/totemtrials/styles/finpartie.css");
-        if (css != null) scene.getStylesheets().add(css.toExternalForm());
+        var css = FinPartieView.class.getResource(
+                "/com/totemtrials/totemtrials/styles/finpartie.css"
+        );
+
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
     }
 
-    /**
-     * Chaque joueur est placé dans un StackPane qui couvre toute la zone podium.
-     * Le translateX de chaque colonne est bindé à (posX - 0.5) * largeur,
-     * ce qui centre précisément chaque jeton sur son pilier, quelle que soit la résolution.
-     */
     private StackPane buildPodiumPane(Stage stage, StatistiquesJoueur[] classement) {
-        //         index dans classement[]  Argent        Or           Bronze
-        int[]    ordre    = {              1,            0,           2            };
-        double[] ratiosY  = {              RATIO_ARGENT, RATIO_OR,    RATIO_BRONZE };
-        double[] posX     = {              POS_X_ARGENT, POS_X_OR,    POS_X_BRONZE };
-        String[] medailles= {              "🥈",         "🥇",         "🥉"         };
+
+        int[] ordre = {1, 0, 2};
+
+        double[] ratiosY = {
+                RATIO_ARGENT,
+                RATIO_OR,
+                RATIO_BRONZE
+        };
+
+        double[] posX = {
+                POS_X_ARGENT,
+                POS_X_OR,
+                POS_X_BRONZE
+        };
+
+        String[] medailles = {"🥈", "🥇", "🥉"};
 
         StackPane pane = new StackPane();
 
         for (int i = 0; i < 3; i++) {
+
             int idx = ordre[i];
-            if (idx >= classement.length) continue;
+
+            if (idx >= classement.length) {
+                continue;
+            }
 
             StatistiquesJoueur sj = classement[idx];
 
-            // Jeton image
             ImageView token = buildTokenView(sj, stage);
 
-            // Médaille emoji
             Label medaille = new Label(medailles[i]);
             medaille.setStyle("-fx-font-size: 30px;");
 
-            // Nom du joueur
             Label nom = new Label(sj.getJoueur().getNom());
             nom.getStyleClass().add("nom-podium");
 
-            // Empilage vertical : jeton → médaille → nom
             VBox playerInfo = new VBox(5, token, medaille, nom);
             playerInfo.setAlignment(Pos.CENTER);
 
-            // Spacer qui pousse le joueur vers le haut (hauteur proportionnelle à l'écran)
             Region spacer = new Region();
-            spacer.minHeightProperty().bind(stage.heightProperty().multiply(ratiosY[i]));
+            spacer.minHeightProperty().bind(
+                    stage.heightProperty().multiply(ratiosY[i])
+            );
 
-            // Colonne complète alignée en bas
             VBox col = new VBox(playerInfo, spacer);
             col.setAlignment(Pos.BOTTOM_CENTER);
-            // Largeur proportionnelle — 18% de l'écran suffit pour le contenu
-            col.prefWidthProperty().bind(stage.widthProperty().multiply(0.18));
 
-            // -------------------------------------------------------
-            // POSITIONNEMENT HORIZONTAL RESPONSIVE
-            // translateX = (posX - 0.5) * largeurEcran
-            // → si posX = 0.5 (centre),  translateX = 0             → colonne au centre
-            // → si posX = 0.3 (gauche),  translateX = -0.2 * largeur → pousse à gauche
-            // → si posX = 0.7 (droite),  translateX = +0.2 * largeur → pousse à droite
-            // Ce calcul est 100% proportionnel donc identique sur toutes les résolutions.
-            // -------------------------------------------------------
+            col.prefWidthProperty().bind(
+                    stage.widthProperty().multiply(0.18)
+            );
+
             col.translateXProperty().bind(
                     stage.widthProperty().multiply(posX[i] - 0.5)
             );
@@ -155,25 +162,37 @@ public class FinPartieView {
     }
 
     private ImageView buildTokenView(StatistiquesJoueur sj, Stage stage) {
+
         ImageView iv = new ImageView();
-        iv.fitWidthProperty().bind(stage.widthProperty().multiply(0.09));
+
+        iv.fitWidthProperty().bind(
+                stage.widthProperty().multiply(0.09)
+        );
+
         iv.setPreserveRatio(true);
 
         if (sj.getJoueur().getJeton() != null) {
+
             InputStream is = FinPartieView.class.getResourceAsStream(
                     "/" + sj.getJoueur().getJeton().getImagePath()
             );
-            if (is != null) iv.setImage(new Image(is));
+
+            if (is != null) {
+                iv.setImage(new Image(is));
+            }
         }
 
         if (sj.getPosition() == 1) {
             iv.setEffect(new DropShadow(25, Color.GOLD));
         }
+
         return iv;
     }
 
     private StackPane createStatsPopup(Stage stage, StatistiquesPartie stats) {
+
         Rectangle dim = new Rectangle();
+
         dim.widthProperty().bind(stage.widthProperty());
         dim.heightProperty().bind(stage.heightProperty());
         dim.setFill(Color.web("#000000", 0.85));
@@ -182,35 +201,77 @@ public class FinPartieView {
         box.setAlignment(Pos.TOP_CENTER);
         box.setMaxSize(650, 550);
         box.setPadding(new Insets(35));
-        box.setStyle("-fx-background-color: #1A1A1A; -fx-border-color: #D35400; -fx-border-width: 3; -fx-background-radius: 20; -fx-border-radius: 20;");
+
+        box.setStyle(
+                "-fx-background-color: #1A1A1A;" +
+                        "-fx-border-color: #D35400;" +
+                        "-fx-border-width: 3;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-border-radius: 20;"
+        );
+
         box.setEffect(new DropShadow(30, Color.BLACK));
 
         Label t = new Label("STATISTIQUES DE LA PARTIE");
-        t.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #D35400;");
+        t.setStyle(
+                "-fx-font-size: 26px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #D35400;"
+        );
 
-        HBox global = new HBox(60,
+        HBox global = new HBox(
+                60,
                 createMetric("TEMPS", stats.getDureeFormatee()),
                 createMetric("TOURS", String.valueOf(stats.getTotalTours()))
         );
+
         global.setAlignment(Pos.CENTER);
 
         VBox list = new VBox(8);
+
         for (StatistiquesJoueur sj : stats.getClassement()) {
-            HBox row = new HBox(20,
+
+            HBox row = new HBox(
+                    20,
                     new Label("#" + sj.getPosition()),
                     new Label(sj.getJoueur().getNom()),
                     new Label(sj.getNombreTours() + " tours")
             );
-            row.setStyle("-fx-background-color: #262626; -fx-padding: 12; -fx-background-radius: 8;");
-            row.getChildren().get(0).setStyle("-fx-text-fill: #D35400; -fx-font-weight: bold; -fx-pref-width: 40;");
-            row.getChildren().get(1).setStyle("-fx-text-fill: white; -fx-pref-width: 250; -fx-font-size: 16px;");
-            row.getChildren().get(2).setStyle("-fx-text-fill: #95A5A6; -fx-font-size: 16px;");
+
+            row.setStyle(
+                    "-fx-background-color: #262626;" +
+                            "-fx-padding: 12;" +
+                            "-fx-background-radius: 8;"
+            );
+
+            row.getChildren().get(0).setStyle(
+                    "-fx-text-fill: #D35400;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-pref-width: 40;"
+            );
+
+            row.getChildren().get(1).setStyle(
+                    "-fx-text-fill: white;" +
+                            "-fx-pref-width: 250;" +
+                            "-fx-font-size: 16px;"
+            );
+
+            row.getChildren().get(2).setStyle(
+                    "-fx-text-fill: #95A5A6;" +
+                            "-fx-font-size: 16px;"
+            );
+
             list.getChildren().add(row);
         }
 
         Button btnFermer = new Button("FERMER");
         btnFermer.getStyleClass().add("btn-quitter");
-        btnFermer.setStyle("-fx-min-width: 200; -fx-background-radius: 30;");
+
+        btnFermer.setStyle(
+                "-fx-min-width: 200;" +
+                        "-fx-background-radius: 30;"
+        );
+
         btnFermer.setOnAction(e -> toggleStats(false));
 
         box.getChildren().addAll(t, global, list, new Region(), btnFermer);
@@ -220,33 +281,57 @@ public class FinPartieView {
     }
 
     private VBox createMetric(String label, String value) {
-        Label l = new Label(label); l.setStyle("-fx-text-fill: #95A5A6; -fx-font-size: 11px;");
-        Label v = new Label(value); v.setStyle("-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;");
+
+        Label l = new Label(label);
+        l.setStyle("-fx-text-fill: #95A5A6; -fx-font-size: 11px;");
+
+        Label v = new Label(value);
+        v.setStyle("-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;");
+
         VBox b = new VBox(l, v);
         b.setAlignment(Pos.CENTER);
+
         return b;
     }
 
     public void toggleStats(boolean show) {
+
         if (show) {
             statsOverlay.setVisible(true);
             mainContent.setEffect(new BoxBlur(8, 8, 3));
         }
 
-        FadeTransition ft = new FadeTransition(Duration.millis(300), statsOverlay);
+        FadeTransition ft = new FadeTransition(
+                Duration.millis(300),
+                statsOverlay
+        );
+
         ft.setFromValue(show ? 0 : 1);
         ft.setToValue(show ? 1 : 0);
+
         ft.setOnFinished(e -> {
             if (!show) {
                 statsOverlay.setVisible(false);
                 mainContent.setEffect(null);
             }
         });
+
         ft.play();
     }
 
-    public Scene  getScene()      { return scene; }
-    public Button getBtnRejouer() { return btnRejouer; }
-    public Button getBtnStats()   { return btnStats; }
-    public Button getBtnQuitter() { return btnQuitter; }
+    public Scene getScene() {
+        return scene;
+    }
+
+    public Button getBtnRejouer() {
+        return btnRejouer;
+    }
+
+    public Button getBtnStats() {
+        return btnStats;
+    }
+
+    public Button getBtnQuitter() {
+        return btnQuitter;
+    }
 }
