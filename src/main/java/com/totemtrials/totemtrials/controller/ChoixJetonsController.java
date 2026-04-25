@@ -70,6 +70,11 @@ public class ChoixJetonsController {
                 javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                         getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml")
                 );
+
+                //debug
+                java.net.URL url = getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml");
+                System.out.println("[DEBUG] Plateau.fxml URL = " + url);
+
                 javafx.scene.layout.AnchorPane root = loader.load();
                 SceneManager.show(new javafx.scene.Scene(root), "Totem Trials");
             } catch (Exception e) {

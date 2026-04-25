@@ -2,6 +2,7 @@ package com.totemtrials.totemtrials.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -16,16 +17,15 @@ public class HomePageView {
     private final ImageView playButton;
     private final ImageView optionButton;
     private final ImageView quitButton;
-    private final Scene     scene;
-    private final Image     backgroundImage;
+    private final Button testFinButton;
+    private final Scene scene;
+    private final Image backgroundImage;
 
     public HomePageView(Stage stage) {
 
         URL classpathRoot = getClass().getClassLoader().getResource("");
         System.out.println("[HomePageView] Classpath root : " + classpathRoot);
 
-        // ── Background ──
-        // Essaie plusieurs chemins pour trouver celui qui fonctionne
         String[] candidats = {
                 "/Images/backgroundMenu.png",
                 "Images/backgroundMenu.png",
@@ -45,15 +45,13 @@ public class HomePageView {
         }
 
         if (is == null) {
-            // Dernier recours : ClassLoader sans slash
             is = getClass().getClassLoader().getResourceAsStream("Images/backgroundMenu.png");
             cheminUtilise = "ClassLoader → Images/backgroundMenu.png";
         }
 
         if (is == null) {
             throw new IllegalStateException(
-                    "[HomePageView] backgroundMenu.png introuvable dans aucun chemin. " +
-                            "Vérifie que src/main/resources est marqué 'Resources Root' dans IntelliJ."
+                    "[HomePageView] backgroundMenu.png introuvable."
             );
         }
 
@@ -65,19 +63,20 @@ public class HomePageView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        // ── Boutons et titre ──
-        ImageView titre = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/Titre-sora.png",          0.45);
-        playButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Start-sora.png",   0.45);
-        optionButton    = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Options-sora.png", 0.38);
-        quitButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Exit-sora.png",    0.28);
+        ImageView titre   = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/Titre-sora.png",          0.45);
+        playButton        = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Start-sora.png",   0.45);
+        optionButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Options-sora.png", 0.38);
+        quitButton        = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Exit-sora.png",    0.28);
 
-        VBox layout = new VBox(10, titre, playButton, optionButton, quitButton);
+        testFinButton = new Button("TEST FIN PARTIE");
+        testFinButton.getStyleClass().add("back-button");
+
+        VBox layout = new VBox(10, titre, playButton, optionButton, quitButton, testFinButton);
         layout.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        // ── CSS ──
         String[] cssCandidats = {
                 "/styles/homepage.css",
                 "/com/totemtrials/totemtrials/styles/homepage.css",
@@ -94,9 +93,10 @@ public class HomePageView {
         }
     }
 
-    public Scene     getScene()        { return scene; }
-    public Image     getBackground()   { return backgroundImage; }
-    public ImageView getPlayButton()   { return playButton; }
-    public ImageView getOptionButton() { return optionButton; }
-    public ImageView getQuitButton()   { return quitButton; }
+    public Scene     getScene()           { return scene; }
+    public Image     getBackground()      { return backgroundImage; }
+    public ImageView getPlayButton()      { return playButton; }
+    public ImageView getOptionButton()    { return optionButton; }
+    public ImageView getQuitButton()      { return quitButton; }
+    public Button    getTestFinButton()   { return testFinButton; }
 }

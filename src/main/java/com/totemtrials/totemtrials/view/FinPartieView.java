@@ -31,22 +31,19 @@ public class FinPartieView {
     private final Button btnStats;
     private final Button btnQuitter;
 
-    // --- VALEURS DE BASE POUR L'ALIGNEMENT ---
-    private static final int OFFSET_OR     = 370;
-    private static final int OFFSET_ARGENT = 310;
-    private static final int OFFSET_BRONZE = 280;
+    private static final int OFFSET_OR       = 370;
+    private static final int OFFSET_ARGENT   = 310;
+    private static final int OFFSET_BRONZE   = 280;
     private static final int LARGEUR_COLONNE = 200;
 
     public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
 
-        // 1. CHARGEMENT DU FOND (Podium)
         InputStream isPodium = FinPartieView.class.getResourceAsStream("/com/totemtrials/totemtrials/Images/fond-podium.jpg");
         ImageView bg = new ImageView((isPodium != null) ? new Image(isPodium) : fallbackBackground);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        // 2. CONTENU DU PODIUM
         Label titre = new Label("TOTEM TRIALS");
         titre.getStyleClass().add("titre-fin");
 
@@ -59,7 +56,6 @@ public class FinPartieView {
 
         btnStats = new Button("📊 VOIR STATS");
         btnStats.getStyleClass().add("btn-rejouer");
-        // Style orange chaud pour le bouton stats
         btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
 
         btnQuitter = new Button("✕  QUITTER");
@@ -72,13 +68,10 @@ public class FinPartieView {
         mainContent = new VBox(20, titre, podium, btnBox);
         mainContent.setAlignment(Pos.CENTER);
 
-        // 3. FENÊTRE POPUP DES STATS (Overlay)
-        // On utilise 'stage' pour lier la taille et éviter le bug du root=null
         statsOverlay = createStatsPopup(stage, stats);
         statsOverlay.setVisible(false);
         statsOverlay.setOpacity(0);
 
-        // 4. ASSEMBLAGE DANS LE STACKPANE
         root = new StackPane(bg, mainContent, statsOverlay);
         scene = new Scene(root, 1100, 750);
 
@@ -87,13 +80,11 @@ public class FinPartieView {
     }
 
     private StackPane createStatsPopup(Stage stage, StatistiquesPartie stats) {
-        // Voile noir transparent
         Rectangle dim = new Rectangle();
         dim.widthProperty().bind(stage.widthProperty());
         dim.heightProperty().bind(stage.heightProperty());
         dim.setFill(Color.web("#000000", 0.85));
 
-        // Boîte de dialogue des stats
         VBox box = new VBox(20);
         box.setAlignment(Pos.TOP_CENTER);
         box.setMaxSize(650, 550);
@@ -108,14 +99,12 @@ public class FinPartieView {
         Label t = new Label("STATISTIQUES DE LA PARTIE");
         t.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #D35400;");
 
-        // Bloc des scores globaux
         HBox global = new HBox(60,
                 createMetric("TEMPS", stats.getDureeFormatee()),
                 createMetric("TOURS", String.valueOf(stats.getTotalTours()))
         );
         global.setAlignment(Pos.CENTER);
 
-        // Liste des scores par joueur
         VBox list = new VBox(8);
         for (StatistiquesJoueur sj : stats.getClassement()) {
             HBox row = new HBox(20,
@@ -149,7 +138,6 @@ public class FinPartieView {
         return b;
     }
 
-    // Gère l'affichage/masquage avec animation et flou
     public void toggleStats(boolean show) {
         if (show) {
             statsOverlay.setVisible(true);
@@ -169,24 +157,25 @@ public class FinPartieView {
     }
 
     private HBox buildPodiumPositions(Stage stage, StatistiquesJoueur[] classement) {
-        int[] ordre = {1, 0, 2}; // Argent, Or, Bronze
+        int[] ordre = {1, 0, 2};
         int[] offsets = {OFFSET_ARGENT, OFFSET_OR, OFFSET_BRONZE};
         String[] medailles = {"🥈", "🥇", "🥉"};
-        HBox row = new HBox(20);
+        HBox row = new HBox(60);
         row.setAlignment(Pos.BOTTOM_CENTER);
 
         for (int i = 0; i < 3; i++) {
             int idx = ordre[i];
             if (idx < classement.length) {
                 StatistiquesJoueur sj = classement[idx];
-                VBox player = new VBox(2);
-                player.setAlignment(Pos.CENTER);
 
                 ImageView token = buildTokenView(sj);
-                Label m = new Label(medailles[i]); m.setStyle("-fx-font-size: 30px;");
-                Label n = new Label(sj.getJoueur().getNom()); n.getStyleClass().add("nom-podium");
+                Label m = new Label(medailles[i]);
+                m.setStyle("-fx-font-size: 30px;");
+                Label n = new Label(sj.getJoueur().getNom());
+                n.getStyleClass().add("nom-podium");
 
-                player.getChildren().addAll(token, m, n);
+                VBox player = new VBox(5, token, m, n);
+                player.setAlignment(Pos.CENTER);
 
                 Region spacer = new Region();
                 spacer.setMinHeight(offsets[i]);
@@ -201,17 +190,25 @@ public class FinPartieView {
     }
 
     private ImageView buildTokenView(StatistiquesJoueur sj) {
-        InputStream is = FinPartieView.class.getResourceAsStream("/" + sj.getJoueur().getJeton().getImagePath());
-        ImageView iv = new ImageView(is != null ? new Image(is) : null);
+        ImageView iv = new ImageView();
         iv.setFitWidth(90);
+        iv.setFitHeight(90);
         iv.setPreserveRatio(true);
+
+        if (sj.getJoueur().getJeton() != null) {
+            InputStream is = FinPartieView.class.getResourceAsStream(
+                    "/" + sj.getJoueur().getJeton().getImagePath()
+            );
+            if (is != null) iv.setImage(new Image(is));
+        }
+
         if (sj.getPosition() == 1) {
             iv.setEffect(new DropShadow(25, Color.GOLD));
         }
         return iv;
     }
 
-    public Scene getScene() { return scene; }
+    public Scene  getScene()      { return scene; }
     public Button getBtnRejouer() { return btnRejouer; }
     public Button getBtnStats()   { return btnStats; }
     public Button getBtnQuitter() { return btnQuitter; }
