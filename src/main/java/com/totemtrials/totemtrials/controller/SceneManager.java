@@ -2,6 +2,7 @@ package com.totemtrials.totemtrials.controller;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 /**
@@ -24,4 +25,9 @@ public class SceneManager {
     }
 
     public static Stage getStage() { return stage; }
+
+    private static MediaPlayer player;
+
+    public static void setPlayer(MediaPlayer p) { player = p; }
+    public static MediaPlayer getPlayer()       { return player; }
 }

@@ -38,7 +38,7 @@ public class HomePageController {
 
         view.getOptionButton().setOnMouseClicked(_ -> {
             OptionsView optView = new OptionsView(SceneManager.getStage(), view.getBackground());
-            new OptionsController(optView, view);
+            new OptionsController(optView, view, SceneManager.getPlayer());
             SceneManager.show(optView.getScene(), "Options");
         });
     }

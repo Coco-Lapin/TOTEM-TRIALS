@@ -15,8 +15,10 @@ public class ChoixJetonsController {
                                  ChoixJoueursView joueursView, HomePageView homeView) {
 
         view.getBackButton().setOnAction(_ ->
-                SceneManager.show(joueursView.getScene(), "Choix des joueurs")
+                SceneManager.show(joueursView.getScene(), "Player choice")
         );
+
+        view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
 
         Map<Jeton, ImageView> jetonViews = view.getJetonViews();
 
@@ -33,32 +35,46 @@ public class ChoixJetonsController {
         Joueur[] joueurs = model.getJoueurs();
         if (currentPlayerIndex >= joueurs.length) return;
 
-        // On affecte le jeton choisi au joueur
         joueurs[currentPlayerIndex].setJeton(jeton);
         System.out.printf("[ChoixJetons] %s -> %s%n",
                 joueurs[currentPlayerIndex].getNom(), jeton.getNom());
 
+        view.cacherJeton(jeton);
+
         currentPlayerIndex++;
 
-        // VERIFICATION : Si tous les joueurs ont un jeton, on affiche le classement
-        if (currentPlayerIndex >= joueurs.length) {
-            System.out.println("[ChoixJetons] Fin de sélection. Affichage du classement...");
+        if (currentPlayerIndex < joueurs.length) {
+            view.getLabelInstruction().setText("C'est au tour de : " + joueurs[currentPlayerIndex].getNom());
+        } else {
+            view.getLabelInstruction().setText("Tous les joueurs ont choisi !");
+        }
 
-            // On crée des statistiques de test pour remplir le podium
-            StatistiquesJoueur[] statsJoueurs = new StatistiquesJoueur[joueurs.length];
+        if (currentPlayerIndex >= joueurs.length) {
+            String[] chemins = new String[joueurs.length];
             for (int i = 0; i < joueurs.length; i++) {
-                statsJoueurs[i] = new StatistiquesJoueur(joueurs[i]);
-                // On simule un classement basé sur l'ordre de création (1er, 2ème, etc.)
-                statsJoueurs[i].setPosition(i + 1);
-                statsJoueurs[i].incrementerTour();
-                statsJoueurs[i].ajouterBonneReponse();
+                String nom = joueurs[i].getJeton().getNom();
+                chemins[i] = switch (nom.toLowerCase()) {
+                    case "tigre"    -> "com/totemtrials/totemtrials/Images/tokkens/jetonTigre.png";
+                    case "serpent"  -> "com/totemtrials/totemtrials/Images/tokkens/jetonSerpent.png";
+                    case "aigle"    -> "com/totemtrials/totemtrials/Images/tokkens/jetonAigle.png";
+                    default         -> "com/totemtrials/totemtrials/Images/tokkens/jetonElephant.png";
+                };
             }
 
-            // On crée l'objet global avec une durée factice de 5 minutes (300s)
-            StatistiquesPartie statsPartie = new StatistiquesPartie(statsJoueurs, 300);
+            System.setProperty("game.nbJoueurs", String.valueOf(joueurs.length));
+            for (int i = 0; i < chemins.length; i++) {
+                System.setProperty("game.jeton." + i, chemins[i]);
+            }
 
-            // On utilise ton controller existant pour changer de scène
-            FinPartieController.lancerFinPartie(statsPartie, model, homeView);
+            try {
+                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                        getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml")
+                );
+                javafx.scene.layout.AnchorPane root = loader.load();
+                SceneManager.show(new javafx.scene.Scene(root), "Totem Trials");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
