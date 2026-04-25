@@ -13,31 +13,27 @@ public class TotemTrialsApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        // 1. SceneManager connaît le stage → navigation centralisée
         SceneManager.init(stage);
 
-        // 2. Model
         Partie partie = new Partie();
 
-        // 3. View principale
         HomePageView homeView = new HomePageView(stage);
 
-        // 4. Controller principal (il câble les events et crée les sous-controllers à la volée)
         new HomePageController(homeView, partie);
 
-        // 5. Audio (optionnel — injecté séparément pour ne pas polluer View/Controller)
-        var audioRes = getClass().getResource("com/totemtrials/totemtrials/resources/sounds/Agrual.mp3");
+        var audioRes = getClass().getResource("/com/totemtrials/totemtrials/sounds/Agrual.mp3");
         if (audioRes != null) {
             try {
                 MediaPlayer player = new MediaPlayer(new Media(audioRes.toURI().toString()));
+                player.setCycleCount(MediaPlayer.INDEFINITE);
+                player.setVolume(0.25);
                 player.play();
-                // Passer 'player' aux OptionsController si besoin de contrôle du volume
+                SceneManager.setPlayer(player);
             } catch (Exception e) {
                 System.err.println("[Audio] " + e.getMessage());
             }
         }
 
-        // 6. Affichage
         SceneManager.show(homeView.getScene(), "Menu principal");
         stage.show();
     }
