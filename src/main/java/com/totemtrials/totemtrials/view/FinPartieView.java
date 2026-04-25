@@ -31,10 +31,23 @@ public class FinPartieView {
     private final Button btnStats;
     private final Button btnQuitter;
 
-    private static final int OFFSET_OR       = 370  ;
-    private static final int OFFSET_ARGENT   = 310;
-    private static final int OFFSET_BRONZE   = 280;
-    private static final int LARGEUR_COLONNE = 200;
+    // =========================================================
+    // RATIOS VERTICAUX
+    // Plus la valeur est grande, plus le jeton monte sur l'écran.
+    // =========================================================
+    private static final double RATIO_ARGENT = 0.38;
+    private static final double RATIO_OR     = 0.48;
+    private static final double RATIO_BRONZE = 0.33;
+
+    // =========================================================
+    // RATIOS HORIZONTAUX — position du centre de chaque pilier
+    // en pourcentage de la largeur totale de l'écran (0.0 = gauche, 1.0 = droite).
+    // C'est LA seule valeur à ajuster si un jeton n'est pas centré sur son pilier.
+    // Exemple : pilier Argent est à 30% depuis la gauche → POS_X_ARGENT = 0.30
+    // =========================================================
+    private static final double POS_X_ARGENT = 0.31;
+    private static final double POS_X_OR     = 0.51;
+    private static final double POS_X_BRONZE = 0.70;
 
     public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
 
@@ -47,11 +60,8 @@ public class FinPartieView {
         Label titre = new Label("TOTEM TRIALS");
         titre.getStyleClass().add("titre-fin");
 
-        HBox podium = buildPodiumPositions(stage, stats.getClassement());
-        podium.setAlignment(Pos.BOTTOM_CENTER);
-        VBox.setVgrow(podium, Priority.ALWAYS);
-
-        podium.setTranslateX(-120);
+        StackPane podiumPane = buildPodiumPane(stage, stats.getClassement());
+        VBox.setVgrow(podiumPane, Priority.ALWAYS);
 
         btnRejouer = new Button("⟳  REJOUER");
         btnRejouer.getStyleClass().add("btn-rejouer");
@@ -67,7 +77,7 @@ public class FinPartieView {
         btnBox.setAlignment(Pos.CENTER);
         btnBox.setPadding(new Insets(0, 0, 50, 0));
 
-        mainContent = new VBox(20, titre, podium, btnBox);
+        mainContent = new VBox(20, titre, podiumPane, btnBox);
         mainContent.setAlignment(Pos.CENTER);
 
         statsOverlay = createStatsPopup(stage, stats);
@@ -81,6 +91,87 @@ public class FinPartieView {
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 
+    /**
+     * Chaque joueur est placé dans un StackPane qui couvre toute la zone podium.
+     * Le translateX de chaque colonne est bindé à (posX - 0.5) * largeur,
+     * ce qui centre précisément chaque jeton sur son pilier, quelle que soit la résolution.
+     */
+    private StackPane buildPodiumPane(Stage stage, StatistiquesJoueur[] classement) {
+        //         index dans classement[]  Argent        Or           Bronze
+        int[]    ordre    = {              1,            0,           2            };
+        double[] ratiosY  = {              RATIO_ARGENT, RATIO_OR,    RATIO_BRONZE };
+        double[] posX     = {              POS_X_ARGENT, POS_X_OR,    POS_X_BRONZE };
+        String[] medailles= {              "🥈",         "🥇",         "🥉"         };
+
+        StackPane pane = new StackPane();
+
+        for (int i = 0; i < 3; i++) {
+            int idx = ordre[i];
+            if (idx >= classement.length) continue;
+
+            StatistiquesJoueur sj = classement[idx];
+
+            // Jeton image
+            ImageView token = buildTokenView(sj, stage);
+
+            // Médaille emoji
+            Label medaille = new Label(medailles[i]);
+            medaille.setStyle("-fx-font-size: 30px;");
+
+            // Nom du joueur
+            Label nom = new Label(sj.getJoueur().getNom());
+            nom.getStyleClass().add("nom-podium");
+
+            // Empilage vertical : jeton → médaille → nom
+            VBox playerInfo = new VBox(5, token, medaille, nom);
+            playerInfo.setAlignment(Pos.CENTER);
+
+            // Spacer qui pousse le joueur vers le haut (hauteur proportionnelle à l'écran)
+            Region spacer = new Region();
+            spacer.minHeightProperty().bind(stage.heightProperty().multiply(ratiosY[i]));
+
+            // Colonne complète alignée en bas
+            VBox col = new VBox(playerInfo, spacer);
+            col.setAlignment(Pos.BOTTOM_CENTER);
+            // Largeur proportionnelle — 18% de l'écran suffit pour le contenu
+            col.prefWidthProperty().bind(stage.widthProperty().multiply(0.18));
+
+            // -------------------------------------------------------
+            // POSITIONNEMENT HORIZONTAL RESPONSIVE
+            // translateX = (posX - 0.5) * largeurEcran
+            // → si posX = 0.5 (centre),  translateX = 0             → colonne au centre
+            // → si posX = 0.3 (gauche),  translateX = -0.2 * largeur → pousse à gauche
+            // → si posX = 0.7 (droite),  translateX = +0.2 * largeur → pousse à droite
+            // Ce calcul est 100% proportionnel donc identique sur toutes les résolutions.
+            // -------------------------------------------------------
+            col.translateXProperty().bind(
+                    stage.widthProperty().multiply(posX[i] - 0.5)
+            );
+
+            pane.getChildren().add(col);
+        }
+
+        return pane;
+    }
+
+    private ImageView buildTokenView(StatistiquesJoueur sj, Stage stage) {
+        ImageView iv = new ImageView();
+        iv.fitWidthProperty().bind(stage.widthProperty().multiply(0.09));
+        iv.setPreserveRatio(true);
+
+        if (sj.getJoueur().getJeton() != null) {
+            InputStream is = FinPartieView.class.getResourceAsStream(
+                    "/" + sj.getJoueur().getJeton().getImagePath()
+            );
+            if (is != null) iv.setImage(new Image(is));
+        }
+
+        if (sj.getPosition() == 1) {
+            iv.setEffect(new DropShadow(25, Color.GOLD));
+        }
+        return iv;
+    }
+
     private StackPane createStatsPopup(Stage stage, StatistiquesPartie stats) {
         Rectangle dim = new Rectangle();
         dim.widthProperty().bind(stage.widthProperty());
@@ -91,11 +182,7 @@ public class FinPartieView {
         box.setAlignment(Pos.TOP_CENTER);
         box.setMaxSize(650, 550);
         box.setPadding(new Insets(35));
-        box.setStyle("-fx-background-color: #1A1A1A; " +
-                "-fx-border-color: #D35400; " +
-                "-fx-border-width: 3; " +
-                "-fx-background-radius: 20; " +
-                "-fx-border-radius: 20;");
+        box.setStyle("-fx-background-color: #1A1A1A; -fx-border-color: #D35400; -fx-border-width: 3; -fx-background-radius: 20; -fx-border-radius: 20;");
         box.setEffect(new DropShadow(30, Color.BLACK));
 
         Label t = new Label("STATISTIQUES DE LA PARTIE");
@@ -156,58 +243,6 @@ public class FinPartieView {
             }
         });
         ft.play();
-    }
-
-    private HBox buildPodiumPositions(Stage stage, StatistiquesJoueur[] classement) {
-        int[] ordre = {1, 0, 2};
-        int[] offsets = {OFFSET_ARGENT, OFFSET_OR, OFFSET_BRONZE};
-        String[] medailles = {"🥈", "🥇", "🥉"};
-        HBox row = new HBox(60);
-        row.setAlignment(Pos.BOTTOM_CENTER);
-
-        for (int i = 0; i < 3; i++) {
-            int idx = ordre[i];
-            if (idx < classement.length) {
-                StatistiquesJoueur sj = classement[idx];
-
-                ImageView token = buildTokenView(sj);
-                Label m = new Label(medailles[i]);
-                m.setStyle("-fx-font-size: 30px;");
-                Label n = new Label(sj.getJoueur().getNom());
-                n.getStyleClass().add("nom-podium");
-
-                VBox player = new VBox(5, token, m, n);
-                player.setAlignment(Pos.CENTER);
-
-                Region spacer = new Region();
-                spacer.setMinHeight(offsets[i]);
-
-                VBox col = new VBox(player, spacer);
-                col.setAlignment(Pos.BOTTOM_CENTER);
-                col.setPrefWidth(LARGEUR_COLONNE);
-                row.getChildren().add(col);
-            }
-        }
-        return row;
-    }
-
-    private ImageView buildTokenView(StatistiquesJoueur sj) {
-        ImageView iv = new ImageView();
-        iv.setFitWidth(90);
-        iv.setFitHeight(90);
-        iv.setPreserveRatio(true);
-
-        if (sj.getJoueur().getJeton() != null) {
-            InputStream is = FinPartieView.class.getResourceAsStream(
-                    "/" + sj.getJoueur().getJeton().getImagePath()
-            );
-            if (is != null) iv.setImage(new Image(is));
-        }
-
-        if (sj.getPosition() == 1) {
-            iv.setEffect(new DropShadow(25, Color.GOLD));
-        }
-        return iv;
     }
 
     public Scene  getScene()      { return scene; }
