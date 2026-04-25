@@ -2,13 +2,13 @@ package com.totemtrials.totemtrials.view;
 
 import com.totemtrials.totemtrials.model.StatistiquesJoueur;
 import com.totemtrials.totemtrials.model.StatistiquesPartie;
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,360 +20,199 @@ import javafx.util.Duration;
 
 import java.io.InputStream;
 
-/**
- * Écran de fin de partie.
- * Layout :
- *   [ TITRE ]
- *   [ PODIUM (3 marches animées) ]
- *   [ STATS GLOBALES | TABLEAU JOUEURS ]
- *   [ BOUTONS ]
- */
 public class FinPartieView {
 
-    private final Scene  scene;
+    private final Scene scene;
+    private final StackPane root;
+    private final VBox mainContent;
+    private final StackPane statsOverlay;
+
     private final Button btnRejouer;
+    private final Button btnStats;
     private final Button btnQuitter;
 
-    // ---- Hauteurs des marches (px) ----
-    private static final int H_OR     = 220;
-    private static final int H_ARGENT = 170;
-    private static final int H_BRONZE = 130;
-    private static final int W_MARCHE = 170;
+    // --- VALEURS DE BASE POUR L'ALIGNEMENT ---
+    private static final int OFFSET_OR     = 370;
+    private static final int OFFSET_ARGENT = 310;
+    private static final int OFFSET_BRONZE = 280;
+    private static final int LARGEUR_COLONNE = 200;
 
-    public FinPartieView(Stage stage, StatistiquesPartie stats, Image background) {
+    public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
 
-        // ══════════════════════════════════════════
-        //  FOND
-        // ══════════════════════════════════════════
-        ImageView bg = new ImageView(background);
+        // 1. CHARGEMENT DU FOND (Podium)
+        InputStream isPodium = FinPartieView.class.getResourceAsStream("/com/totemtrials/totemtrials/Images/fond-podium.jpg");
+        ImageView bg = new ImageView((isPodium != null) ? new Image(isPodium) : fallbackBackground);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        // Voile sombre pour améliorer la lisibilité
-        Rectangle overlay = new Rectangle();
-        overlay.setFill(Color.web("#050E02", 0.72));
-        overlay.widthProperty().bind(stage.widthProperty());
-        overlay.heightProperty().bind(stage.heightProperty());
-
-        // ══════════════════════════════════════════
-        //  TITRE
-        // ══════════════════════════════════════════
+        // 2. CONTENU DU PODIUM
         Label titre = new Label("TOTEM TRIALS");
         titre.getStyleClass().add("titre-fin");
 
-        Label ssTitre = new Label("— FIN DE PARTIE —   ⏱  " + stats.getDureeFormatee());
-        ssTitre.getStyleClass().add("sous-titre");
-
-        VBox headerBox = new VBox(4, titre, ssTitre);
-        headerBox.setAlignment(Pos.CENTER);
-        headerBox.setPadding(new Insets(30, 0, 0, 0));
-
-        // ══════════════════════════════════════════
-        //  PODIUM
-        // ══════════════════════════════════════════
-        StatistiquesJoueur[] classement = stats.getClassement();
-        HBox podium = buildPodium(stage, classement);
+        HBox podium = buildPodiumPositions(stage, stats.getClassement());
         podium.setAlignment(Pos.BOTTOM_CENTER);
-        podium.setPadding(new Insets(10, 0, 0, 0));
+        VBox.setVgrow(podium, Priority.ALWAYS);
 
-        // ══════════════════════════════════════════
-        //  STATS GLOBALES + TABLEAU
-        // ══════════════════════════════════════════
-        HBox statsZone = buildStatsZone(stats, classement);
-
-        // ══════════════════════════════════════════
-        //  BOUTONS
-        // ══════════════════════════════════════════
         btnRejouer = new Button("⟳  REJOUER");
         btnRejouer.getStyleClass().add("btn-rejouer");
+
+        btnStats = new Button("📊 VOIR STATS");
+        btnStats.getStyleClass().add("btn-rejouer");
+        // Style orange chaud pour le bouton stats
+        btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
 
         btnQuitter = new Button("✕  QUITTER");
         btnQuitter.getStyleClass().add("btn-quitter");
 
-        HBox btnBox = new HBox(20, btnRejouer, btnQuitter);
+        HBox btnBox = new HBox(25, btnRejouer, btnStats, btnQuitter);
         btnBox.setAlignment(Pos.CENTER);
-        btnBox.setPadding(new Insets(16, 0, 24, 0));
+        btnBox.setPadding(new Insets(0, 0, 50, 0));
 
-        // ══════════════════════════════════════════
-        //  ASSEMBLAGE
-        // ══════════════════════════════════════════
-        VBox content = new VBox(0, headerBox, podium, statsZone, btnBox);
-// On change TOP_CENTER par CENTER pour le centrage vertical interne
-        content.setAlignment(Pos.CENTER);
-        content.setMaxWidth(900);
+        mainContent = new VBox(20, titre, podium, btnBox);
+        mainContent.setAlignment(Pos.CENTER);
 
-        VBox.setVgrow(statsZone, Priority.ALWAYS);
-        content.setPadding(new Insets(20));
+        // 3. FENÊTRE POPUP DES STATS (Overlay)
+        // On utilise 'stage' pour lier la taille et éviter le bug du root=null
+        statsOverlay = createStatsPopup(stage, stats);
+        statsOverlay.setVisible(false);
+        statsOverlay.setOpacity(0);
 
-        ScrollableStackWrapper wrapper = new ScrollableStackWrapper(content);
-
-        StackPane root = new StackPane(bg, overlay, wrapper.getNode());
-
-        StackPane.setAlignment(wrapper.getNode(), Pos.CENTER);
-
-        scene = new Scene(root, 1000, 700);
+        // 4. ASSEMBLAGE DANS LE STACKPANE
+        root = new StackPane(bg, mainContent, statsOverlay);
+        scene = new Scene(root, 1100, 750);
 
         var css = FinPartieView.class.getResource("/com/totemtrials/totemtrials/styles/finpartie.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
-
-        // ══════════════════════════════════════════
-        //  ANIMATIONS D'ENTRÉE
-        // ══════════════════════════════════════════
-        playEntranceAnimations(titre, ssTitre, podium, statsZone, btnBox);
     }
 
-    // ─────────────────────────────────────────────
-    //  CONSTRUCTION DU PODIUM
-    // ─────────────────────────────────────────────
-    private HBox buildPodium(Stage stage, StatistiquesJoueur[] classement) {
-        // Ordre d'affichage : 2ème | 1er | 3ème
-        int[] ordre = {1, 0, 2};
-        String[] styles = {"marche-argent", "marche-or", "marche-bronze"};
-        String[] rangStyles = {"rang-podium-argent", "rang-podium-or", "rang-podium-bronze"};
-        int[] hauteurs = {H_ARGENT, H_OR, H_BRONZE};
+    private StackPane createStatsPopup(Stage stage, StatistiquesPartie stats) {
+        // Voile noir transparent
+        Rectangle dim = new Rectangle();
+        dim.widthProperty().bind(stage.widthProperty());
+        dim.heightProperty().bind(stage.heightProperty());
+        dim.setFill(Color.web("#000000", 0.85));
+
+        // Boîte de dialogue des stats
+        VBox box = new VBox(20);
+        box.setAlignment(Pos.TOP_CENTER);
+        box.setMaxSize(650, 550);
+        box.setPadding(new Insets(35));
+        box.setStyle("-fx-background-color: #1A1A1A; " +
+                "-fx-border-color: #D35400; " +
+                "-fx-border-width: 3; " +
+                "-fx-background-radius: 20; " +
+                "-fx-border-radius: 20;");
+        box.setEffect(new DropShadow(30, Color.BLACK));
+
+        Label t = new Label("STATISTIQUES DE LA PARTIE");
+        t.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #D35400;");
+
+        // Bloc des scores globaux
+        HBox global = new HBox(60,
+                createMetric("TEMPS", stats.getDureeFormatee()),
+                createMetric("TOURS", String.valueOf(stats.getTotalTours()))
+        );
+        global.setAlignment(Pos.CENTER);
+
+        // Liste des scores par joueur
+        VBox list = new VBox(8);
+        for (StatistiquesJoueur sj : stats.getClassement()) {
+            HBox row = new HBox(20,
+                    new Label("#" + sj.getPosition()),
+                    new Label(sj.getJoueur().getNom()),
+                    new Label(sj.getNombreTours() + " tours")
+            );
+            row.setStyle("-fx-background-color: #262626; -fx-padding: 12; -fx-background-radius: 8;");
+            row.getChildren().get(0).setStyle("-fx-text-fill: #D35400; -fx-font-weight: bold; -fx-pref-width: 40;");
+            row.getChildren().get(1).setStyle("-fx-text-fill: white; -fx-pref-width: 250; -fx-font-size: 16px;");
+            row.getChildren().get(2).setStyle("-fx-text-fill: #95A5A6; -fx-font-size: 16px;");
+            list.getChildren().add(row);
+        }
+
+        Button btnFermer = new Button("FERMER");
+        btnFermer.getStyleClass().add("btn-quitter");
+        btnFermer.setStyle("-fx-min-width: 200; -fx-background-radius: 30;");
+        btnFermer.setOnAction(e -> toggleStats(false));
+
+        box.getChildren().addAll(t, global, list, new Region(), btnFermer);
+        VBox.setVgrow(list, Priority.ALWAYS);
+
+        return new StackPane(dim, box);
+    }
+
+    private VBox createMetric(String label, String value) {
+        Label l = new Label(label); l.setStyle("-fx-text-fill: #95A5A6; -fx-font-size: 11px;");
+        Label v = new Label(value); v.setStyle("-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;");
+        VBox b = new VBox(l, v);
+        b.setAlignment(Pos.CENTER);
+        return b;
+    }
+
+    // Gère l'affichage/masquage avec animation et flou
+    public void toggleStats(boolean show) {
+        if (show) {
+            statsOverlay.setVisible(true);
+            mainContent.setEffect(new BoxBlur(8, 8, 3));
+        }
+
+        FadeTransition ft = new FadeTransition(Duration.millis(300), statsOverlay);
+        ft.setFromValue(show ? 0 : 1);
+        ft.setToValue(show ? 1 : 0);
+        ft.setOnFinished(e -> {
+            if (!show) {
+                statsOverlay.setVisible(false);
+                mainContent.setEffect(null);
+            }
+        });
+        ft.play();
+    }
+
+    private HBox buildPodiumPositions(Stage stage, StatistiquesJoueur[] classement) {
+        int[] ordre = {1, 0, 2}; // Argent, Or, Bronze
+        int[] offsets = {OFFSET_ARGENT, OFFSET_OR, OFFSET_BRONZE};
         String[] medailles = {"🥈", "🥇", "🥉"};
-
-        HBox row = new HBox(0);
+        HBox row = new HBox(20);
         row.setAlignment(Pos.BOTTOM_CENTER);
-
-        row.setFillHeight(false);
 
         for (int i = 0; i < 3; i++) {
             int idx = ordre[i];
-            if (idx >= classement.length) {
-                // Colonne vide si moins de 3 joueurs
-                row.getChildren().add(buildMarcheVide(hauteurs[i]));
-                continue;
+            if (idx < classement.length) {
+                StatistiquesJoueur sj = classement[idx];
+                VBox player = new VBox(2);
+                player.setAlignment(Pos.CENTER);
+
+                ImageView token = buildTokenView(sj);
+                Label m = new Label(medailles[i]); m.setStyle("-fx-font-size: 30px;");
+                Label n = new Label(sj.getJoueur().getNom()); n.getStyleClass().add("nom-podium");
+
+                player.getChildren().addAll(token, m, n);
+
+                Region spacer = new Region();
+                spacer.setMinHeight(offsets[i]);
+
+                VBox col = new VBox(player, spacer);
+                col.setAlignment(Pos.BOTTOM_CENTER);
+                col.setPrefWidth(LARGEUR_COLONNE);
+                row.getChildren().add(col);
             }
-            StatistiquesJoueur sj = classement[idx];
-            row.getChildren().add(buildMarche(stage, sj, styles[i], rangStyles[i],
-                                               hauteurs[i], medailles[i]));
         }
         return row;
     }
 
-    private VBox buildMarche(Stage stage, StatistiquesJoueur sj,
-                              String marcheStyle, String rangStyle,
-                              int hauteur, String medaille) {
-
-        // Token du joueur
-        ImageView token = buildTokenView(stage, sj);
-
-        // Médaille
-        Label medailleLabel = new Label(medaille);
-        medailleLabel.getStyleClass().add("medaille");
-
-        // Nom
-        Label nom = new Label(sj.getJoueur().getNom());
-        nom.getStyleClass().add("nom-podium");
-
-        VBox dessus = new VBox(4, token, medailleLabel, nom);
-        dessus.setAlignment(Pos.BOTTOM_CENTER);
-        dessus.setPadding(new Insets(0, 0, 8, 0));
-
-        // Rang sur la marche
-        Label rang = new Label(String.valueOf(sj.getPosition()));
-        rang.getStyleClass().add(rangStyle);
-
-        VBox marche = new VBox(0, rang);
-        marche.setAlignment(Pos.CENTER);
-        marche.setPrefWidth(W_MARCHE);
-        marche.setPrefHeight(hauteur);
-
-        // AJOUTEZ CES DEUX LIGNES POUR FORCER LA HAUTEUR :
-        marche.setMinHeight(hauteur);
-        marche.setMaxHeight(hauteur);
-
-        marche.getStyleClass().addAll("marche", marcheStyle);
-
-        VBox colonne = new VBox(0, dessus, marche);
-        colonne.setAlignment(Pos.BOTTOM_CENTER);
-        return colonne;
-    }
-
-    private Region buildMarcheVide(int hauteur) {
-        Region r = new Region();
-        r.setPrefWidth(W_MARCHE);
-        r.setPrefHeight(hauteur);
-        return r;
-    }
-
-    private ImageView buildTokenView(Stage stage, StatistiquesJoueur sj) {
-        if (sj.getJoueur().getJeton() == null) {
-            // Pas de jeton → placeholder
-            ImageView iv = new ImageView();
-            iv.setFitWidth(64);
-            iv.setFitHeight(64);
-            return iv;
-        }
-        String path = sj.getJoueur().getJeton().getImagePath();
-        InputStream is = FinPartieView.class.getResourceAsStream("/" + path);
-        if (is == null) {
-            ImageView iv = new ImageView();
-            iv.setFitWidth(64);
-            return iv;
-        }
-        ImageView iv = new ImageView(new Image(is));
-        iv.setFitWidth(72);
+    private ImageView buildTokenView(StatistiquesJoueur sj) {
+        InputStream is = FinPartieView.class.getResourceAsStream("/" + sj.getJoueur().getJeton().getImagePath());
+        ImageView iv = new ImageView(is != null ? new Image(is) : null);
+        iv.setFitWidth(90);
         iv.setPreserveRatio(true);
-        // Glow animé pour le 1er
         if (sj.getPosition() == 1) {
-            DropShadow glow = new javafx.scene.effect.DropShadow(20, Color.GOLD);
-            glow.setSpread(0.4);
-            iv.setEffect(glow);
-            ScaleTransition pulse = new ScaleTransition(Duration.millis(900), iv);
-            pulse.setFromX(1.0); pulse.setToX(1.12);
-            pulse.setFromY(1.0); pulse.setToY(1.12);
-            pulse.setCycleCount(Timeline.INDEFINITE);
-            pulse.setAutoReverse(true);
-            pulse.play();
+            iv.setEffect(new DropShadow(25, Color.GOLD));
         }
         return iv;
     }
 
-    // ─────────────────────────────────────────────
-    //  STATS ZONE
-    // ─────────────────────────────────────────────
-    private HBox buildStatsZone(StatistiquesPartie stats, StatistiquesJoueur[] classement) {
-        VBox globales = buildStatsGlobales(stats);
-        VBox tableau  = buildTableauJoueurs(classement);
-
-        Separator sep = new Separator(javafx.geometry.Orientation.VERTICAL);
-        sep.getStyleClass().add("separateur-stats");
-
-        HBox zone = new HBox(30, globales, sep, tableau);
-        zone.setAlignment(Pos.TOP_CENTER);
-        zone.getStyleClass().add("stats-panel");
-        zone.setMaxWidth(860);
-        HBox.setHgrow(tableau, Priority.ALWAYS);
-        VBox.setMargin(zone, new Insets(12, 0, 8, 0));
-        return zone;
-    }
-
-    private VBox buildStatsGlobales(StatistiquesPartie stats) {
-        Label titre = new Label("PARTIE");
-        titre.getStyleClass().add("stats-section-title");
-
-        VBox col = new VBox(12, titre);
-        col.setAlignment(Pos.TOP_CENTER);
-        col.setPrefWidth(160);
-
-        // On garde uniquement la Durée et les Tours
-        col.getChildren().addAll(
-                statGlobale(stats.getDureeFormatee(), "DURÉE"),
-                statGlobale(String.valueOf(stats.getTotalTours()), "TOURS")
-        );
-        return col;
-    }
-
-    private VBox statGlobale(String valeur, String libelle) {
-        Label v = new Label(valeur);
-        v.getStyleClass().add("stat-globale-valeur");
-        Label l = new Label(libelle);
-        l.getStyleClass().add("stat-globale-label");
-        VBox box = new VBox(0, v, l);
-        box.setAlignment(Pos.CENTER);
-        return box;
-    }
-
-    private VBox buildTableauJoueurs(StatistiquesJoueur[] classement) {
-        Label titre = new Label("JOUEURS");
-        titre.getStyleClass().add("stats-section-title");
-
-        // En-tête : on garde uniquement NOM et TOURS (j'ai élargi un peu les largeurs)
-        HBox header = new HBox(
-                colHeader("NOM",   200),
-                colHeader("TOURS", 150)
-        );
-        header.setAlignment(Pos.CENTER_LEFT);
-
-        VBox tableau = new VBox(6, titre, header);
-        tableau.setAlignment(Pos.TOP_LEFT);
-
-        for (StatistiquesJoueur sj : classement) {
-            boolean winner = sj.getPosition() == 1;
-
-            // Lignes : on garde uniquement le nom et le nombre de tours
-            Label nom   = styledCell(sj.getJoueur().getNom(), "cell-nom", 200);
-            Label tours = styledCell(String.valueOf(sj.getNombreTours()), "cell-valeur", 150);
-
-            HBox row = new HBox(nom, tours);
-            row.setAlignment(Pos.CENTER_LEFT);
-            row.getStyleClass().add(winner ? "row-joueur-winner" : "row-joueur");
-            VBox.setMargin(row, new Insets(2, 0, 2, 0));
-
-            tableau.getChildren().add(row);
-        }
-
-        return tableau;
-    }
-
-    private Label colHeader(String text, double width) {
-        Label l = new Label(text);
-        l.getStyleClass().add("table-header");
-        l.setPrefWidth(width);
-        l.setMinWidth(width);
-        return l;
-    }
-
-    private Label styledCell(String text, String style, double width) {
-        Label l = new Label(text);
-        l.getStyleClass().add(style);
-        l.setPrefWidth(width);
-        l.setMinWidth(width);
-        l.setPadding(new Insets(0, 8, 0, 8));
-        return l;
-    }
-
-    // ─────────────────────────────────────────────
-    //  ANIMATIONS D'ENTRÉE
-    // ─────────────────────────────────────────────
-    private void playEntranceAnimations(javafx.scene.Node... nodes) {
-        for (int i = 0; i < nodes.length; i++) {
-            javafx.scene.Node node = nodes[i];
-            node.setOpacity(0);
-            node.setTranslateY(30);
-
-            FadeTransition ft = new FadeTransition(Duration.millis(600), node);
-            ft.setToValue(1);
-
-            TranslateTransition tt = new TranslateTransition(Duration.millis(600), node);
-            tt.setToY(0);
-
-            ParallelTransition pt = new ParallelTransition(ft, tt);
-            pt.setDelay(Duration.millis(150 + i * 200L));
-            pt.play();
-        }
-    }
-
-    // ─────────────────────────────────────────────
-    //  ACCESSEURS
-    // ─────────────────────────────────────────────
-    public Scene  getScene()      { return scene; }
+    public Scene getScene() { return scene; }
     public Button getBtnRejouer() { return btnRejouer; }
+    public Button getBtnStats()   { return btnStats; }
     public Button getBtnQuitter() { return btnQuitter; }
-
-    // ─────────────────────────────────────────────
-    //  Helper interne : wrap scrollable si besoin
-    // ─────────────────────────────────────────────
-    private static class ScrollableStackWrapper {
-        private final javafx.scene.control.ScrollPane sp;
-
-        ScrollableStackWrapper(VBox content) {
-            // On place le VBox dans un StackPane intermédiaire pour forcer le centrage
-            StackPane centerWrapper = new StackPane(content);
-            centerWrapper.setAlignment(Pos.CENTER);
-            centerWrapper.setMinHeight(700); // Hauteur minimale de votre scène
-
-            sp = new javafx.scene.control.ScrollPane(centerWrapper);
-            sp.setFitToWidth(true);
-            sp.setFitToHeight(true); // TRÈS IMPORTANT pour le centrage vertical
-            sp.setHbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER);
-            sp.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            sp.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        }
-
-        javafx.scene.Node getNode() { return sp; }
-    }
 }
