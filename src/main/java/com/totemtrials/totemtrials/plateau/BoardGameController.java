@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 // import du quiz
 import com.totemtrials.totemtrials.questions.GestionQuiz;
-import com.totemtrials.totemtrials.HelloApplication;
 
 public class BoardGameController {
     public VBox PlateauInfoLeft;
