@@ -1,0 +1,118 @@
+name: Discord Push Notification
+
+on:
+  push:
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send push summary to Discord
+        uses: actions/github-script@v8
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          script: |
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            if (!webhookUrl) {
+              core.setFailed("Missing secret DISCORD_WEBHOOK_URL");
+              return;
+            }
+
+            const payload = context.payload || {};
+            const commits = Array.isArray(payload.commits) ? payload.commits : [];
+            if (commits.length === 0) {
+              core.info("No commits in push payload. Nothing to send.");
+              return;
+            }
+
+            const short = (value, max) => {
+              const text = String(value || "");
+              if (text.length <= max) return text;
+              return `${text.slice(0, Math.max(0, max - 3))}...`;
+            };
+
+            const firstLine = (message) =>
+              String(message || "").split("\n")[0].trim() || "(empty message)";
+
+            const branch = String(payload.ref || "").replace("refs/heads/", "") || "unknown";
+            const pusher =
+              payload.pusher?.name || payload.sender?.login || payload.pusher?.email || "unknown";
+            const repo =
+              payload.repository?.full_name || `${context.repo.owner}/${context.repo.repo}`;
+
+            const commitLines = commits.map((commit) => {
+              const sha = String(commit.id || "").slice(0, 7) || "unknown";
+              return `- ${sha} ${firstLine(commit.message)}`;
+            });
+
+            const formatList = (lines, maxLines, label) => {
+              if (lines.length === 0) return `No ${label}`;
+              if (lines.length <= maxLines) return lines.join("\n");
+              const visible = lines.slice(0, maxLines);
+              visible.push(`- ... +${lines.length - maxLines} ${label}(s)`);
+              return visible.join("\n");
+            };
+
+            const changedFiles = new Set();
+            for (const commit of commits) {
+              for (const file of commit.added || []) changedFiles.add(file);
+              for (const file of commit.modified || []) changedFiles.add(file);
+              for (const file of commit.removed || []) changedFiles.add(file);
+            }
+
+            const fileLines = [...changedFiles]
+              .sort((a, b) => a.localeCompare(b))
+              .map((file) => `- ${file}`);
+
+            const pushDateRaw =
+              payload.head_commit?.timestamp ||
+              commits[commits.length - 1]?.timestamp ||
+              new Date().toISOString();
+            const pushDate = new Date(pushDateRaw);
+            const safeDate = Number.isNaN(pushDate.getTime()) ? new Date() : pushDate;
+            const unixTime = Math.floor(safeDate.getTime() / 1000);
+
+            const commitMessages = short(formatList(commitLines, 15, "commit"), 1024);
+            const modifiedFiles = short(formatList(fileLines, 20, "file"), 1024);
+            const summary = short(
+              `Push on ${repo} | branch: ${branch} | by: ${pusher} | commits: ${commits.length}`,
+              2000
+            );
+
+            const discordPayload = {
+              username: "GitHub Push Bot",
+              avatar_url:
+                "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+              content: summary,
+              embeds: [
+                {
+                  title: `New push on ${repo}`,
+                  color: 0x2ea043,
+                  fields: [
+                    { name: "Branch", value: branch, inline: true },
+                    { name: "Pushed by", value: pusher, inline: true },
+                    { name: "Commit count", value: String(commits.length), inline: true },
+                    { name: "Time", value: `<t:${unixTime}:F>`, inline: true },
+                    { name: "Commit messages", value: commitMessages },
+                    { name: "Modified files", value: modifiedFiles }
+                  ],
+                  timestamp: safeDate.toISOString()
+                }
+              ]
+            };
+
+            const response = await fetch(webhookUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(discordPayload)
+            });
+
+            if (!response.ok) {
+              const responseText = await response.text();
+              core.setFailed(
+                `Discord webhook failed (${response.status}): ${responseText}`
+              );
+            } else {
+              core.info("Discord notification sent.");
+            }
