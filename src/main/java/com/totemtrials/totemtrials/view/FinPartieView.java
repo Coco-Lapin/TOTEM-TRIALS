@@ -31,7 +31,7 @@ public class FinPartieView {
     private final Button btnStats;
     private final Button btnQuitter;
 
-    private static final int OFFSET_OR       = 370;
+    private static final int OFFSET_OR       = 370  ;
     private static final int OFFSET_ARGENT   = 310;
     private static final int OFFSET_BRONZE   = 280;
     private static final int LARGEUR_COLONNE = 200;
@@ -50,6 +50,8 @@ public class FinPartieView {
         HBox podium = buildPodiumPositions(stage, stats.getClassement());
         podium.setAlignment(Pos.BOTTOM_CENTER);
         VBox.setVgrow(podium, Priority.ALWAYS);
+
+        podium.setTranslateX(-120);
 
         btnRejouer = new Button("⟳  REJOUER");
         btnRejouer.getStyleClass().add("btn-rejouer");
