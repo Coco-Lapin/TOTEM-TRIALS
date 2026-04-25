@@ -1,0 +1,262 @@
+[
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 1,
+        "question": "What is the most visited country in the world?",
+        "answer": "France",
+        "choices": ["France", "Spain", "USA", "China"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 1,
+        "question": "Which country is called the Middle Kingdom?",
+        "answer": "China",
+        "choices": ["China", "Germany", "Russia", "Egypt"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 2,
+        "question": "In which country is the famous Machu Picchu site located?",
+        "answer": "Peru",
+        "choices": ["Peru", "Mexico", "Chile", "Brazil"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 2,
+        "question": "In which country did reggae originate?",
+        "answer": "Jamaica",
+        "choices": ["Jamaica", "USA", "UK", "Brazil"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 3,
+        "question": "In which country is the famous Leaning Tower of Pisa located?",
+        "answer": "Italy",
+        "choices": ["Italy", "France", "Spain", "Greece"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 3,
+        "question": "What is the tiredness caused by time zone changes called?",
+        "answer": "Jet lag",
+        "choices": ["Jet lag", "Time shift", "Overtravel", "Time lag"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 4,
+        "question": "In which city is the famous astronomical clock located?",
+        "answer": "Prague",
+        "choices": ["Prague", "Berlin", "Vienna", "Budapest"]
+    },
+    {
+        "theme": "Tourism",
+        "subject": "Tourism",
+        "difficulty": 4,
+        "question": "Which country does not have a Roman amphitheater?",
+        "answer": "Belgium",
+        "choices": ["Tunisia", "Croatia", "Belgium", "Bulgaria"]
+    },
+
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 1,
+        "question": "What's the release date of the Friends series?",
+        "answer": "1994",
+        "choices": ["1994", "2001", "1986", "2012"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 1,
+        "question": "What is the most popular game coded in the programming language \"Java\"?",
+        "answer": "Minecraft",
+        "choices": ["Minecraft", "Elden Ring", "Call of Duty: Black Ops II", "Mario Bros"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 2,
+        "question": "In what year was the game Fortnite Battle Royale officially released?",
+        "answer": "2017",
+        "choices": ["2017", "2011", "2015", "2010"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 2,
+        "question": "What is the prisoner's name in The Green Mile?",
+        "answer": "John Coffey",
+        "choices": ["John Coffey", "Paul Edgecomb", "Wild Bill Wharton", "Delacroix"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 3,
+        "question": "Which Mario Kart allowed having two characters on the same kart?",
+        "answer": "Mario Kart DS",
+        "choices": ["Mario Kart DS", "Mario Kart 3DS", "Mario Kart GameCube", "Mario Kart Wii"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 3,
+        "question": "In which film does Jeff Goldblum play an egocentric mathematician?",
+        "answer": "Jurassic Park",
+        "choices": ["Jurassic Park", "Independence Day", "Wicked", "Thor: Ragnarok"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 4,
+        "question": "How many playable champions are there in League of Legends?",
+        "answer": "172",
+        "choices": ["172", "202", "182", "167"]
+    },
+    {
+        "theme": "entertainment",
+        "subject": "entertainment",
+        "difficulty": 4,
+        "question": "Under which pseudonym is Laurent Godefroid known?",
+        "answer": "Réléchix",
+        "choices": ["Opastix", "Idefix", "Whyskix", "Réfléchix"]
+    },
+
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 1,
+        "question": "What does the \"++\" symbol do?",
+        "answer": "It adds 1 to the value",
+        "choices": ["It adds 1 to the value", "It deletes the variable", "It multiplies by 2", "It pauses the program"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 1,
+        "question": "What is a True or False value called?",
+        "answer": "A Boolean",
+        "choices": ["A Boolean", "A String", "An Integer", "A Loop"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 2,
+        "question": "Which programming language is known for its readability and simplicity?",
+        "answer": "Python",
+        "choices": ["Python", "VBA", "C++", "Cobra"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 2,
+        "question": "Which line of code is correct in Python?",
+        "answer": "print(\"Hello World!\")",
+        "choices": ["print(\"Hello World!\")", "\"Hello World\".print()", "HelloWorld(print)", "print = \"hello World\" Print(print)"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 3,
+        "question": "What is the result of the binary addition 1101 + 1011? (Answer in decimal)",
+        "answer": "24",
+        "choices": ["22", "24", "26", "23"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 3,
+        "question": "Which programming language is primarily used in the Unity engine?",
+        "answer": "C#",
+        "choices": ["C#", "C++", "Python", "Java"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 4,
+        "question": "Who is considered to be the very first person to write a computer program?",
+        "answer": "Ada Lovelace",
+        "choices": ["Ada Lovelace", "Alan Turing", "Grace Hopper", "Charles Babbage"]
+    },
+    {
+        "theme": "Informatics",
+        "subject": "Informatics",
+        "difficulty": 4,
+        "question": "What was the original name of the Java language before it was renamed?",
+        "answer": "Oak",
+        "choices": ["Oak", "TypeScript", "Python", "Cobble"]
+    },
+
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 1,
+        "question": "What kind of game is Jumanji originally?",
+        "answer": "A board game",
+        "choices": ["A board game", "A card game", "A video game", "A sports game"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 1,
+        "question": "In the game Jumanji, how can players stop the dangers released by the game?",
+        "answer": "By reaching the final square and shouting \"Jumanji\"",
+        "choices": ["By reaching the final square and shouting \"Jumanji\"", "By leaving the game as soon as a danger appears", "By winning each challenge individually", "By destroying the game board"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 2,
+        "question": "What is the release date of the (first) Jumanji movie?",
+        "answer": "1995",
+        "choices": ["1995", "1990", "1999", "2005"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 2,
+        "question": "What is the name of the hunter chasing Alan Parrish in Jumanji (first movie)?",
+        "answer": "Van Pelt",
+        "choices": ["Van Pelt", "Van Helsing", "Clayton", "Kraven"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 3,
+        "question": "In the movie Jumanji: Welcome to the Jungle, which actor plays the role of Dr. Xander Bravestone?",
+        "answer": "Dwayne Johnson",
+        "choices": ["Dwayne Johnson", "Kevin Hart", "Karen Gillan", "Jack Black"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 3,
+        "question": "Which actor played Alan Parrish in the original 1995 Jumanji film?",
+        "answer": "Robin Williams",
+        "choices": ["Robin Williams", "Dustin Hoffman", "Tim Allen", "Tom Hanks"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 4,
+        "question": "Who wrote the original Jumanji children's book?",
+        "answer": "Chris Van Allsburg",
+        "choices": ["Chris Van Allsburg", "Dr. Seuss", "Roald Dahl", "J.K. Rowling"]
+    },
+    {
+        "theme": "Mystery (Jumanji)",
+        "subject": "Mystery (Jumanji)",
+        "difficulty": 4,
+        "question": "Which actor portrayed the hunter Van Pelt in the original 1995 Jumanji film?",
+        "answer": "Jonathan Hyde",
+        "choices": ["Jonathan Hyde", "Robin Williams", "Brad Pitt", "Samuel L. Jackson"]
+    }
+]
+
