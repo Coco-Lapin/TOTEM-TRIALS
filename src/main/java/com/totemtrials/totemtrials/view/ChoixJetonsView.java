@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class ChoixJetonsView {
 
+    private final Button infoPassiveButton;
     private final Button backButton;
     private final Scene scene;
     private final Label labelInstruction;
@@ -24,10 +25,14 @@ public class ChoixJetonsView {
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
 
     public ChoixJetonsView(Stage stage, Image background, Jeton[] jetons) {
+
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
+
+        infoPassiveButton = new Button("INFORMATION PASSIF");
+        infoPassiveButton.getStyleClass().add("back-button");
 
         backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
@@ -46,22 +51,17 @@ public class ChoixJetonsView {
             Rectangle2D fixeViewport = base.getViewport();
             Image animImage     = anim.getImage();
 
-            Label labelPassif = new Label("");
-            labelPassif.setTextFill(Color.WHITE);
-            labelPassif.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);");
-
             base.setOnMouseEntered(_ -> {
                 base.setImage(animImage);
                 base.setViewport(null);
-                labelPassif.setText(jeton.getPassif());
             });
+
             base.setOnMouseExited(_ -> {
                 base.setImage(fixeImage);
                 base.setViewport(fixeViewport);
-                labelPassif.setText("");
             });
 
-            VBox groupe = new VBox(10, base, labelPassif);
+            VBox groupe = new VBox(10, base);
             groupe.setAlignment(Pos.CENTER);
 
             jetonViews.put(jeton, base);
@@ -69,11 +69,14 @@ public class ChoixJetonsView {
             row.getChildren().add(groupe);
         }
 
+        StackPane.setAlignment(infoPassiveButton, Pos.TOP_RIGHT);
+        StackPane.setMargin(infoPassiveButton, new javafx.geometry.Insets(20));
+
         VBox layout = new VBox(10, labelInstruction, row, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
-        StackPane root = new StackPane(bg, layout);
+        StackPane root = new StackPane(bg, layout, infoPassiveButton);
         scene = new Scene(root, 600, 500);
 
         var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
@@ -90,6 +93,7 @@ public class ChoixJetonsView {
 
     public Scene                 getScene()            { return scene; }
     public Button                getBackButton()       { return backButton; }
+    public Button getInfoPassiveButton() {return infoPassiveButton; }
     public Map<Jeton, ImageView> getJetonViews()       { return jetonViews; }
     public Label                 getLabelInstruction() { return labelInstruction; }
 }

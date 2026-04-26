@@ -25,7 +25,8 @@ public class ChoixJoueursController {
                 homeView.getBackground(),
                 model.getJetonsDisponibles()
         );
-        new ChoixJetonsController(jetonsView, model, view, homeView);
+
+        new ChoixJetonsController(jetonsView, model, view ,homeView);
         SceneManager.show(jetonsView.getScene(), "Choix des jetons");
     }
 }
