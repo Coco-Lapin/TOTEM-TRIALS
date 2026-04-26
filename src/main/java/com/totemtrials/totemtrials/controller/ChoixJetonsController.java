@@ -13,11 +13,15 @@ public class ChoixJetonsController {
 
     private int currentPlayerIndex = 0;
 
-    public ChoixJetonsController(ChoixJetonsView view, Partie model,
+    public ChoixJetonsController(ChoixJetonsView view,Partie model,
                                  ChoixJoueursView joueursView, HomePageView homeView) {
 
         view.getBackButton().setOnAction(_ ->
                 SceneManager.show(joueursView.getScene(), "Player choice")
+        );
+
+        view.getInfoPassiveButton().setOnAction(_ ->
+                goInfoView(homeView,model,view)
         );
 
         view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
@@ -83,5 +87,18 @@ public class ChoixJetonsController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void goInfoView(HomePageView homeView, Partie model, ChoixJetonsView cView){
+
+        InfoPassifView iView = new InfoPassifView(
+                SceneManager.getStage(),
+                homeView.getBackground(),
+                model.getJetonsDisponibles()
+        );
+
+        new InfoPassifController(iView, cView);
+        SceneManager.show(iView.getScene(), "Infos Passif");
+
     }
 }
