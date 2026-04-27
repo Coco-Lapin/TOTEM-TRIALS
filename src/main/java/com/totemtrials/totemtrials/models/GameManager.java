@@ -171,6 +171,9 @@ public class GameManager {
 
         if (estVictorieux) {
             distance = 6; // Victoire : il avance de 6
+            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
+                distance++;
+            }
             System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
         } else {
             distance = -3; // Défaite : il recule de 3
@@ -200,6 +203,22 @@ public class GameManager {
         int distChallenger = challengerOk ? 4 : -4;
         int distOpponent = adversaireOk ? 4 : -4;
 
+        if(playerNames[idChallenger].equalsIgnoreCase("tigre") && challengerOk){
+            distChallenger++;
+        }
+
+        if(playerNames[idOpponent].equalsIgnoreCase("tigre") && adversaireOk){
+            distChallenger++;
+        }
+
+        if(playerNames[idChallenger].equalsIgnoreCase("serpent") && !challengerOk){
+            distOpponent++;
+        }
+
+        if(playerNames[idOpponent].equalsIgnoreCase("serpent") && !adversaireOk){
+            distOpponent++;
+        }
+
         // 2. Update of the different positions
         positionsJoueurs[idChallenger] += distChallenger;
         positionsJoueurs[idOpponent] += distOpponent;
@@ -213,9 +232,10 @@ public class GameManager {
         if (positionsJoueurs[idOpponent] > Maxtile) positionsJoueurs[idOpponent] = Maxtile;
        // ONE BY ONE
         //The challenger moves first
+        int finalDistOpponent = distOpponent;
         MC.deplacerPion(idChallenger, distChallenger, () -> {
             // when the challenger finish his move then the opponent can be deplaced
-            MC.deplacerPion(idOpponent, distOpponent, () -> {
+            MC.deplacerPion(idOpponent, finalDistOpponent, () -> {
                 // when the two players moved then the game continues
                 passerAuJoueurSuivant();
             });
