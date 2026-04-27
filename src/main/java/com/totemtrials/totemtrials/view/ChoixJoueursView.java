@@ -25,9 +25,9 @@ public class ChoixJoueursView {
         bg.setPreserveRatio(false);
 
         //----------------Creation des images pour les boutons----------
-        btn2Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/2Players.png",0.25);
-        btn3Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
-        btn4Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);
+        btn2Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/2Players.png",0.25);
+        btn3Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/3Players.png",0.3);
+        btn4Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/4Players.png",0.25);
 
         backButton   = new Button("BACK");
 
@@ -42,7 +42,7 @@ public class ChoixJoueursView {
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        var css = getClass().getResource("/styleSheet/homepage.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 

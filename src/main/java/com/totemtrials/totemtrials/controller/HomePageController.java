@@ -1,6 +1,6 @@
 package com.totemtrials.totemtrials.controller;
 
-import com.totemtrials.totemtrials.model.Partie;
+import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;

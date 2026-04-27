@@ -37,7 +37,7 @@ public class OptionsView {
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        var css = getClass().getResource("/styleSheet/homepage.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 

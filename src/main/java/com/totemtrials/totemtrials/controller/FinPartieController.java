@@ -1,7 +1,7 @@
 package com.totemtrials.totemtrials.controller;
 
-import com.totemtrials.totemtrials.model.Partie;
-import com.totemtrials.totemtrials.model.StatistiquesPartie;
+import com.totemtrials.totemtrials.models.Partie;
+import com.totemtrials.totemtrials.models.StatistiquesPartie;
 import com.totemtrials.totemtrials.view.FinPartieView;
 import com.totemtrials.totemtrials.view.HomePageView;
 import javafx.application.Platform;

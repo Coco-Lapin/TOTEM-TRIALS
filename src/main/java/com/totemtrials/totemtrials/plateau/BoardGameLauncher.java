@@ -16,7 +16,7 @@ private Stage mainStage;
 
         public void start(Stage primaryStage) throws Exception {
             this.mainStage = primaryStage;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Plateau.fxml"));
             AnchorPane root = loader.load();
 
             Scene scene = new Scene(root);

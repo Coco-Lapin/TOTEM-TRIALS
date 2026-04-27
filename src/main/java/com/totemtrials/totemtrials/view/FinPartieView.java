@@ -1,7 +1,7 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.StatistiquesJoueur;
-import com.totemtrials.totemtrials.model.StatistiquesPartie;
+import com.totemtrials.totemtrials.models.StatistiquesJoueur;
+import com.totemtrials.totemtrials.models.StatistiquesPartie;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -82,7 +82,7 @@ public class FinPartieView {
         root = new StackPane(bg, mainContent, statsOverlay);
         scene = new Scene(root, 1100, 750);
 
-        var css = FinPartieView.class.getResource("/com/totemtrials/totemtrials/styles/finpartie.css");
+        var css = FinPartieView.class.getResource("/styleSheet/finpartie.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 

@@ -29,7 +29,7 @@ public class HomePageView {
         String[] candidats = {
                 "/Images/backgroundMenu.png",
                 "Images/backgroundMenu.png",
-                "/com/totemtrials/totemtrials/Images/backgroundMenu.png",
+                "/images/backgroundMenu.png",
         };
 
         InputStream is = null;
@@ -66,10 +66,10 @@ public class HomePageView {
         bg.setPreserveRatio(false);
 
         // ── Boutons et titre ──
-        ImageView titre = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/Titre-sora.png",          0.45);
-        playButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Start-sora.png",   0.45);
-        optionButton    = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Options-sora.png", 0.38);
-        quitButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Exit-sora.png",    0.28);
+        ImageView titre = ViewUtils.createCroppedImageView(stage, "images/Titre-sora.png",          0.45);
+        playButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Start-sora.png",   0.45);
+        optionButton    = ViewUtils.createCroppedImageView(stage, "images/buttons/Options-sora.png", 0.38);
+        quitButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Exit-sora.png",    0.28);
 
         VBox layout = new VBox(10, titre, playButton, optionButton, quitButton);
         layout.setAlignment(Pos.CENTER);
@@ -80,7 +80,7 @@ public class HomePageView {
         // ── CSS ──
         String[] cssCandidats = {
                 "/styles/homepage.css",
-                "/com/totemtrials/totemtrials/styles/homepage.css",
+                "/styleSheet/homepage.css",
                 "styles/homepage.css",
         };
 

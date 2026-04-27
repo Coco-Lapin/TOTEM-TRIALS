@@ -1,6 +1,6 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.Jeton;
+import com.totemtrials.totemtrials.models.Jeton;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -76,7 +76,7 @@ public class ChoixJetonsView {
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        var css = getClass().getResource("/styleSheet/homepage.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 

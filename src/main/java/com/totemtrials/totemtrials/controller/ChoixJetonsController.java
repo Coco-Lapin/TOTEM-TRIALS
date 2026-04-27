@@ -1,7 +1,9 @@
 package com.totemtrials.totemtrials.controller;
 
-import com.totemtrials.totemtrials.model.*;
 import com.totemtrials.totemtrials.models.GameConfig;
+import com.totemtrials.totemtrials.models.Jeton;
+import com.totemtrials.totemtrials.models.Joueur;
+import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.view.ChoixJetonsView;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
@@ -64,10 +66,10 @@ public class ChoixJetonsController {
 
                 // 3. On choisit la bonne image en fonction de ce même nom
                 chemins[i] = switch (nomDuJetonChoisi.toLowerCase()) {
-                    case "tigre"    -> "/com/totemtrials/totemtrials/Images/tokkens/jetonTigre.png";
-                    case "serpent"  -> "/com/totemtrials/totemtrials/Images/tokkens/jetonSerpent.png";
-                    case "aigle"    -> "/com/totemtrials/totemtrials/Images/tokkens/jetonAigle.png";
-                    default         -> "/com/totemtrials/totemtrials/Images/tokkens/jetonElephant.png";
+                    case "tigre"    -> "/images/tokens/jetonTigre.png";
+                    case "serpent"  -> "/images/tokens/jetonSerpent.png";
+                    case "aigle"    -> "/images/tokens/jetonAigle.png";
+                    default         -> "/images/tokens/jetonElephant.png";
                 };
             }
 
@@ -77,7 +79,7 @@ public class ChoixJetonsController {
             GameConfig.getInstance().setNomsJoueurs(noms); // Le singleton reçoit ["Tigre", "Aigle", ...]
             try {
                 javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                        getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml")
+                        getClass().getResource("/FXML/Plateau.fxml")
                 );
                 javafx.scene.layout.AnchorPane root = loader.load();
                 SceneManager.show(new javafx.scene.Scene(root), "Totem Trials");

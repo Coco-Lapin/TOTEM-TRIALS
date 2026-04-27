@@ -6,7 +6,6 @@ import com.totemtrials.totemtrials.controller.movementController;
 import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.models.GameManager;
 import com.totemtrials.totemtrials.view.OptionsView;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -25,13 +24,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 import java.util.ArrayList;
 import java.util.List;
 // import du quiz
-import com.totemtrials.totemtrials.questions.GestionQuiz;
+
 
 public class BoardGameController {
     public VBox PlateauInfoLeft;
@@ -111,7 +109,7 @@ public class BoardGameController {
                 plateauJeu.scaleXProperty().bind(ratioZoom);
                 plateauJeu.scaleYProperty().bind(ratioZoom);
 
-                Image imgTour = new Image(getClass().getResource("/images/Tourism.png").toExternalForm());
+                Image imgTour = new Image(getClass().getResource("/images/gameSquare/Tourism.png").toExternalForm());
                 ImagePattern patternTour = new ImagePattern(imgTour);
 
                 // 2. Créer un tableau contenant tes variables @FXML
@@ -123,7 +121,7 @@ public class BoardGameController {
                         r.setFill(patternTour);
                     }
                 }
-                Image imgDiv = new Image(getClass().getResource("/images/Divert.png").toExternalForm());
+                Image imgDiv = new Image(getClass().getResource("/images/gameSquare/Divert.png").toExternalForm());
                 ImagePattern patternDiv = new ImagePattern(imgDiv);
                 Rectangle[] Divert ={RDiv1, RDiv2, RDiv3, RDiv4, RDiv5, RDiv6, RDiv7, RDiv8};
                 for (Rectangle r : Divert) {
@@ -131,7 +129,7 @@ public class BoardGameController {
                         r.setFill(patternDiv);
                     }
                 }
-                Image imgMyst = new Image(getClass().getResource("/images/Mistery.png").toExternalForm());
+                Image imgMyst = new Image(getClass().getResource("/images/gameSquare/Mistery.png").toExternalForm());
                 ImagePattern patternMyst = new ImagePattern(imgMyst);
                 Rectangle[] Myst ={RMyst1, RMyst2, RMyst3, RMyst4, RMyst5, RMyst6, RMyst7, RMyst8};
                 for (Rectangle r : Myst) {
@@ -139,7 +137,7 @@ public class BoardGameController {
                         r.setFill(patternMyst);
                     }
                 }
-                Image imgInfo = new Image(getClass().getResource("/images/Informatic.png").toExternalForm());
+                Image imgInfo = new Image(getClass().getResource("/images/gameSquare/computing.png").toExternalForm());
                 ImagePattern patternInfo = new ImagePattern(imgInfo);
                 Rectangle[] Info ={RInfo1, RInfo2, RInfo3, RInfo4, RInfo5, RInfo6, RInfo7, RInfo8};
                 for (Rectangle r : Info) {
@@ -147,23 +145,23 @@ public class BoardGameController {
                         r.setFill(patternInfo);
                     }
                 }
-                Image imgVersus = new Image(getClass().getResource("/images/Versus.png").toExternalForm());
+                Image imgVersus = new Image(getClass().getResource("/images/gameSquare/Versus.png").toExternalForm());
                 ImagePattern patterVersus = new ImagePattern(imgVersus);
                 Rectangle[] Versus ={RVersus1, RVersus2,RVersus3,RVersus4};
                 for(Rectangle r : Versus){
                     r.setFill(patterVersus);
                 }
-                Image imgHop = new Image(getClass().getResource("/images/HOP.png").toExternalForm());
+                Image imgHop = new Image(getClass().getResource("/images/gameSquare/HOP.png").toExternalForm());
                 ImagePattern patternHop = new ImagePattern(imgHop);
                 Rectangle[] Hop ={RHop1, RHop2,RBonus1,RBonus2};
                 for(Rectangle r : Hop){
                     r.setFill(patternHop);
                 }
 
-                Image imgStart = new Image(getClass().getResource("/images/start.png").toExternalForm());
+                Image imgStart = new Image(getClass().getResource("/images/gameSquare/start.png").toExternalForm());
                 RStart.setFill(new ImagePattern(imgStart));
 
-                Image imgEnd = new Image(getClass().getResource("/images/end.png").toExternalForm());
+                Image imgEnd = new Image(getClass().getResource("/images/gameSquare/end.png").toExternalForm());
                 RFinish.setFill(new ImagePattern(imgEnd));
 
                 // Dans ton initialize, tu boucles sur CE tableau

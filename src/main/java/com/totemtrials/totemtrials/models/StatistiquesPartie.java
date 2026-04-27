@@ -1,4 +1,4 @@
-package com.totemtrials.totemtrials.model;
+package com.totemtrials.totemtrials.models;
 
 import java.util.Arrays;
 import java.util.Comparator;
