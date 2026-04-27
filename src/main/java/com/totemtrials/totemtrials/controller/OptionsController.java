@@ -6,38 +6,43 @@ import javafx.scene.Scene;
 import javafx.scene.media.MediaPlayer;
 
 public class OptionsController {
-    // --------------------------------------------------------
-    // 1. CONSTRUCTEURS EXISTANTS (Pour le Menu)
-    // --------------------------------------------------------
-    public OptionsController(OptionsView view, HomePageView homeView) {
-        // Le MediaPlayer est géré dans TotemTrialsApp et passé ici si nécessaire.
-        // Pour l'instant le binding volume n'est pas connecté au player —
-        // voir TotemTrialsApp pour injecter le MediaPlayer.
 
+    // ── Menu principal ──────────────────────────────────────────────────────
+    public OptionsController(OptionsView view, HomePageView homeView) {
         view.getBackButton().setOnAction(_ ->
-            SceneManager.show(homeView.getScene(), "Menu principal")
+                SceneManager.show(homeView.getScene(), "Menu principal")
         );
     }
 
-    /** Surcharge permettant de brancher le volume sur un MediaPlayer existant. */
     public OptionsController(OptionsView view, HomePageView homeView, MediaPlayer player) {
         this(view, homeView);
-        player.volumeProperty().bind(view.getVolumeSlider().valueProperty().divide(100));
+        if (player != null) bindVolume(view, player);
     }
 
-    // --------------------------------------------------------
-    // 2. NOUVEAUX CONSTRUCTEURS (Pour le Plateau FXML)
-    // --------------------------------------------------------
+    // ── Plateau (FXML) ──────────────────────────────────────────────────────
     public OptionsController(OptionsView view, Scene previousScene, String previousTitle) {
         view.getBackButton().setOnAction(_ ->
-                SceneManager.show(previousScene, previousTitle) // Retourne directement à la scène précédente !
+                SceneManager.show(previousScene, previousTitle)
         );
     }
 
     public OptionsController(OptionsView view, Scene previousScene, String previousTitle, MediaPlayer player) {
         this(view, previousScene, previousTitle);
-        if (player != null) {
-            player.volumeProperty().bind(view.getVolumeSlider().valueProperty().divide(100));
-        }
+        if (player != null) bindVolume(view, player);
+    }
+
+    // ── Helper ──────────────────────────────────────────────────────────────
+    /**
+     * Initialise le slider sur le volume ACTUEL du player AVANT de binder.
+     * Sans ça, le bind() fire immédiatement et remet le volume à 25 (valeur
+     * par défaut du slider).
+     */
+    private void bindVolume(OptionsView view, MediaPlayer player) {
+        // 1. Positionne le slider sur le volume courant
+        view.getVolumeSlider().setValue(player.getVolume() * 100);
+        // 2. Maintenant le bind ne change rien car slider = volume actuel
+        player.volumeProperty().bind(
+                view.getVolumeSlider().valueProperty().divide(100)
+        );
     }
 }

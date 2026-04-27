@@ -16,10 +16,11 @@ public class TotemTrialsApp extends Application {
         SceneManager.init(stage);
 
         Partie partie = new Partie();
-
         HomePageView homeView = new HomePageView(stage);
-
         new HomePageController(homeView, partie);
+
+        // Stocke la scène du menu — utilisée par StopGame pour revenir
+        SceneManager.setHomeScene(homeView.getScene());
 
         var audioRes = getClass().getResource("/sounds/Agrual.mp3");
         if (audioRes != null) {

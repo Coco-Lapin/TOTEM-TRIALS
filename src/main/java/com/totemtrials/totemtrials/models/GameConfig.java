@@ -10,8 +10,8 @@ public class GameConfig {
 
     private int nbJoueurs = 4;
     private String[] jetonsChoisis = {
-            "/images/tokens/jetonElephan.png",
-            "/images/tokens/jetonSnake.png",
+            "/images/tokens/jetonElephant.png",
+            "/images/tokens/jetonSerpent.png",
             "/images/tokens/jetonAigle.png",
             "/images/tokens/jetonTigre.png"
     };

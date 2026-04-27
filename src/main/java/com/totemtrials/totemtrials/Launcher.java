@@ -7,5 +7,3 @@ public class Launcher {
         Application.launch(TotemTrialsApp.class, args);
     }
 }
-
-//test webhook Github - discord V7
