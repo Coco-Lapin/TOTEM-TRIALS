@@ -1,3 +1,10 @@
+.label {
+    -fx-text-fill: white;
+}
+.button {
+    -fx-text-fill: white;
+}
+
 /* ---- BOUTON MENU ---- */
 .menu-button {
     -fx-background-color: transparent;
@@ -58,3 +65,4 @@
     -fx-background-color: #5a3010;
     -fx-border-color: #f0a820;
 }
+
