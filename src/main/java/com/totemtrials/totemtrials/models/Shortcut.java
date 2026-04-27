@@ -95,7 +95,7 @@ public class Shortcut {
             case 4 -> tileTheme="Mystery (Jumanji)";
         }
 
-        GestionQuiz quiz = new GestionQuiz(tileTheme, boardGameController.getZoneCentrale());
+        GestionQuiz quiz = new GestionQuiz(tileTheme,4, boardGameController.getZoneCentrale(),"");
 
         quiz.setOnFinish(q -> {
             // q.getVue() renvoie un StackPane

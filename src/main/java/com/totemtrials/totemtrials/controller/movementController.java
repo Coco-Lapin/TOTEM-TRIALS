@@ -57,7 +57,7 @@ public class movementController {
 
         // A CHANGER ALLER DE I A SPRITES.LENGTHS
         for (int i = 0; i < GameConfig.getInstance().getNbJoueurs(); i++) {
-            sprites[i] = new Circle(40); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
+            sprites[i] = new Circle(70); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
             Image imgJeton = new Image(getClass().getResource(cheminImages[i]).toExternalForm());
             sprites[i].setFill(new ImagePattern(imgJeton));
             sprites[i].setStroke(Color.BLACK);

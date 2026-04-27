@@ -25,7 +25,7 @@ public class GameManager {
         this.boardGameController = bg;
         this.MC = mc;
         this.listeCases = cases;
-        // CORRECTION 1 : Initialiser l'objet Shortcut ici !
+
         this.shortcut = new Shortcut(this.boardGameController, this);
 
     }
@@ -92,6 +92,9 @@ public class GameManager {
             // Sinon le code continue et lance un Quiz normal par dessus ton raccourci !
             return;
         }
+        if(tileTheme.equals("BONUS")) {
+            tileTheme="Mystery (Jumanji)";
+        }
 
         GestionQuiz nouveauQuiz = setupQuiz(tileTheme);
         this.boardGameController.afficherPopUpQuiz(nouveauQuiz.getVue());
@@ -147,14 +150,18 @@ public class GameManager {
     }
 
     public void EndingHop(boolean aJoue, boolean estVictorieux) {
+        int distance;
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
             System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
-            passerAuJoueurSuivant();
+            distance = 1 ;
+            MC.deplacerPion(joueurActuel, distance, () -> {
+                passerAuJoueurSuivant();
+            });
             return; // On arrête la méthode ici
         }
         // 2. Si le joueur a accepté de jouer (il a cliqué sur "Yes")
-        int distance;
+
         if (estVictorieux) {
             distance = 6; // Victoire : il avance de 6
             System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");

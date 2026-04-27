@@ -72,6 +72,7 @@ public class BoardGameController {
             if (id.startsWith("RHop"))    return "HOP";
             if (id.equals("RStart"))     return "DEPART";
             if (id.equals("RFinish"))    return "FINISH";
+            if(id.equals("RBonus")) return "BONUS";
 
             return "INCONNU"; // Sécurité
         }
