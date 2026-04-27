@@ -21,6 +21,7 @@ public class GameManager {
     // 1. Nouvelles variables pour le multijoueur
     private int[] positionsJoueurs = new int[GameConfig.getInstance().getNbJoueurs()]; // La position exacte de chaque joueur
     private int joueurActuel = 0; // 0 = Bleu, 1 = Rouge, 2 = Vert, 3 = Jaune
+    String[] playerNames = GameConfig.getInstance().getNomsJoueurs();
 
     public GameManager(BoardGameController bg, movementController mc, List<Case> cases) {
         this.boardGameController = bg;
@@ -109,7 +110,13 @@ public class GameManager {
             this.boardGameController.fermerPopUpQuiz(q.getVue());
 
             if (q.isCorrecte()) {
+
                 int steps = q.getNiveauChoisi();
+
+                if(playerNames[joueurActuel].equalsIgnoreCase("aigle")){
+                    steps +=1 ;
+                }
+
                 System.out.println("Bonne réponse ! Le joueur " + joueurActuel + " avance de " + steps + " cases bonus.");
 
                 // On met à jour la position après le bonus
