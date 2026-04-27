@@ -13,6 +13,7 @@ import java.util.List;
 public class GameManager {
     private BoardGameController boardGameController;
     private movementController MC;
+    private GameConfig gameConfig;
     private List<Case> listeCases;
     private Shortcut shortcut;
     private StackPane zoneCentrale;
@@ -27,7 +28,6 @@ public class GameManager {
         this.listeCases = cases;
 
         this.shortcut = new Shortcut(this.boardGameController, this);
-
     }
 
     public void demarrerPartie() {
@@ -73,7 +73,7 @@ public class GameManager {
         // --------------------------------VERSUS GAMEPLAY ------------------------------------
         //-------------------------------------------------------------------------------------
         if(tileTheme.equals("VERSUS") ) {
-            Versus v = new Versus(boardGameController.getZoneCentrale());
+            Versus v = new Versus(boardGameController.getZoneCentrale(),this.gameConfig);
             v.setGameManager(this); // On lie le GameManager
             v.setBoardGameController(this.boardGameController);
             // ... set les controllers ...

@@ -68,7 +68,7 @@
                                     <children>
 
                                         <ImageView fx:id="imageFond" fitHeight="3584.0" fitWidth="6144.0">
-                                            <Image url="@images\plateau-jeu-javaFX.png" />
+                                            <Image url="@/images/plateau-jeu-javaFX.png"/>
                                         </ImageView>
 
                                         <Rectangle fx:id="RStart" fill="deeppink" height="180.0" layoutX="585.0" layoutY="1040.0" opacity="1.0" stroke="BLACK" width="180.0" />

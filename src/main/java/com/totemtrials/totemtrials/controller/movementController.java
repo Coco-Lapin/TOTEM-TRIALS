@@ -22,15 +22,15 @@ import java.util.Random;
 
 public class movementController {
 
-    private String[] cheminImages = GameConfig.getInstance().getJetonsChoisis();
-
+    private String[] cheminImages ;
+    private String[] nomsJoueurs;
     private BoardGameController boardGame;
     private int indiceCaseActuelle = 0;
 
     @FXML private Pane plateauJeu; // Injecte le même Pane que dans BoardGameController
     // RETIRER LES INITIALISATIONS PLUS TARD
-    private int[] indicesCasesActuelles = {0, 0, 0, 0};
-    private Circle[] sprites = new Circle[4];
+    private int[] indicesCasesActuelles ;
+    private Circle[] sprites;
 
     // On définit 4 couleurs différentes pour les joueurs
     private Color[] couleursJoueurs = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};
@@ -40,7 +40,7 @@ public class movementController {
         // 1. Initialisation des tableaux à la taille exacte demandée
         this.indicesCasesActuelles = new int[param];
         this.sprites = new Circle[param];
-        // 2. Remplissage par défaut (optionnel car un int[] est à 0 par défaut)
+        // 2. Remplissage par défaut
         for (int i = 0; i < param; i++) {
             indicesCasesActuelles[i] = 0;
         }
@@ -53,10 +53,18 @@ public class movementController {
 
     // 2. On initialise 4 pions au lieu d'un seul
     public void initialiserPions() {
+
+        // 3. On récupère les VRAIES infos du GameConfig ici
+        int nbJoueursReels = GameConfig.getInstance().getNbJoueurs();
+        this.cheminImages = GameConfig.getInstance().getJetonsChoisis();
+        this.nomsJoueurs = GameConfig.getInstance().getNomsJoueurs();
+        // 4. On prépare les tableaux avec le VRAI nombre de joueurs (2, 3 ou 4)
+        setupPlayers(nbJoueursReels);
+
         Case depart = boardGame.getListeCases().get(0);
 
         // A CHANGER ALLER DE I A SPRITES.LENGTHS
-        for (int i = 0; i < GameConfig.getInstance().getNbJoueurs(); i++) {
+        for (int i = 0; i < nbJoueursReels; i++) {
             sprites[i] = new Circle(70); // J'ai un peu réduit le rayon (40) pour que les 4 rentrent mieux
             Image imgJeton = new Image(getClass().getResource(cheminImages[i]).toExternalForm());
             sprites[i].setFill(new ImagePattern(imgJeton));
@@ -119,12 +127,5 @@ public class movementController {
         });
         trajetComplet.play();
     }
-    // METHODE PROVISOIRE permet de simuler le potentiel déplacement d'un joueur après réponse
-    public int nbCasesAParcourir(){
-        // création d'un objet Random
-        Random rand = new Random();
-        int alea=rand.nextInt(10);
-        System.out.println(alea);
-        return alea;
-    }
+
 }

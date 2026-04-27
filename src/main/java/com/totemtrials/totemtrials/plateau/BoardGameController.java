@@ -1,8 +1,11 @@
 package com.totemtrials.totemtrials.plateau;
 
+import com.totemtrials.totemtrials.controller.OptionsController;
+import com.totemtrials.totemtrials.controller.SceneManager;
 import com.totemtrials.totemtrials.controller.movementController;
 import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.models.GameManager;
+import com.totemtrials.totemtrials.view.OptionsView;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -208,6 +211,17 @@ public class BoardGameController {
     }
 
     public void OpenSettings(ActionEvent actionEvent) {
+        // 1. On crée la vue des options avec ton fond de plateau
+        OptionsView optView = new OptionsView(SceneManager.getStage(), imageFond.getImage());
+
+        // 2. On récupère la Scène actuelle du plateau grâce à l'événement du clic (exactement comme tu l'as fait pour StopGame)
+        Scene scenePlateau = ((Node) actionEvent.getSource()).getScene();
+
+        // 3. On utilise le NOUVEAU constructeur en lui passant la Scène et le titre de la fenêtre !
+        new OptionsController(optView, scenePlateau, "Totem Trials", SceneManager.getPlayer());
+
+        // 4. On affiche les options
+        SceneManager.show(optView.getScene(), "Options");
     }
 
     // Expose zoneCentrale pour le binding adaptatif dans GestionQuiz

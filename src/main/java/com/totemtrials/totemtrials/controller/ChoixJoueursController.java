@@ -1,14 +1,15 @@
 package com.totemtrials.totemtrials.controller;
 
 import com.totemtrials.totemtrials.model.Partie;
+import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.view.ChoixJetonsView;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
 
 public class ChoixJoueursController {
-
-    public ChoixJoueursController(ChoixJoueursView view, Partie model, HomePageView homeView) {
-
+    private GameConfig gm;
+    public ChoixJoueursController(ChoixJoueursView view, Partie model, HomePageView homeView,GameConfig gm) {
+            this.gm = gm;
         view.getBackButton().setOnAction(_ ->
             SceneManager.show(homeView.getScene(), "Menu principal")
         );
@@ -25,7 +26,7 @@ public class ChoixJoueursController {
                 homeView.getBackground(),
                 model.getJetonsDisponibles()
         );
-        new ChoixJetonsController(jetonsView, model, view, homeView);
+        new ChoixJetonsController(jetonsView, model, view, homeView ,this.gm );
         SceneManager.show(jetonsView.getScene(), "Choix des jetons");
     }
 }

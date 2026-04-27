@@ -1,6 +1,7 @@
 package com.totemtrials.totemtrials.controller;
 
 import com.totemtrials.totemtrials.model.Partie;
+import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.OptionsView;
@@ -12,7 +13,7 @@ public class HomePageController {
 
     private final HomePageView view;
     private final Partie       model;
-
+    private GameConfig gameConfig;
     public HomePageController(HomePageView view, Partie model) {
         this.view  = view;
         this.model = model;
@@ -32,7 +33,7 @@ public class HomePageController {
         view.getPlayButton().setOnMouseClicked(_ -> {
             ChoixJoueursView choixView = new ChoixJoueursView(
                     SceneManager.getStage(), view.getBackground());
-            new ChoixJoueursController(choixView, model, view);
+            new ChoixJoueursController(choixView, model, view,gameConfig);
             SceneManager.show(choixView.getScene(), "Choix des joueurs");
         });
 
