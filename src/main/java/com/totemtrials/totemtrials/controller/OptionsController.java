@@ -31,18 +31,21 @@ public class OptionsController {
         if (player != null) bindVolume(view, player);
     }
 
-    // ── Helper ──────────────────────────────────────────────────────────────
-    /**
-     * Initialise le slider sur le volume ACTUEL du player AVANT de binder.
-     * Sans ça, le bind() fire immédiatement et remet le volume à 25 (valeur
-     * par défaut du slider).
-     */
+    // ── Binding audio ───────────────────────────────────────────────────────
     private void bindVolume(OptionsView view, MediaPlayer player) {
-        // 1. Positionne le slider sur le volume courant
-        view.getVolumeSlider().setValue(player.getVolume() * 100);
-        // 2. Maintenant le bind ne change rien car slider = volume actuel
+        // --- Music slider ---
+        // Initialise sur le volume courant avant de binder (évite le reset à 25%)
+        view.getMusicSlider().setValue(player.getVolume() * 100);
         player.volumeProperty().bind(
-                view.getVolumeSlider().valueProperty().divide(100)
+                view.getMusicSlider().valueProperty().divide(100)
+        );
+
+        // --- SFX slider ---
+        // Initialise sur le volume SFX courant stocké dans SceneManager
+        view.getSfxSlider().setValue(SceneManager.getSfxVolume() * 100);
+        // Chaque changement du slider met à jour SceneManager.sfxVolume
+        view.getSfxSlider().valueProperty().addListener((obs, oldVal, newVal) ->
+                SceneManager.setSfxVolume(newVal.doubleValue() / 100)
         );
     }
 }
