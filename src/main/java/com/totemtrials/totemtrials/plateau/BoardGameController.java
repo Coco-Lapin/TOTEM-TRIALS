@@ -124,7 +124,7 @@ public class BoardGameController {
             applyPattern(new Rectangle[]{RMyst1,RMyst2,RMyst3,RMyst4,RMyst5,RMyst6,RMyst7,RMyst8},
                     IMG_TILES + "Mistery.png");
             applyPattern(new Rectangle[]{RInfo1,RInfo2,RInfo3,RInfo4,RInfo5,RInfo6,RInfo7,RInfo8},
-                    IMG_TILES + "computing.png");   // FIX: Informatic.png → computing.png
+                    IMG_TILES + "Computing.png");   // FIX: Informatic.png → computing.png
             applyPattern(new Rectangle[]{RVersus1,RVersus2,RVersus3,RVersus4},
                     IMG_TILES + "Versus.png");
             applyPattern(new Rectangle[]{RHop1,RHop2,RBonus1,RBonus2},
