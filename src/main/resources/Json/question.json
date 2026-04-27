@@ -125,69 +125,69 @@
         "subject": "entertainment",
         "difficulty": 4,
         "question": "Under which pseudonym is Laurent Godefroid known?",
-        "answer": "Réléchix",
+        "answer": "Réfléchix",
         "choices": ["Opastix", "Idefix", "Whyskix", "Réfléchix"]
     },
 
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 1,
         "question": "What does the \"++\" symbol do?",
         "answer": "It adds 1 to the value",
         "choices": ["It adds 1 to the value", "It deletes the variable", "It multiplies by 2", "It pauses the program"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 1,
         "question": "What is a True or False value called?",
         "answer": "A Boolean",
         "choices": ["A Boolean", "A String", "An Integer", "A Loop"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 2,
         "question": "Which programming language is known for its readability and simplicity?",
         "answer": "Python",
         "choices": ["Python", "VBA", "C++", "Cobra"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 2,
         "question": "Which line of code is correct in Python?",
         "answer": "print(\"Hello World!\")",
         "choices": ["print(\"Hello World!\")", "\"Hello World\".print()", "HelloWorld(print)", "print = \"hello World\" Print(print)"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 3,
         "question": "What is the result of the binary addition 1101 + 1011? (Answer in decimal)",
         "answer": "24",
         "choices": ["22", "24", "26", "23"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 3,
         "question": "Which programming language is primarily used in the Unity engine?",
         "answer": "C#",
         "choices": ["C#", "C++", "Python", "Java"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 4,
         "question": "Who is considered to be the very first person to write a computer program?",
         "answer": "Ada Lovelace",
         "choices": ["Ada Lovelace", "Alan Turing", "Grace Hopper", "Charles Babbage"]
     },
     {
-        "theme": "Informatics",
-        "subject": "Informatics",
+        "theme": "Computing",
+        "subject": "Computing",
         "difficulty": 4,
         "question": "What was the original name of the Java language before it was renamed?",
         "answer": "Oak",
