@@ -32,14 +32,14 @@ public class FinPartieView {
     private final Button btnQuitter;
 
     // =========================================================
-    // RATIOS VERTICAUX
+    // VERTICAL RATIOS
     // =========================================================
     private static final double RATIO_ARGENT = 0.38;
     private static final double RATIO_OR     = 0.48;
     private static final double RATIO_BRONZE = 0.33;
 
     // =========================================================
-    // POSITIONS HORIZONTALES
+    // HORIZONTAL POSITIONS
     // =========================================================
     private static final double POS_X_ARGENT = 0.31;
     private static final double POS_X_OR     = 0.51;
@@ -65,14 +65,14 @@ public class FinPartieView {
         StackPane podiumPane = buildPodiumPane(stage, stats.getClassement());
         VBox.setVgrow(podiumPane, Priority.ALWAYS);
 
-        btnRejouer = new Button("⟳  REJOUER");
+        btnRejouer = new Button("⟳  PLAY AGAIN");
         btnRejouer.getStyleClass().add("btn-rejouer");
 
-        btnStats = new Button("📊 VOIR STATS");
+        btnStats = new Button("📊 VIEW STATS");
         btnStats.getStyleClass().add("btn-rejouer");
         btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
 
-        btnQuitter = new Button("✕  QUITTER");
+        btnQuitter = new Button("✕  QUIT");
         btnQuitter.getStyleClass().add("btn-quitter");
 
         HBox btnBox = new HBox(25, btnRejouer, btnStats, btnQuitter);
@@ -212,7 +212,7 @@ public class FinPartieView {
 
         box.setEffect(new DropShadow(30, Color.BLACK));
 
-        Label t = new Label("STATISTIQUES DE LA PARTIE");
+        Label t = new Label("GAME STATISTICS");
         t.setStyle(
                 "-fx-font-size: 26px;" +
                         "-fx-font-weight: bold;" +
@@ -221,8 +221,8 @@ public class FinPartieView {
 
         HBox global = new HBox(
                 60,
-                createMetric("TEMPS", stats.getDureeFormatee()),
-                createMetric("TOURS", String.valueOf(stats.getTotalTours()))
+                createMetric("TIME", stats.getDureeFormatee()),
+                createMetric("ROUNDS", String.valueOf(stats.getTotalTours()))
         );
 
         global.setAlignment(Pos.CENTER);
@@ -235,7 +235,7 @@ public class FinPartieView {
                     20,
                     new Label("#" + sj.getPosition()),
                     new Label(sj.getJoueur().getNom()),
-                    new Label(sj.getNombreTours() + " tours")
+                    new Label(sj.getNombreTours() + " ROUNDS")
             );
 
             row.setStyle(

@@ -10,7 +10,7 @@ public class ChoixJoueursController {
     public ChoixJoueursController(ChoixJoueursView view, Partie model, HomePageView homeView) {
 
         view.getBackButton().setOnAction(_ ->
-            SceneManager.show(homeView.getScene(), "Menu principal")
+            SceneManager.show(homeView.getScene(), "Main Menu")
         );
 
         view.getBtn2Joueurs().setOnMouseClicked(_ -> goChoixJetons(2, model, view, homeView));
@@ -27,6 +27,6 @@ public class ChoixJoueursController {
         );
 
         new ChoixJetonsController(jetonsView, model, view ,homeView);
-        SceneManager.show(jetonsView.getScene(), "Choix des jetons");
+        SceneManager.show(jetonsView.getScene(), "Token Selection");
     }
 }

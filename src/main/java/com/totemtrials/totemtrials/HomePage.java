@@ -39,12 +39,13 @@ public class HomePage extends Application {
     public void start(Stage stage) {
         this.stage = stage;
 
-        //-------- Création des jetons ---------
-        tiger = new Token("tiger","Avance d'une case en plus en cas de victoire d'un versus",createCroppedImageView("Images/tokkens/jetonTigre.png",0.10),createCroppedImageView("Images/tokkens/jetonTigre_anim.gif",0.10));
-        eagle = new Token("aigle","Avance d'une case en plus en cas de bonne réponse",createCroppedImageView("Images/tokkens/jetonAigle.png",0.10),createCroppedImageView("Images/tokkens/jetonAigle_anim.gif",0.10));
-        snake = new Token("serpent","Recule d'une case en moins en cas de défaites d'un versus",createCroppedImageView("Images/tokkens/jetonSerpent.png",0.10),createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif",0.10));
-        elephant = new Token("elephant","Recule d'une case en moins en cas de mauvaise réponse",createCroppedImageView("Images/tokkens/jetonElephant.png",0.10),createCroppedImageView("Images/tokkens/jetonElephant_anim.gif",0.10));
-        //---------Mettre les jetons dans une liste--------
+        //-------- Token creation ---------
+        tiger = new Token("tiger", "Advances 1 extra space upon winning a versus", createCroppedImageView("Images/tokkens/jetonTigre.png", 0.10), createCroppedImageView("Images/tokkens/jetonTigre_anim.gif", 0.10));
+        eagle = new Token("eagle", "Advances 1 extra space for a correct answer", createCroppedImageView("Images/tokkens/jetonAigle.png", 0.10), createCroppedImageView("Images/tokkens/jetonAigle_anim.gif", 0.10));
+        snake = new Token("snake", "Moves back 1 less space upon losing a versus", createCroppedImageView("Images/tokkens/jetonSerpent.png", 0.10), createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif", 0.10));
+        elephant = new Token("elephant", "Moves back 1 less space for a wrong answer", createCroppedImageView("Images/tokkens/jetonElephant.png", 0.10), createCroppedImageView("Images/tokkens/jetonElephant_anim.gif", 0.10));
+
+        //--------- Put tokens in a list --------
         myTokens = new Token[]{tiger, eagle, snake, elephant};
 
         // ------------------- BACKGROUND -------------------
@@ -53,13 +54,13 @@ public class HomePage extends Application {
         InputStream is = getClass().getResourceAsStream(path);
 
         if (is == null) {
-            System.err.println("Image background introuvable : " + path);
+            System.err.println("Background image not found: " + path);
             try (InputStream in = getClass().getResourceAsStream("/");
                  BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
                 String resource;
                 while ((resource = reader.readLine()) != null) System.err.println(resource);
             } catch (Exception e) {
-                System.err.println("Erreur chargement ressources");
+                System.err.println("Error loading resources");
             }
             return;
         }
@@ -72,10 +73,10 @@ public class HomePage extends Application {
                 mediaPlayer = new MediaPlayer(new Media(musicFile));
                 mediaPlayer.play();
             } catch (Exception ex) {
-                System.err.println("Erreur audio : " + ex.getMessage());
+                System.err.println("Audio error: " + ex.getMessage());
             }
         } else {
-            System.err.println("Fichier audio introuvable");
+            System.err.println("Audio file not found");
         }
 
         // ------------------- BACKGROUND IMAGE -------------------
@@ -85,7 +86,7 @@ public class HomePage extends Application {
         imageView.fitHeightProperty().bind(stage.heightProperty());
         imageView.setPreserveRatio(false);
 
-        // ------------------- TITRE + BOUTONS -------------------
+        // ------------------- TITLE + BUTTON -------------------
         ImageView titre        = createCroppedImageView("Images/Titre-sora.png",           0.45);
         ImageView playbutton   = createCroppedImageView("Images/buttons/Start-sora.png",   0.45);
         ImageView optionbutton = createCroppedImageView("Images/buttons/Options-sora.png", 0.38);
@@ -116,7 +117,7 @@ public class HomePage extends Application {
         Scene choicePlayerScene = choicePlayerScene(scene);
         playbutton.setOnMouseClicked(_->{
             stage.setScene(choicePlayerScene);
-            stage.setTitle("Choix des jetons");
+            stage.setTitle("Token selection");
             stage.setFullScreenExitHint("");
             stage.setFullScreen(true);
 
@@ -132,7 +133,7 @@ public class HomePage extends Application {
 
         // ------------------- STAGE -------------------
         stage.setScene(scene);
-        stage.setTitle("Menu principal");
+        stage.setTitle("Main menu");
         stage.setFullScreenExitHint("");
         stage.setFullScreen(true);
         stage.show();
@@ -143,18 +144,19 @@ public class HomePage extends Application {
         InputStream is = getClass().getResourceAsStream(imagePath);
 
         if (is == null) {
-            System.err.println("Image introuvable : " + imagePath);
+            System.err.println("Image not found: " + imagePath);
             return iv;
         }
 
         Image img = new Image(is);
 
-        // --- PROTECTION POUR LES GIFS ---
-        // Si c'est un GIF ou si le PixelReader est indisponible, on saute le crop
+        // --- GIF PROTECTION ---
+
+        // If it's a GIF or if the PixelReader is unavailable, the crop is skipped
         PixelReader pr = img.getPixelReader();
         if (imagePath.endsWith(".gif") || pr == null) {
             iv.setImage(img);
-            // On lie quand même la largeur pour que le GIF ait la bonne taille
+            // Still binding the width so the GIF has the correct size
             iv.fitWidthProperty().bind(stage.widthProperty().multiply(widthRatio));
             iv.setPreserveRatio(true);
             return iv;
@@ -238,12 +240,12 @@ public class HomePage extends Application {
     }
 
     public Scene choicePlayerScene(Scene menuScene) {
-        //----------------Creation des images pour les boutons----------
+        //---------------- Creation of button images ----------
         ImageView btn2 = createCroppedImageView("Images/buttons/2Players.png",0.2);
         ImageView btn3 = createCroppedImageView("Images/buttons/3Players.png",0.3);
         ImageView btn4 = createCroppedImageView("Images/buttons/4Players.png",0.25);
 
-        //-----------------Creation de la scène-------------------------
+        //----------------- Scene creation -------------------------
         ImageView imageViewOption = new ImageView(image);
         imageViewOption.fitWidthProperty().bind(stage.widthProperty());
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
@@ -279,8 +281,8 @@ public class HomePage extends Application {
         });
 
         bj2.setOnAction(_ -> {
-            p1 = new Player("Joueur 1");
-            p2 = new Player("Joueur 2");
+            p1 = new Player("Player 1");
+            p2 = new Player("Player 2");
             myPlayers = new Player[]{p1, p2};
             stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
@@ -290,9 +292,9 @@ public class HomePage extends Application {
         });
 
         bj3.setOnAction(_ -> {
-            p1 = new Player("Joueur 1");
-            p2 = new Player("Joueur 2");
-            p3 = new Player("Joueur 3");
+            p1 = new Player("Player 1");
+            p2 = new Player("Player 2");
+            p3 = new Player("Player 3");
             myPlayers = new Player[]{p1, p2, p3};
             stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
@@ -302,10 +304,10 @@ public class HomePage extends Application {
         });
 
         bj4.setOnAction(_ -> {
-            p1 = new Player("Joueur 1");
-            p2 = new Player("Joueur 2");
-            p3 = new Player("Joueur 3");
-            p4 = new Player("Joueur 4");
+            p1 = new Player("Player 1");
+            p2 = new Player("Player 2");
+            p3 = new Player("Player 3");
+            p4 = new Player("Player 4");
             myPlayers = new Player[]{p1, p2, p3, p4};
             stage.setScene(tokenChoice(menuScene,myPlayers));
             Platform.runLater(() -> {
@@ -318,10 +320,10 @@ public class HomePage extends Application {
     }
 
 
-    // A RECUPERER ET A INTEGRER
+    // TO RECOVER AND INTEGRATE
     public Scene tokenChoice(Scene menuScene, Player[] joueur){
 
-        //-----------------Creation de la scène-------------------------
+        //----------------- Scene creation -------------------------
         ImageView imageViewOption = new ImageView(image);
         imageViewOption.fitWidthProperty().bind(stage.widthProperty());
         imageViewOption.fitHeightProperty().bind(stage.heightProperty());
@@ -329,78 +331,78 @@ public class HomePage extends Application {
         Button backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
-        // --- RÉINITIALISATION DES JETONS ---
+        // --- TOKEN RESET ---
         for (Token j : myTokens) {
             j.getImageBase().setVisible(true);
             j.getImageBase().setDisable(false);
-            j.getImageBase().setOpacity(1.0); // Au cas où vous auriez touché à l'opacité
+            j.getImageBase().setOpacity(1.0); // Just in case you touched the opacity
         }
 
-        // On utilise un tableau d'une case pour pouvoir modifier l'index dans les événements
+        // Using a single-cell array to be able to modify the index within events
         int[] tourActuel = {0};
 
-        // Label pour indiquer qui doit choisir
-        Label instruction = new Label("C'est au tour de : " + joueur[tourActuel[0]].getNom());
+        // Label to indicate who must choose
+        Label instruction = new Label("It's " + joueur[tourActuel[0]].getNom() + "'s turn");
         instruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
 
 
-        //----------------- Animation et sélection des jetons -----------------------
+        //----------------- Animation and token selection -----------------------
         for (Token j : myTokens) {
 
-            // On récupère l'ImageView qui contient le PNG (fixe)
+            // Retrieve the ImageView containing the (fixed) PNG
             ImageView vueAffichee = j.getImageBase();
 
             Label labelPouvoir = new Label("");
-            labelPouvoir.setTextFill(Color.WHITE); // Plus fiable que setStyle pour un test
-            labelPouvoir.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);"); // Fond semi-transparent
+            labelPouvoir.setTextFill(Color.WHITE); // More reliable than setStyle for a test
+            labelPouvoir.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);"); // Semi-transparent background
             labelPouvoir.setMinWidth(Region.USE_PREF_SIZE);
             labelPouvoir.setMinHeight(30);
 
-            VBox groupement = new VBox(10); // 10 pixels d'écart entre image et texte
+            VBox groupement = new VBox(10); // 10 pixels gap between image and text
             groupement.getChildren().addAll(vueAffichee, labelPouvoir);
             groupement.setAlignment(Pos.CENTER);
 
-            // On stocke l'image PNG et son Viewport une fois pour toutes
+            // Storing the PNG image and its Viewport once and for all
             Image imageFixe = j.getImageBase().getImage();
             Rectangle2D viewportFixe = j.getImageBase().getViewport();
             Image imageAnimée = j.getImageAnimation().getImage();
 
             vueAffichee.setOnMouseEntered(_ -> {
-                // PASSAGE AU GIF
+                // SWITCHING TO GIF
                 vueAffichee.setImage(imageAnimée);
-                vueAffichee.setViewport(null); // On enlève le crop pour voir tout le GIF
-                // affiche le passif
+                vueAffichee.setViewport(null); // Removing crop to see the whole GIF
+                // displays the passive
                 labelPouvoir.setText(j.getPassif());
             });
 
             vueAffichee.setOnMouseExited(_ -> {
-                // RETOUR AU PNG (L'animation s'arrête visuellement ici)
+                // BACK TO PNG (Animation visually stops here)
                 vueAffichee.setImage(imageFixe);
-                vueAffichee.setViewport(viewportFixe); // On remet le crop du PNG
+                vueAffichee.setViewport(viewportFixe); // Putting back the PNG crop
                 labelPouvoir.setText("");
             });
 
             vueAffichee.setOnMouseClicked(_ -> {
                 if (tourActuel[0] < joueur.length) {
-                    // 1. Assigner le jeton au joueur actuel
+                    // 1. Assign the token to the current player
                     joueur[tourActuel[0]].setJetonJoueur(j);
-                    System.out.println(joueur[tourActuel[0]].getNom() + " a choisi " + j.getNom());
+                    System.out.println(joueur[tourActuel[0]].getNom() + " has chosen " + j.getNom());
 
-                    // 2. Faire disparaître le jeton (le retirer du layout ou le rendre invisible)
+                    // 2. Make the token disappear (remove it from the layout or make it invisible)
                     vueAffichee.setVisible(false);
-                    vueAffichee.setDisable(true); // Empêche de cliquer sur un jeton invisible
+                    vueAffichee.setDisable(true); // Prevents clicking on an invisible token
 
                     groupement.setVisible(false);
                     groupement.setManaged(false);
 
-                    // 3. Passer au joueur suivant
+                    // 3. Move to the next player
                     tourActuel[0]++;
 
-                    // 4. Mettre à jour le texte ou passer à la suite
+                    // 4. Update the text or move to the next part
                     if (tourActuel[0] < joueur.length) {
-                        instruction.setText("C'est au tour de : " + joueur[tourActuel[0]].getNom());
+                        instruction.setText("It's " + joueur[tourActuel[0]].getNom() + "'s turn");
                     } else {
-                        instruction.setText("Tous les joueurs ont choisi !");
+                        instruction.setText("All players have chosen!");
                         stage.setScene(menuScene);
                         stage.setFullScreen(true);
                     }
@@ -411,7 +413,7 @@ public class HomePage extends Application {
 
         //----------------- Layout -------------------------------------
         HBox tokenAlignement = new HBox(10);
-        //--------Ajout des images dans la HBox ------------------------
+        //-------- Adding images to the HBox ------------------------
         for(Token j : myTokens){
             tokenAlignement.getChildren().add(j.getImageBase());
         }

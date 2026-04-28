@@ -36,7 +36,7 @@ public class InfoPassifView {
         backButton.getStyleClass().add("back-button");
         backButton.setAlignment(Pos.BOTTOM_RIGHT);
 
-        //Création du tableau
+        //Creating the table
         VBox vBox = new VBox(10);
         vBox.setAlignment(Pos.CENTER);
 
@@ -51,7 +51,7 @@ public class InfoPassifView {
 
             hBox.getChildren().addAll(base, passif);
 
-            // Ajout de la HBox dans la VBox
+            // Adding the HBox to the VBox
             vBox.getChildren().add(hBox);
         }
 

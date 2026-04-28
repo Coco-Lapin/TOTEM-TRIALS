@@ -68,7 +68,7 @@ public class HomePageView {
         optionButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Options-sora.png", 0.38);
         quitButton        = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Exit-sora.png",    0.28);
 
-        testFinButton = new Button("TEST FIN PARTIE");
+        testFinButton = new Button("TEST END GAME");
         testFinButton.getStyleClass().add("back-button");
 
         VBox layout = new VBox(10, titre, playButton, optionButton, quitButton, testFinButton);

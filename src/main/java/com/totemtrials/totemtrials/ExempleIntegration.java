@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
-//  EXEMPLE D'INTÉGRATION — à coller dans ton controller de jeu
-//  quand un joueur atteint la case centrale et répond correctement
+//  INTEGRATION EXAMPLE — paste this into your game controller
+//  when a player reaches the central space and answers correctly
 // ═══════════════════════════════════════════════════════════════
 
 package com.totemtrials.totemtrials;
@@ -13,28 +13,29 @@ import com.totemtrials.totemtrials.view.HomePageView;
 public class ExempleIntegration {
 
     /**
-     * Simule la fin d'une partie à 3 joueurs.
-     * Dans ton vrai controller, remplace par tes vraies instances.
+     * Simulates the end of a 3-player game.
+     * In your real controller, replace with your real instances.
      */
     public static void exemple(Partie partie, HomePageView homeView) {
 
         Joueur[] joueurs = partie.getJoueurs();
         StatistiquesJoueur[] stats = new StatistiquesJoueur[joueurs.length];
 
-        // --- Remplir les stats (dans le vrai jeu ces champs sont incrémentés en cours de partie) ---
+        // --- Fill stats (in the real game these fields are incremented during the match) ---
         for (int i = 0; i < joueurs.length; i++) {
             stats[i] = new StatistiquesJoueur(joueurs[i]);
-            stats[i].setPosition(i + 1);  // le vainqueur a position=1
-            // Exemple de valeurs fictives
+            stats[i].setPosition(i + 1);  // the winner has position=1
+
+            // Example of dummy values
             for (int t = 0; t < 8 - i; t++)  stats[i].incrementerTour();
             for (int b = 0; b < 5 - i; b++)  stats[i].ajouterBonneReponse();
             for (int m = 0; m < 2 + i; m++)  stats[i].ajouterMauvaiseReponse();
         }
 
-        long dureeSecondes = 754; // remplace par System.currentTimeMillis() / 1000 - debutPartie
+        long dureeSecondes = 754; // replace with System.currentTimeMillis() / 1000 - startTime
         StatistiquesPartie statsPartie = new StatistiquesPartie(stats, dureeSecondes);
 
-        // --- Déclenche l'écran de fin ---
+        // --- Triggers the end game screen ---
         FinPartieController.lancerFinPartie(statsPartie, partie, homeView);
     }
 }

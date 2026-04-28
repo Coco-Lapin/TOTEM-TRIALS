@@ -12,10 +12,10 @@ public class FinPartieController {
 
         view.getBtnRejouer().setOnAction(_ -> {
             model.initJoueurs(0);
-            SceneManager.show(homeView.getScene(), "Menu principal");
+            SceneManager.show(homeView.getScene(), "Main Menu");
         });
 
-        // ACTION : Afficher la popup Overlay
+        // ACTION: Display the Overlay popup
         view.getBtnStats().setOnAction(_ -> {
             view.toggleStats(true);
         });
@@ -26,6 +26,6 @@ public class FinPartieController {
     public static void lancerFinPartie(StatistiquesPartie stats, Partie model, HomePageView homeView) {
         FinPartieView finView = new FinPartieView(SceneManager.getStage(), stats, homeView.getBackground());
         new FinPartieController(finView, model, homeView, stats);
-        SceneManager.show(finView.getScene(), "Fin de partie");
+        SceneManager.show(finView.getScene(), "End Game");
     }
 }
