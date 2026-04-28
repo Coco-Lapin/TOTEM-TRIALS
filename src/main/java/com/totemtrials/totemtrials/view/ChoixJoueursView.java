@@ -17,6 +17,7 @@ public class ChoixJoueursView {
     private final ImageView btn3Joueurs;
     private final ImageView btn4Joueurs;
     private final Scene  scene;
+    final double PLAYER_BTN_RATIO = 0.25;
 
     public ChoixJoueursView(Stage stage, Image background) {
         ImageView bg = new ImageView(background);
@@ -25,16 +26,16 @@ public class ChoixJoueursView {
         bg.setPreserveRatio(false);
 
         //----------------Creation des images pour les boutons----------
-        btn2Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/2Players.png",0.25);
-        btn3Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/3Players.png",0.3);
-        btn4Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/4Players.png",0.25);
+        btn2Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/2Players.png",PLAYER_BTN_RATIO);
+        btn3Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/3Players.png",PLAYER_BTN_RATIO);
+        btn4Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/4Players.png",PLAYER_BTN_RATIO);
 
-        backButton = ViewUtils.createBackButton(stage, 0.15);
+        backButton = ViewUtils.createBackButton(stage, 0.20);
 
-        HBox boutons = new HBox(10, btn2Joueurs, btn3Joueurs, btn4Joueurs);
+        HBox boutons = new HBox(50, btn2Joueurs, btn3Joueurs, btn4Joueurs);
         boutons.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(10,boutons ,backButton );
+        VBox layout = new VBox(30,boutons ,backButton );
         layout.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(bg, layout);
