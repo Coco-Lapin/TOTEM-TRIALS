@@ -12,6 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class OptionsView {
 
     private final Slider musicSlider;
@@ -26,9 +28,17 @@ public class OptionsView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
+        // ── Panneau de fond pour les sliders ─────────────────────────────
+        ImageView panel = new ImageView(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/settings-panel.png")))
+        );
+        panel.fitWidthProperty().bind(stage.widthProperty().multiply(0.45));
+        panel.setPreserveRatio(true);
+        panel.setMouseTransparent(true); // les clics passent à travers vers les sliders
+
         // Image de fond partagée pour les deux sliders
         Image sliderBg = new Image(
-                getClass().getResourceAsStream("/images/buttons/bg-sound-slider.png")
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/buttons/bg-sound-slider.png"))
         );
 
         // ── Music slider ─────────────────────────────────────────────────
@@ -45,7 +55,7 @@ public class OptionsView {
                 0.26    // longueur slider
         );
 
-        VBox musicBox = new VBox(-20, musicLabel, musicPane);
+        VBox musicBox = new VBox(-80, musicLabel, musicPane); //moidify the first value to resize the vertical margin
         musicBox.setAlignment(Pos.CENTER);
 
         // ── SFX slider ───────────────────────────────────────────────────
@@ -62,17 +72,17 @@ public class OptionsView {
                 0.26
         );
 
-        VBox sfxBox = new VBox(-20, sfxLabel, sfxPane);
+        VBox sfxBox = new VBox(-80, sfxLabel, sfxPane); //moidify the first value to resize the vertical margin
         sfxBox.setAlignment(Pos.CENTER);
 
         // ── Back button ──────────────────────────────────────────────────
         backButton = ViewUtils.createBackButton(stage, 0.15);
 
-        VBox layout = new VBox(40, musicBox, sfxBox, backButton);
+        VBox layout = new VBox(-40, musicBox, sfxBox, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
-        StackPane root = new StackPane(bg, layout);
+        StackPane root = new StackPane(bg,panel,layout);
         scene = new Scene(root, 600, 500);
 
         var css = getClass().getResource("/styleSheet/homepage.css");
