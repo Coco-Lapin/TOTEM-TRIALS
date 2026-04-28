@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ChoixJetonsView {
 
-    private final Button backButton;
+    private final StackPane backButton;
     private final Scene scene;
     private final Label labelInstruction;
     private final Map<Jeton, ImageView> jetonViews = new LinkedHashMap<>();
@@ -29,8 +29,7 @@ public class ChoixJetonsView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        backButton = new Button("BACK");
-        backButton.getStyleClass().add("back-button");
+        backButton = ViewUtils.createBackButton(stage, 0.15);
 
         labelInstruction = new Label("");
         labelInstruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
@@ -88,8 +87,8 @@ public class ChoixJetonsView {
         }
     }
 
-    public Scene                 getScene()            { return scene; }
-    public Button                getBackButton()       { return backButton; }
-    public Map<Jeton, ImageView> getJetonViews()       { return jetonViews; }
-    public Label                 getLabelInstruction() { return labelInstruction; }
+    public Scene getScene() { return scene; }
+    public StackPane getBackButton() { return backButton; }
+    public Map<Jeton, ImageView> getJetonViews() { return jetonViews; }
+    public Label getLabelInstruction() { return labelInstruction; }
 }

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class ChoixJoueursView {
 
-    private final Button backButton;
+    private final StackPane backButton;
     private final ImageView btn2Joueurs;
     private final ImageView btn3Joueurs;
     private final ImageView btn4Joueurs;
@@ -29,9 +29,7 @@ public class ChoixJoueursView {
         btn3Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/3Players.png",0.3);
         btn4Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/4Players.png",0.25);
 
-        backButton   = new Button("BACK");
-
-        backButton.getStyleClass().add("back-button");
+        backButton = ViewUtils.createBackButton(stage, 0.15);
 
         HBox boutons = new HBox(10, btn2Joueurs, btn3Joueurs, btn4Joueurs);
         boutons.setAlignment(Pos.CENTER);
@@ -47,7 +45,7 @@ public class ChoixJoueursView {
     }
 
     public Scene  getScene()       { return scene; }
-    public Button getBackButton()  { return backButton; }
+    public StackPane getBackButton() { return backButton; }
     public ImageView getBtn2Joueurs() { return btn2Joueurs; }
     public ImageView getBtn3Joueurs() { return btn3Joueurs; }
     public ImageView getBtn4Joueurs() { return btn4Joueurs; }

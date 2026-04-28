@@ -18,7 +18,7 @@ public class ChoixJetonsController {
     public ChoixJetonsController(ChoixJetonsView view, Partie model,
                                  ChoixJoueursView joueursView, HomePageView homeView,GameConfig gm) {
             this.gameConfig = gm;
-        view.getBackButton().setOnAction(_ ->
+        view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(joueursView.getScene(), "Player choice")
         );
 

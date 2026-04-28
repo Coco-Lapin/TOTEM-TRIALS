@@ -16,7 +16,7 @@ public class OptionsView {
 
     private final Slider musicSlider;
     private final Slider sfxSlider;
-    private final Button backButton;
+    private final StackPane backButton;
     private final Scene  scene;
 
     public OptionsView(Stage stage, Image background) {
@@ -66,8 +66,7 @@ public class OptionsView {
         sfxBox.setAlignment(Pos.CENTER);
 
         // ── Back button ──────────────────────────────────────────────────
-        backButton = new Button("BACK");
-        backButton.getStyleClass().add("back-button");
+        backButton = ViewUtils.createBackButton(stage, 0.15);
 
         VBox layout = new VBox(40, musicBox, sfxBox, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -113,6 +112,6 @@ public class OptionsView {
     public Scene  getScene()        { return scene; }
     public Slider getMusicSlider()  { return musicSlider; }
     public Slider getSfxSlider()    { return sfxSlider; }
-    public Button getBackButton()   { return backButton; }
+    public StackPane getBackButton() { return backButton; }
     public Slider getVolumeSlider() { return musicSlider; }
 }

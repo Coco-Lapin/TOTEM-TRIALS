@@ -10,7 +10,7 @@ public class ChoixJoueursController {
     private GameConfig gm;
     public ChoixJoueursController(ChoixJoueursView view, Partie model, HomePageView homeView,GameConfig gm) {
             this.gm = gm;
-        view.getBackButton().setOnAction(_ ->
+        view.getBackButton().setOnMouseClicked(_ ->
             SceneManager.show(homeView.getScene(), "Menu principal")
         );
 

@@ -9,7 +9,7 @@ public class OptionsController {
 
     // ── Menu principal ──────────────────────────────────────────────────────
     public OptionsController(OptionsView view, HomePageView homeView) {
-        view.getBackButton().setOnAction(_ ->
+        view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(homeView.getScene(), "Menu principal")
         );
     }
@@ -21,7 +21,7 @@ public class OptionsController {
 
     // ── Plateau (FXML) ──────────────────────────────────────────────────────
     public OptionsController(OptionsView view, Scene previousScene, String previousTitle) {
-        view.getBackButton().setOnAction(_ ->
+        view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(previousScene, previousTitle)
         );
     }

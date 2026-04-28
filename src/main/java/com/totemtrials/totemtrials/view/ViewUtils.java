@@ -1,9 +1,11 @@
 package com.totemtrials.totemtrials.view;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -59,4 +61,15 @@ public class ViewUtils {
         iv.setViewport(new Rectangle2D(0, top, w, bottom - top + 1));
         return iv;
     }
+
+    public static StackPane createBackButton(Stage stage, double widthRatio) {
+        ImageView img = createCroppedImageView(stage, "images/buttons/bouton-back.png", widthRatio);
+        StackPane pane = new StackPane(img);
+        pane.setPickOnBounds(true);
+        pane.setCursor(Cursor.HAND);
+        pane.setOnMouseEntered(_ -> { pane.setScaleX(1.05); pane.setScaleY(1.05); });
+        pane.setOnMouseExited (_ -> { pane.setScaleX(1.0);  pane.setScaleY(1.0);  });
+        return pane;
+    }
+
 }
