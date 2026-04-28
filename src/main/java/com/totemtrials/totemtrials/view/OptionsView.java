@@ -1,5 +1,6 @@
 package com.totemtrials.totemtrials.view;
 
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,47 +20,56 @@ public class OptionsView {
     private final Scene  scene;
 
     public OptionsView(Stage stage, Image background) {
+
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        // ── Music slider ─────────────────────────────────────────────────────
+        // Image de fond partagée pour les deux sliders
+        Image sliderBg = new Image(
+                getClass().getResourceAsStream("/images/buttons/bg-sound-slider.png")
+        );
+
+        // ── Music slider ─────────────────────────────────────────────────
         Label musicLabel = new Label("Game Music");
-        musicLabel.setStyle("-fx-font-family: Impact; -fx-font-size: 16px; -fx-text-fill: #f5a623;");
+        musicLabel.getStyleClass().add("slider-label");
 
         musicSlider = new Slider(0, 100, 25);
-        musicSlider.prefWidthProperty().bind(stage.widthProperty().multiply(0.25));
-        musicSlider.setShowTickLabels(true);
-        musicSlider.setShowTickMarks(true);
-        musicSlider.setMajorTickUnit(25);
-        musicSlider.setBlockIncrement(1);
-        musicSlider.setStyle("-fx-accent: #f5a623;");
+        musicSlider.getStyleClass().add("jungle-slider");
+        musicSlider.setId("music-slider");
 
-        VBox musicBox = new VBox(6, musicLabel, musicSlider);
+        StackPane musicPane = buildSliderPane(
+                musicSlider, sliderBg, stage,
+                0.35,   // taille image
+                0.26    // longueur slider
+        );
+
+        VBox musicBox = new VBox(-20, musicLabel, musicPane);
         musicBox.setAlignment(Pos.CENTER);
 
-        // ── SFX slider ───────────────────────────────────────────────────────
+        // ── SFX slider ───────────────────────────────────────────────────
         Label sfxLabel = new Label("Sound Effects");
-        sfxLabel.setStyle("-fx-font-family: Impact; -fx-font-size: 16px; -fx-text-fill: #f5a623;");
+        sfxLabel.getStyleClass().add("slider-label");
 
         sfxSlider = new Slider(0, 100, 80);
-        sfxSlider.prefWidthProperty().bind(stage.widthProperty().multiply(0.25));
-        sfxSlider.setShowTickLabels(true);
-        sfxSlider.setShowTickMarks(true);
-        sfxSlider.setMajorTickUnit(25);
-        sfxSlider.setBlockIncrement(1);
-        sfxSlider.setStyle("-fx-accent: #f5a623;");
+        sfxSlider.getStyleClass().add("jungle-slider");
+        sfxSlider.setId("sfx-slider");
 
-        VBox sfxBox = new VBox(6, sfxLabel, sfxSlider);
+        StackPane sfxPane = buildSliderPane(
+                sfxSlider, sliderBg, stage,
+                0.35,
+                0.26
+        );
+
+        VBox sfxBox = new VBox(-20, sfxLabel, sfxPane);
         sfxBox.setAlignment(Pos.CENTER);
 
-        // ── Back button ──────────────────────────────────────────────────────
+        // ── Back button ──────────────────────────────────────────────────
         backButton = new Button("BACK");
         backButton.getStyleClass().add("back-button");
 
-        // ── Layout ───────────────────────────────────────────────────────────
-        VBox layout = new VBox(30, musicBox, sfxBox, backButton);
+        VBox layout = new VBox(40, musicBox, sfxBox, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
@@ -70,11 +80,39 @@ public class OptionsView {
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 
+    private StackPane buildSliderPane(Slider slider, Image trackImage, Stage stage,
+                                      double imageWidthRatio,
+                                      double sliderWidthRatio) {
+
+        ImageView trackBg = new ImageView(trackImage);
+        trackBg.fitWidthProperty().bind(stage.widthProperty().multiply(imageWidthRatio));
+        trackBg.setPreserveRatio(true);
+        trackBg.setMouseTransparent(true);
+
+        DoubleBinding sliderW = stage.widthProperty().multiply(sliderWidthRatio);
+        slider.minWidthProperty().bind(sliderW);
+        slider.prefWidthProperty().bind(sliderW);
+        slider.maxWidthProperty().bind(sliderW);
+
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(false);
+        slider.setMajorTickUnit(25);    // un trait majeur tous les 25
+        slider.setMinorTickCount(4);    // 4 petits traits entre chaque majeur
+        slider.setBlockIncrement(1);
+
+        StackPane pane = new StackPane(trackBg, slider);
+        pane.setAlignment(Pos.CENTER);
+        pane.setPickOnBounds(false);
+
+        // Compense la hauteur des ticks/labels affichés sous le slider
+        slider.setTranslateY(8);   // ajuste : 8, 10, 12, 15 selon la taille de tes labels
+
+        return pane;
+    }
+
     public Scene  getScene()        { return scene; }
     public Slider getMusicSlider()  { return musicSlider; }
     public Slider getSfxSlider()    { return sfxSlider; }
     public Button getBackButton()   { return backButton; }
-
-    /** Rétrocompatibilité — pointe sur le slider musique */
     public Slider getVolumeSlider() { return musicSlider; }
 }
