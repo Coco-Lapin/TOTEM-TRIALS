@@ -7,6 +7,7 @@ import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.view.ChoixJetonsView;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
+import com.totemtrials.totemtrials.view.InfoPassifView;
 import javafx.scene.image.ImageView;
 import java.util.Map;
 
@@ -20,6 +21,10 @@ public class ChoixJetonsController {
             this.gameConfig = gm;
         view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(joueursView.getScene(), "Player choice")
+        );
+
+        view.getInfoPassiveButton().setOnAction(_ ->
+                goInfoView(homeView,model,view)
         );
 
         view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
@@ -88,4 +93,18 @@ public class ChoixJetonsController {
             }
         }
     }
+
+    public void goInfoView(HomePageView homeView, Partie model, ChoixJetonsView cView){
+
+        InfoPassifView iView = new InfoPassifView(
+                SceneManager.getStage(),
+                homeView.getBackground(),
+                model.getJetonsDisponibles()
+        );
+
+        new InfoPassifController(iView, cView);
+        SceneManager.show(iView.getScene(), "Infos Passif");
+
+    }
+
 }

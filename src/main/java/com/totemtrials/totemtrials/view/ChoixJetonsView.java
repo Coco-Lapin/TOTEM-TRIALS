@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class ChoixJetonsView {
 
+    private final Button infoPassiveButton;
     private final StackPane backButton;
     private final Scene scene;
     private final Label labelInstruction;
@@ -24,10 +25,14 @@ public class ChoixJetonsView {
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
 
     public ChoixJetonsView(Stage stage, Image background, Jeton[] jetons) {
+        ImageView icon = ViewUtils.createCroppedImageView(stage, "src/main/resources/images/buttons/bouton-abilities.png", 0.20);
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
+
+        infoPassiveButton = new Button("");
+        infoPassiveButton.setGraphic(icon);
 
         backButton = ViewUtils.createBackButton(stage, 0.15);
 
@@ -45,22 +50,17 @@ public class ChoixJetonsView {
             Rectangle2D fixeViewport = base.getViewport();
             Image animImage     = anim.getImage();
 
-            Label labelPassif = new Label("");
-            labelPassif.setTextFill(Color.WHITE);
-            labelPassif.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);");
 
             base.setOnMouseEntered(_ -> {
                 base.setImage(animImage);
                 base.setViewport(null);
-                labelPassif.setText(jeton.getPassif());
             });
             base.setOnMouseExited(_ -> {
                 base.setImage(fixeImage);
                 base.setViewport(fixeViewport);
-                labelPassif.setText("");
             });
 
-            VBox groupe = new VBox(10, base, labelPassif);
+            VBox groupe = new VBox(10, base);
             groupe.setAlignment(Pos.CENTER);
 
             jetonViews.put(jeton, base);
@@ -68,7 +68,10 @@ public class ChoixJetonsView {
             row.getChildren().add(groupe);
         }
 
-        VBox layout = new VBox(10, labelInstruction, row, backButton);
+        StackPane.setAlignment(infoPassiveButton, Pos.TOP_RIGHT);
+        StackPane.setMargin(infoPassiveButton, new javafx.geometry.Insets(20));
+
+        VBox layout = new VBox(10, labelInstruction, row, backButton, infoPassiveButton);
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
@@ -89,6 +92,7 @@ public class ChoixJetonsView {
 
     public Scene getScene() { return scene; }
     public StackPane getBackButton() { return backButton; }
+    public Button getInfoPassiveButton() {return infoPassiveButton; }
     public Map<Jeton, ImageView> getJetonViews() { return jetonViews; }
     public Label getLabelInstruction() { return labelInstruction; }
 }
