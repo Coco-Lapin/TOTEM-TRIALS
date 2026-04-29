@@ -55,7 +55,7 @@ public class OptionsView {
                 0.26    // longueur slider
         );
 
-        VBox musicBox = new VBox(-80, musicLabel, musicPane); //moidify the first value to resize the vertical margin
+        VBox musicBox = new VBox(-50, musicLabel, musicPane); //moidify the first value to resize the vertical margin
         musicBox.setAlignment(Pos.CENTER);
 
         // ── SFX slider ───────────────────────────────────────────────────
@@ -72,7 +72,7 @@ public class OptionsView {
                 0.26
         );
 
-        VBox sfxBox = new VBox(-80, sfxLabel, sfxPane); //moidify the first value to resize the vertical margin
+        VBox sfxBox = new VBox(-50, sfxLabel, sfxPane); //moidify the first value to resize the vertical margin
         sfxBox.setAlignment(Pos.CENTER);
 
         // ── Back button ──────────────────────────────────────────────────
