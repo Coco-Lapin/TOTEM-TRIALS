@@ -17,6 +17,7 @@ public class TotemTrialsApp extends Application {
 
         Partie partie = new Partie();
         HomePageView homeView = new HomePageView(stage);
+        SceneManager.setHomePageView(homeView);
         new HomePageController(homeView, partie);
 
         // Stocke la scène du menu — utilisée par StopGame pour revenir

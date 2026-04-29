@@ -91,7 +91,7 @@ public class Shortcut {
         switch (alea) {
             case 1 -> tileTheme="entertainment";
             case 2 -> tileTheme="Tourism";
-            case 3 -> tileTheme="Informatics";
+            case 3 -> tileTheme="Computing";
             case 4 -> tileTheme="Mystery (Jumanji)";
         }
 

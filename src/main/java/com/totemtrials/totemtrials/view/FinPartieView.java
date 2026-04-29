@@ -201,6 +201,11 @@ public class FinPartieView {
     }
 
     private ImageView buildTokenView(StatistiquesJoueur sj) {
+
+        if (sj.getJoueur().getJeton() == null) {
+            System.err.println("Attention : Le joueur " + sj.getJoueur().getNom() + " n'a pas de jeton !");
+            return new ImageView(); // Retourne une image vide au lieu de planter
+        }
         InputStream is = FinPartieView.class.getResourceAsStream("/" + sj.getJoueur().getJeton().getImagePath());
         ImageView iv = new ImageView(is != null ? new Image(is) : null);
         iv.setFitWidth(90);

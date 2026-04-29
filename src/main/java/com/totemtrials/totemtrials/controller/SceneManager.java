@@ -1,5 +1,6 @@
 package com.totemtrials.totemtrials.controller;
 
+import com.totemtrials.totemtrials.view.HomePageView;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.media.MediaPlayer;
@@ -34,4 +35,14 @@ public class SceneManager {
 
     public static void   setSfxVolume(double v) { sfxVolume = v; }
     public static double getSfxVolume()         { return sfxVolume; }
+
+    private static HomePageView homePageView;
+
+    public static HomePageView getHomePageView() {
+        return homePageView;
+    }
+
+    public static void setHomePageView(HomePageView view) {
+        homePageView = view;
+    }
 }

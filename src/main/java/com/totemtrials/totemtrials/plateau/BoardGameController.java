@@ -3,8 +3,8 @@ package com.totemtrials.totemtrials.plateau;
 import com.totemtrials.totemtrials.controller.OptionsController;
 import com.totemtrials.totemtrials.controller.SceneManager;
 import com.totemtrials.totemtrials.controller.movementController;
-import com.totemtrials.totemtrials.models.GameConfig;
-import com.totemtrials.totemtrials.models.GameManager;
+import com.totemtrials.totemtrials.models.*;
+import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.OptionsView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -146,9 +146,39 @@ public class BoardGameController {
             }
         });
 
-        GameManager gm = new GameManager(this, this.MC, this.listeCases);
+
         String css = getClass().getResource("/styleSheet/homepage.css").toExternalForm();
         plateauJeu.getScene(); // scene peut être null ici — utilise Platform.runLater déjà en place
+
+        int nb = GameConfig.getInstance().getNbJoueurs();
+        String[] noms = GameConfig.getInstance().getNomsJoueurs();
+        String[] cheminsJetons = GameConfig.getInstance().getJetonsChoisis(); // On récupère les chemins
+
+        StatistiquesJoueur[] tableauStats = new StatistiquesJoueur[nb];
+
+        for (int i = 0; i < nb; i++) {
+            // 1. Créer le joueur avec son nom
+            Joueur j = new Joueur(noms[i]);
+
+            // 2. Créer l'objet Jeton avec le chemin correspondant
+            // Note : On suppose que ton constructeur Jeton prend le chemin en paramètre
+            Jeton jeton = new Jeton(cheminsJetons[i]);
+
+            // 3. Lier le jeton au joueur
+            j.setJeton(jeton);
+
+            // 4. Créer la stat avec ce joueur complet
+            tableauStats[i] = new StatistiquesJoueur(j);
+        }
+
+        GameManager gm = new GameManager(this, this.MC, this.listeCases, tableauStats);
+        StatistiquesPartie lesStats = new StatistiquesPartie(tableauStats, 0);
+        Partie laPartie = new Partie();
+
+        HomePageView home = SceneManager.getHomePageView();
+        gm.setPartie(laPartie);
+        gm.setStatistiquesPartie(lesStats);
+        gm.setHomeView(home);
         gm.demarrerPartie();
     }
 
