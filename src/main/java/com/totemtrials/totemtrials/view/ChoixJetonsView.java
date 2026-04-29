@@ -25,7 +25,7 @@ public class ChoixJetonsView {
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
 
     public ChoixJetonsView(Stage stage, Image background, Jeton[] jetons) {
-        ImageView icon = ViewUtils.createCroppedImageView(stage, "src/main/resources/images/buttons/bouton-abilities.png", 0.20);
+        ImageView icon = ViewUtils.createCroppedImageView(stage, "images/buttons/bouton-abilities.png", 0.20);
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
