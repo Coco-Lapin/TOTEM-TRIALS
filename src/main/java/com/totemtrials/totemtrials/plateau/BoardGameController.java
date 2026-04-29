@@ -3,8 +3,8 @@ package com.totemtrials.totemtrials.plateau;
 import com.totemtrials.totemtrials.controller.OptionsController;
 import com.totemtrials.totemtrials.controller.SceneManager;
 import com.totemtrials.totemtrials.controller.movementController;
-import com.totemtrials.totemtrials.models.GameConfig;
-import com.totemtrials.totemtrials.models.GameManager;
+import com.totemtrials.totemtrials.models.*;
+import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.OptionsView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -145,10 +145,34 @@ public class BoardGameController {
                         + " centre: " + c.getCenterX() + ", " + c.getCenterY());
             }
         });
+// 1. Récupération des données du menu (GameConfig)
+        int nb = GameConfig.getInstance().getNbJoueurs();
+        String[] noms = GameConfig.getInstance().getNomsJoueurs();
+        String[] cheminsJetons = GameConfig.getInstance().getJetonsChoisis();
 
-        GameManager gm = new GameManager(this, this.MC, this.listeCases);
+// 2. Création des joueurs avec leurs Jetons et leurs Statistiques
+        StatistiquesJoueur[] tableauStats = new StatistiquesJoueur[nb];
+        for (int i = 0; i < nb; i++) {
+            Joueur j = new Joueur(noms[i]);
+            j.setJeton(new Jeton(cheminsJetons[i])); // Utilise le constructeur qu'on a créé !
+            tableauStats[i] = new StatistiquesJoueur(j);
+        }
+
+// 3. Initialisation du GameManager avec le tableau de stats
+        GameManager gm = new GameManager(this, this.MC, this.listeCases, tableauStats);
+
+// 4. Préparation des objets pour la Fin de Partie
+        StatistiquesPartie lesStats = new StatistiquesPartie(tableauStats, 0);
+        Partie laPartie = new Partie();
+        HomePageView home = SceneManager.getHomePageView(); // Récupère la vue pour l'image de fond
+
+// 5. On donne les infos au GameManager
+        gm.setPartie(laPartie);
+        gm.setStatistiquesPartie(lesStats);
+        gm.setHomeView(home);
+
         String css = getClass().getResource("/styleSheet/homepage.css").toExternalForm();
-        plateauJeu.getScene(); // scene peut être null ici — utilise Platform.runLater déjà en place
+        plateauJeu.getScene();
         gm.demarrerPartie();
     }
 
