@@ -44,7 +44,7 @@ public class FinPartieView {
 
     private final ImageView btnRejouer;
     private final ImageView btnStats;
-    private final ImageView btnQuitter;
+    private final ImageView btnBack;
     private ImageView btnFermerStats;
 
     public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
@@ -65,17 +65,17 @@ public class FinPartieView {
         // BOUTONS IMAGE
         btnRejouer = ViewUtils.createCroppedImageView(stage, IMG + "buttons/PlayAgain.png", 0.25);
         btnStats   = ViewUtils.createCroppedImageView(stage, IMG + "buttons/ViewStats.png", 0.25);
-        btnQuitter = ViewUtils.createCroppedImageView(stage, IMG + "buttons/Exit-sora.png",      0.18);
+        btnBack = ViewUtils.createCroppedImageView(stage, IMG + "buttons/BackButton.png",      0.18);
 
         btnStats.getStyleClass().add("btn-rejouer");
         btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
         btnRejouer.setStyle("-fx-cursor: hand;");
         btnStats  .setStyle("-fx-cursor: hand;");
-        btnQuitter.setStyle("-fx-cursor: hand;");
+        btnBack.setStyle("-fx-cursor: hand;");
 
-        btnQuitter.getStyleClass().add("btn-quitter");
+        btnBack.getStyleClass().add("btn-back");
 
-        HBox btnBox = new HBox(25, btnRejouer, btnStats, btnQuitter);
+        HBox btnBox = new HBox(25, btnRejouer, btnStats, btnBack);
         btnBox.setAlignment(Pos.CENTER);
         btnBox.spacingProperty().bind(stage.widthProperty().multiply(0.04));
         btnBox.paddingProperty().bind(
@@ -160,73 +160,125 @@ public class FinPartieView {
 
         // Voile sombre plein écran
         Rectangle dim = new Rectangle();
-
         dim.widthProperty().bind(stage.widthProperty());
         dim.heightProperty().bind(stage.heightProperty());
         dim.setFill(Color.web("#000000", 0.78));
 
-        // Fond image : taille bindée sur stage (pas sur box → pas de feedback loop)
+        // box : taille explicite depuis stage — source de vérité unique
+        // bgStats et content suivent box, pas l'inverse → pas de feedback loop
+        StackPane box = new StackPane();
+        box.prefWidthProperty().bind(stage.widthProperty().multiply(0.60)); //largeur du stage
+        box.prefHeightProperty().bind(stage.heightProperty().multiply(0.82));  //hauteur du stage
+        box.setMaxWidth(Region.USE_PREF_SIZE);
+        box.setMaxHeight(Region.USE_PREF_SIZE);
+
+        // bgStats bindé directement sur stage — même pattern que les valeurs du tableau
         ImageView bgStats = new ImageView(loadOrFallback("Images/BackGroundStatistique.png", null));
         bgStats.setPreserveRatio(false);
-        bgStats.fitWidthProperty().bind(stage.widthProperty().multiply(0.52));
-        bgStats.setFitHeight(560);
+        bgStats.fitWidthProperty().bind(stage.widthProperty().multiply(0.60));
+        bgStats.fitHeightProperty().bind(stage.heightProperty().multiply(0.82));
 
-        // Titre
-        Label titre = new Label("STATISTIQUES");
-        titre.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #FFD700; " +
-                       "-fx-font-family: 'Georgia', serif;");
-
-        Label t = new Label("GAME STATISTICS");
-        t.setStyle(
-                "-fx-font-size: 26px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #D35400;"
-        );
+        // Titre image
+        ImageView titre = ViewUtils.createCroppedImageView(stage, IMG + "statistique.png", 0.38);
 
         HBox global = new HBox(
                 60,
                 createMetric("TIME", stats.getDureeFormatee()),
                 createMetric("ROUNDS", String.valueOf(stats.getTotalTours()))
         );
-
         global.setAlignment(Pos.CENTER);
 
-        // Tableau joueurs
-        VBox playerList = buildPlayerList(stats.getClassement());
+        VBox playerList = buildPlayerList(stats.getClassement(), stage);
 
-        // Bouton fermer
-        btnFermerStats = ViewUtils.createCroppedImageView(stage, IMG + "buttons/Exit-sora.png", 0.14);
+        btnFermerStats = ViewUtils.createCroppedImageView(stage, IMG + "buttons/BackButton.png", 0.10);
         btnFermerStats.setStyle("-fx-cursor: hand;");
 
-        VBox content = new VBox(16, titre, global, playerList, btnFermerStats);
-        content.setAlignment(Pos.TOP_CENTER);
-        content.setPadding(new Insets(30, 40, 30, 40));
+        // content : remplit box entièrement (maxWidth/Height MAX_VALUE)
+        // StackPane le redimensionne → Pos.CENTER centre les enfants verticalement
+        VBox content = new VBox(12, titre, global, playerList, btnFermerStats);
+        content.setAlignment(Pos.CENTER);
+        content.paddingProperty().bind(
+                stage.widthProperty().map(w -> new Insets(w.doubleValue() * 0.025)));
+        content.setMaxWidth(Double.MAX_VALUE);
+        content.setMaxHeight(Double.MAX_VALUE);
 
-        // Boite popup : bg image + contenu (taille max fixe)
-        StackPane box = new StackPane(bgStats, content);
-        box.maxWidthProperty().bind(stage.widthProperty().multiply(0.52));
-        box.setMaxHeight(560);
-        box.setStyle(
-                "-fx-border-radius: 12; -fx-background-radius: 12; " +
-                "-fx-effect: dropshadow(gaussian, #000000DD, 40, 0.5, 0, 6);");
+        box.getChildren().addAll(bgStats, content);
 
         return new StackPane(dim, box);
     }
 
-    private VBox buildPlayerList(StatistiquesJoueur[] classement) {
-        String[] medals  = {"🥇", "🥈", "🥉", "4.", "5.", "6."};
-        String[] bgColors = {"#3A280066", "#2A2A2A66", "#2A1A0A66"};
+    private VBox buildPlayerList(StatistiquesJoueur[] classement, Stage stage) {
+        String[] medals = {"🥇", "🥈", "🥉", "4.", "5.", "6."};
 
-        VBox list = new VBox(6);
+        // Toutes les largeurs de colonnes bindées sur stage — responsive
+        var colMedal     = stage.widthProperty().multiply(0.040);
+        var colToken     = stage.widthProperty().multiply(0.030);
+        var colNom       = stage.widthProperty().multiply(0.070);
+        var colGap       = stage.widthProperty().multiply(0.004);
+        var colBonnes    = stage.widthProperty().multiply(0.070);
+        var colMauvaises = stage.widthProperty().multiply(0.070);
+        var colPct       = stage.widthProperty().multiply(0.070);
+        var spacing      = stage.widthProperty().multiply(0.004);
+
+        // En-têtes — police adaptive, PAS de maxWidth → texte visible même si long
+        Label hMedal = new Label("POSITION");
+        hMedal.styleProperty().bind(stage.widthProperty().map(w ->
+                "-fx-text-fill: #4A3000; -fx-font-size: " +
+                Math.max(6, (int)(w.doubleValue() * 0.007)) + "px; -fx-font-weight: bold;"));
+        hMedal.prefWidthProperty().bind(colMedal);
+
+        Label hToken = new Label("");
+        hToken.prefWidthProperty().bind(colToken);
+
+        Label hNom = new Label("PLAYER");
+        hNom.styleProperty().bind(stage.widthProperty().map(w ->
+                "-fx-text-fill: #4A3000; -fx-font-size: " +
+                Math.max(6, (int)(w.doubleValue() * 0.007)) + "px; -fx-font-weight: bold;"));
+        hNom.prefWidthProperty().bind(colNom);
+
+        Region hGap = new Region();
+        hGap.minWidthProperty().bind(colGap);
+
+        Label hBonnes = new Label("CORRECT ANSWER");
+        hBonnes.styleProperty().bind(stage.widthProperty().map(w ->
+                "-fx-text-fill: #4A3000; -fx-font-size: " +
+                Math.max(6, (int)(w.doubleValue() * 0.007)) + "px; -fx-font-weight: bold;"));
+        hBonnes.prefWidthProperty().bind(colBonnes);
+
+        Label hMauvaises = new Label("WRONG ANSWER");
+        hMauvaises.styleProperty().bind(stage.widthProperty().map(w ->
+                "-fx-text-fill: #4A3000; -fx-font-size: " +
+                Math.max(6, (int)(w.doubleValue() * 0.007)) + "px; -fx-font-weight: bold;"));
+        hMauvaises.prefWidthProperty().bind(colMauvaises);
+
+        Label hPct = new Label("ACCURACY RATE");
+        hPct.styleProperty().bind(stage.widthProperty().map(w ->
+                "-fx-text-fill: #4A3000; -fx-font-size: " +
+                Math.max(6, (int)(w.doubleValue() * 0.007)) + "px; -fx-font-weight: bold;"));
+        hPct.prefWidthProperty().bind(colPct);
+
+        HBox header = new HBox();
+        header.spacingProperty().bind(spacing);
+        header.getChildren().addAll(hMedal, hToken, hNom, hGap, hBonnes, hMauvaises, hPct);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.styleProperty().bind(stage.widthProperty().map(w -> {
+            int p = (int)(w.doubleValue() * 0.008);
+            return "-fx-padding: 4 " + p + " 6 " + p + "; " +
+                   "-fx-border-color: #4A3000; -fx-border-width: 0 0 1 0;";
+        }));
+
+        VBox list = new VBox(4);
         for (int i = 0; i < classement.length; i++) {
             StatistiquesJoueur sj = classement[i];
 
             Label medal = new Label(i < medals.length ? medals[i] : (i + 1) + ".");
-            medal.setStyle("-fx-font-size: 18px;");
-            medal.setMinWidth(36);
+            medal.styleProperty().bind(stage.widthProperty().map(w ->
+                    "-fx-font-size: " + Math.max(10, (int)(w.doubleValue() * 0.013)) + "px;"));
+            medal.prefWidthProperty().bind(colMedal);
+            medal.maxWidthProperty().bind(colMedal);
 
             ImageView token = new ImageView();
-            token.setFitWidth(32);
+            token.fitWidthProperty().bind(colToken);
             token.setPreserveRatio(true);
             if (sj.getJoueur().getJeton() != null) {
                 InputStream is = FinPartieView.class.getResourceAsStream(
@@ -236,36 +288,64 @@ public class FinPartieView {
             if (sj.getPosition() == 1) token.setEffect(new DropShadow(12, Color.GOLD));
 
             Label nom = new Label(sj.getJoueur().getNom());
-            nom.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
-            nom.setMinWidth(140);
+            nom.styleProperty().bind(stage.widthProperty().map(w ->
+                    "-fx-text-fill: #2A1500; -fx-font-size: " +
+                    Math.max(10, (int)(w.doubleValue() * 0.011)) + "px; -fx-font-weight: bold;")); //changer la valeur derriere (w.doubleValue() pour modifier la taille de la police et celle apres Math.max(
+            nom.prefWidthProperty().bind(colNom);
+            nom.maxWidthProperty().bind(colNom);
 
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
+            Region gap = new Region();
+            gap.minWidthProperty().bind(colGap);
 
-            Label tours = new Label(sj.getNombreTours() + " tours");
-            tours.setStyle("-fx-text-fill: #C8D8A0; -fx-font-size: 13px;");
+            Label bonnes = new Label("✓ " + sj.getBonnesReponses());
+            bonnes.styleProperty().bind(stage.widthProperty().map(w ->
+                    "-fx-text-fill: #2D6B00; -fx-font-size: " +
+                    Math.max(9, (int)(w.doubleValue() * 0.010)) + "px; -fx-font-weight: bold;"));
+            bonnes.prefWidthProperty().bind(colBonnes);
+            bonnes.maxWidthProperty().bind(colBonnes);
+
+            Label mauvaises = new Label("✗ " + sj.getMauvaisesReponses());
+            mauvaises.styleProperty().bind(stage.widthProperty().map(w ->
+                    "-fx-text-fill: #8B0000; -fx-font-size: " +
+                    Math.max(9, (int)(w.doubleValue() * 0.010)) + "px; -fx-font-weight: bold;"));
+            mauvaises.prefWidthProperty().bind(colMauvaises);
+            mauvaises.maxWidthProperty().bind(colMauvaises);
 
             int pctVal = sj.getPourcentageReussite();
-            String pctColor = pctVal >= 60 ? "#7EC850" : pctVal >= 30 ? "#FFD700" : "#E05050";
+            String pctColor = pctVal >= 60 ? "#2D6B00" : pctVal >= 30 ? "#8B6000" : "#8B0000";
             Label pct = new Label(pctVal + "%");
-            pct.setStyle("-fx-text-fill: " + pctColor + "; -fx-font-size: 13px; -fx-font-weight: bold;");
-            pct.setMinWidth(45);
+            pct.styleProperty().bind(stage.widthProperty().map(w ->
+                    "-fx-text-fill: " + pctColor + "; -fx-font-size: " +
+                    Math.max(9, (int)(w.doubleValue() * 0.010)) + "px; -fx-font-weight: bold;"));
+            pct.prefWidthProperty().bind(colPct);
+            pct.maxWidthProperty().bind(colPct);
 
-            HBox row = new HBox(12, medal, token, nom, spacer, tours, pct);
+            HBox row = new HBox();
+            row.spacingProperty().bind(spacing);
+            row.getChildren().addAll(medal, token, nom, gap, bonnes, mauvaises, pct);
             row.setAlignment(Pos.CENTER_LEFT);
-            row.setStyle("-fx-padding: 8 12 8 12;");
+            row.styleProperty().bind(stage.widthProperty().map(w -> {
+                int pv = (int)(w.doubleValue() * 0.005);
+                int ph = (int)(w.doubleValue() * 0.009);
+                return "-fx-padding: " + pv + " " + ph + " " + pv + " " + ph + ";";
+            }));
 
             list.getChildren().add(row);
         }
-        return list;
+
+        VBox wrapper = new VBox(0, header, list);
+        // Contrainte max = disponible dans box (stage*0.60) moins padding content (stage*0.05)
+        wrapper.maxWidthProperty().bind(stage.widthProperty().multiply(0.40));
+        return wrapper;
     }
 
     private VBox createMetric(String label, String value) {
 
+        //value to adjust if you need to change the text size for the statistique table title
         Label l = new Label(label);
-        l.setStyle("-fx-text-fill: #8DC84A; -fx-font-size: 11px; -fx-font-weight: bold;");
+        l.setStyle("-fx-text-fill: #4A3000; -fx-font-size: 12px; -fx-font-weight: bold;");
         Label v = new Label(value);
-        v.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 26px; -fx-font-weight: bold; " +
+        v.setStyle("-fx-text-fill: #3B1E00; -fx-font-size: 20px; -fx-font-weight: bold; " +
                    "-fx-font-family: 'Georgia', serif;");
         VBox b = new VBox(2, l, v);
         b.setAlignment(Pos.CENTER);
@@ -301,6 +381,6 @@ public class FinPartieView {
     public Scene     getScene()          { return scene; }
     public ImageView getBtnRejouer()     { return btnRejouer; }
     public ImageView getBtnStats()       { return btnStats; }
-    public ImageView getBtnQuitter()     { return btnQuitter; }
+    public ImageView getBtnBack()     { return btnBack; }
     public ImageView getBtnFermerStats() { return btnFermerStats; }
 }

@@ -20,7 +20,7 @@ public class FinPartieController {
 
         view.getBtnStats().setOnMouseClicked(_ -> view.toggleStats(true));
 
-        view.getBtnQuitter().setOnMouseClicked(_ -> Platform.exit());
+        view.getBtnBack().setOnMouseClicked(_ -> Platform.exit());
 
         view.getBtnFermerStats().setOnMouseClicked(_ -> view.toggleStats(false));
     }
