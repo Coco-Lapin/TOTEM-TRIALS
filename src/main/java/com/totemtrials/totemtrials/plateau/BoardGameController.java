@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.totemtrials.totemtrials.questions.GestionQuiz;
 
@@ -130,8 +131,8 @@ public class BoardGameController {
             applyPattern(new Rectangle[]{RHop1,RHop2,RBonus1,RBonus2},
                     IMG_TILES + "HOP.png");
 
-            RStart.setFill(new ImagePattern(load(IMG_BOARD + "Start.png")));
-            RFinish.setFill(new ImagePattern(load(IMG_BOARD + "Finish.png")));
+            RStart.setFill(new ImagePattern(Objects.requireNonNull(load(IMG_BOARD + "Start.png"))));
+            RFinish.setFill(new ImagePattern(Objects.requireNonNull(load(IMG_BOARD + "Finish.png"))));
 
             // ── Construction de la liste logique ────────────────────────
             for (int i = 0; i < cheminDuJeu.length; i++) {
@@ -147,7 +148,7 @@ public class BoardGameController {
         });
 
         GameManager gm = new GameManager(this, this.MC, this.listeCases);
-        String css = getClass().getResource("/styleSheet/homepage.css").toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource("/styleSheet/homepage.css")).toExternalForm();
         plateauJeu.getScene(); // scene peut être null ici — utilise Platform.runLater déjà en place
         gm.demarrerPartie();
     }
