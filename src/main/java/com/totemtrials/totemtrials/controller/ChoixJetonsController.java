@@ -24,7 +24,7 @@ public class ChoixJetonsController {
                 goInfoView(homeView,model,view)
         );
 
-        view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
+        view.getLabelInstruction().setText("It is the turn of : " + model.getJoueurs()[0].getNom());
 
         Map<Jeton, ImageView> jetonViews = view.getJetonViews();
 
@@ -50,9 +50,9 @@ public class ChoixJetonsController {
         currentPlayerIndex++;
 
         if (currentPlayerIndex < joueurs.length) {
-            view.getLabelInstruction().setText("C'est au tour de : " + joueurs[currentPlayerIndex].getNom());
+            view.getLabelInstruction().setText("It is the turn of    : " + joueurs[currentPlayerIndex].getNom());
         } else {
-            view.getLabelInstruction().setText("Tous les joueurs ont choisi !");
+            view.getLabelInstruction().setText("All the players have made their choice!");
         }
 
         if (currentPlayerIndex >= joueurs.length) {

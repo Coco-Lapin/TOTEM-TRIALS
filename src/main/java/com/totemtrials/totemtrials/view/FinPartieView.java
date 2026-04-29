@@ -6,6 +6,7 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
@@ -23,10 +24,16 @@ public class FinPartieView {
 
     private static final String IMG = "com/totemtrials/totemtrials/Images/";
 
+    // =========================================================
+    // VERTICAL RATIOS
+    // =========================================================
     private static final double RATIO_ARGENT = 0.38;
     private static final double RATIO_OR     = 0.48;
     private static final double RATIO_BRONZE = 0.33;
 
+    // =========================================================
+    // HORIZONTAL POSITIONS
+    // =========================================================
     private static final double POS_X_ARGENT = 0.31;
     private static final double POS_X_OR     = 0.51;
     private static final double POS_X_BRONZE = 0.70;
@@ -60,11 +67,15 @@ public class FinPartieView {
         btnStats   = ViewUtils.createCroppedImageView(stage, IMG + "buttons/ViewStats.png", 0.25);
         btnQuitter = ViewUtils.createCroppedImageView(stage, IMG + "buttons/Exit-sora.png",      0.18);
 
+        btnStats.getStyleClass().add("btn-rejouer");
+        btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
         btnRejouer.setStyle("-fx-cursor: hand;");
         btnStats  .setStyle("-fx-cursor: hand;");
         btnQuitter.setStyle("-fx-cursor: hand;");
 
-        HBox btnBox = new HBox(btnRejouer, btnStats, btnQuitter);
+        btnQuitter.getStyleClass().add("btn-quitter");
+
+        HBox btnBox = new HBox(25, btnRejouer, btnStats, btnQuitter);
         btnBox.setAlignment(Pos.CENTER);
         btnBox.spacingProperty().bind(stage.widthProperty().multiply(0.04));
         btnBox.paddingProperty().bind(
@@ -97,6 +108,7 @@ public class FinPartieView {
         StackPane pane = new StackPane();
 
         for (int i = 0; i < 3; i++) {
+
             int idx = ordre[i];
             if (idx >= classement.length) continue;
 
@@ -123,15 +135,18 @@ public class FinPartieView {
 
             pane.getChildren().add(col);
         }
+
         return pane;
     }
 
     private ImageView buildTokenView(StatistiquesJoueur sj, Stage stage) {
+
         ImageView iv = new ImageView();
         iv.fitWidthProperty().bind(stage.widthProperty().multiply(0.09));
         iv.setPreserveRatio(true);
 
         if (sj.getJoueur().getJeton() != null) {
+
             InputStream is = FinPartieView.class.getResourceAsStream(
                     "/" + sj.getJoueur().getJeton().getImagePath());
             if (is != null) iv.setImage(new Image(is));
@@ -145,6 +160,7 @@ public class FinPartieView {
 
         // Voile sombre plein écran
         Rectangle dim = new Rectangle();
+
         dim.widthProperty().bind(stage.widthProperty());
         dim.heightProperty().bind(stage.heightProperty());
         dim.setFill(Color.web("#000000", 0.78));
@@ -160,11 +176,19 @@ public class FinPartieView {
         titre.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #FFD700; " +
                        "-fx-font-family: 'Georgia', serif;");
 
-        // Stats globales
-        HBox global = new HBox(60,
-                createMetric("DURÉE",  stats.getDureeFormatee()),
-                createMetric("TOURS",  String.valueOf(stats.getTotalTours()))
+        Label t = new Label("GAME STATISTICS");
+        t.setStyle(
+                "-fx-font-size: 26px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #D35400;"
         );
+
+        HBox global = new HBox(
+                60,
+                createMetric("TIME", stats.getDureeFormatee()),
+                createMetric("ROUNDS", String.valueOf(stats.getTotalTours()))
+        );
+
         global.setAlignment(Pos.CENTER);
 
         // Tableau joueurs
@@ -237,6 +261,7 @@ public class FinPartieView {
     }
 
     private VBox createMetric(String label, String value) {
+
         Label l = new Label(label);
         l.setStyle("-fx-text-fill: #8DC84A; -fx-font-size: 11px; -fx-font-weight: bold;");
         Label v = new Label(value);
@@ -244,10 +269,12 @@ public class FinPartieView {
                    "-fx-font-family: 'Georgia', serif;");
         VBox b = new VBox(2, l, v);
         b.setAlignment(Pos.CENTER);
+
         return b;
     }
 
     public void toggleStats(boolean show) {
+
         if (show) {
             statsOverlay.setVisible(true);
             mainContent.setEffect(new BoxBlur(8, 8, 3));
@@ -261,6 +288,7 @@ public class FinPartieView {
                 mainContent.setEffect(null);
             }
         });
+
         ft.play();
     }
 

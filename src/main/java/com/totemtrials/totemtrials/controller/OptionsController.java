@@ -7,17 +7,18 @@ import javafx.scene.media.MediaPlayer;
 public class OptionsController {
 
     public OptionsController(OptionsView view, HomePageView homeView) {
-        // Le MediaPlayer est géré dans TotemTrialsApp et passé ici si nécessaire.
-        // Pour l'instant le binding volume n'est pas connecté au player —
-        // voir TotemTrialsApp pour injecter le MediaPlayer.
+        // The MediaPlayer is managed in TotemTrialsApp and passed here if necessary.
+
+        // Currently, the volume binding is not connected to the player —
+
+        // See TotemTrialsApp to inject the MediaPlayer.
 
         view.getBackButton().setOnAction(_ ->
             SceneManager.show(homeView.getScene(), "Menu principal")
         );
     }
 
-    /** Surcharge permettant de brancher le volume sur un MediaPlayer existant. */
-    public OptionsController(OptionsView view, HomePageView homeView, MediaPlayer player) {
+    /** Overload allowing the volume to be connected to an existing Media Player. */    public OptionsController(OptionsView view, HomePageView homeView, MediaPlayer player) {
         this(view, homeView);
         player.volumeProperty().bind(view.getVolumeSlider().valueProperty().divide(100));
     }

@@ -31,7 +31,7 @@ public class ChoixJetonsView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        infoPassiveButton = new Button("INFORMATION PASSIF");
+        infoPassiveButton = new Button("PASSIVE INFORMATION");
         infoPassiveButton.getStyleClass().add("back-button");
 
         backButton = new Button("BACK");

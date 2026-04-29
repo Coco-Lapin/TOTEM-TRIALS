@@ -6,8 +6,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 /**
- * Point unique de navigation entre les scènes.
- * Évite de passer des références de Scene entre controllers.
+
+ * Single navigation point between scenes.
+
+ * Avoids passing scene references between controllers.
+
  */
 public class SceneManager {
 

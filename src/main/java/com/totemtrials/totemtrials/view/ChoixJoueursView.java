@@ -24,7 +24,7 @@ public class ChoixJoueursView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        //----------------Creation des images pour les boutons----------
+        //----------------Creating images for the buttons----------
         btn2Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/2Players.png",0.25);
         btn3Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
         btn4Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);

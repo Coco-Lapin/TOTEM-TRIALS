@@ -1,8 +1,11 @@
 package com.totemtrials.totemtrials.model;
 
 /**
- * Statistiques accumulées pour un joueur sur toute la partie.
- * Incrémentées au fil du jeu, lues à la FinPartieView.
+
+ * Accumulated statistics for a player throughout the entire game.
+
+ * Incremented during the game, read at EndGameView.
+
  */
 public class StatistiquesJoueur {
 
@@ -16,20 +19,20 @@ public class StatistiquesJoueur {
         this.joueur = joueur;
     }
 
-    // ---- Mutateurs appelés pendant la partie ----
+    // ---- Mutators called during the game ----
     public void ajouterBonneReponse()      { bonnesReponses++; }
     public void ajouterMauvaiseReponse()   { mauvaisesReponses++; }
     public void incrementerTour()          { nombreTours++; }
     public void setPosition(int position)  { this.position = position; }
 
-    // ---- Accesseurs ----
+    // ---- Accessor ----
     public Joueur getJoueur()              { return joueur; }
     public int    getBonnesReponses()      { return bonnesReponses; }
     public int    getMauvaisesReponses()   { return mauvaisesReponses; }
     public int    getNombreTours()         { return nombreTours; }
     public int    getPosition()            { return position; }
 
-    /** Pourcentage de bonnes réponses, 0 si aucune question posée. */
+    /** Percentage of correct answers, 0 if no question was asked. */
     public int getPourcentageReussite() {
         int total = bonnesReponses + mauvaisesReponses;
         return total == 0 ? 0 : (int) Math.round(100.0 * bonnesReponses / total);

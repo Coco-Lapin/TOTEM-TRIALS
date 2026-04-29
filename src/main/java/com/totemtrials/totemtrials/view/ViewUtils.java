@@ -13,8 +13,10 @@ public class ViewUtils {
     private ViewUtils() {}
 
     /**
-     * Charge une image depuis les ressources, rogne les marges transparentes
-     * (sauf pour les GIF), et lie la largeur à un ratio de la scène.
+
+     * Loads an image from the resources, crops the transparent margins
+     * (except for GIFs), and links the width to a scene aspect ratio.
+
      */
     public static ImageView createCroppedImageView(Stage stage, String imagePath, double widthRatio) {
         ImageView iv = new ImageView();
@@ -29,7 +31,7 @@ public class ViewUtils {
         iv.fitWidthProperty().bind(stage.widthProperty().multiply(widthRatio));
         iv.setPreserveRatio(true);
 
-        // Les GIFs n'ont pas de PixelReader → pas de crop
+        // GIFs don't have a PixelReader → no cropping
         PixelReader pr = img.getPixelReader();
         if (imagePath.endsWith(".gif") || pr == null) {
             iv.setImage(img);

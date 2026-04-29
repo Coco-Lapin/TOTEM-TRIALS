@@ -28,6 +28,6 @@ public class FinPartieController {
     public static void lancerFinPartie(StatistiquesPartie stats, Partie model, HomePageView homeView) {
         FinPartieView finView = new FinPartieView(SceneManager.getStage(), stats, homeView.getBackground());
         new FinPartieController(finView, model, homeView, stats);
-        SceneManager.show(finView.getScene(), "Fin de partie");
+        SceneManager.show(finView.getScene(), "End Game");
     }
 }
