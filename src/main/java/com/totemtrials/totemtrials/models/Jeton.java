@@ -32,4 +32,12 @@ public class Jeton {
     public String getImagePath()     { return imagePath; }
     public String getAnimationPath() { return animationPath; }
     public String getPassif()       { return passif; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Jeton j2){
+            return this.nom.equalsIgnoreCase(j2.getNom()) || this.passif.equalsIgnoreCase(j2.getPassif()) ;
+        }
+        return false;
+    }
 }

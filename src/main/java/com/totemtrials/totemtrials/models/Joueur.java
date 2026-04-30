@@ -12,4 +12,12 @@ public class Joueur {
     public String getNom()           { return nom; }
     public Jeton  getJeton()         { return jeton; }
     public void   setJeton(Jeton j)  { this.jeton = j; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Joueur j2){
+            return this.nom.equalsIgnoreCase(j2.getNom());
+        }
+        return false ;
+    }
 }

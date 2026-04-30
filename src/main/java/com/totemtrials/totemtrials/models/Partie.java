@@ -16,6 +16,10 @@ public class Partie {
     };
 
     public void initJoueurs(int count) {
+        if (count < 2 || count > 4) {
+            throw new IllegalArgumentException("Le nombre de joueurs doit être compris entre 2 et 4.");
+        }
+
         joueurs = new Joueur[count];
         for (int i = 0; i < count; i++)
             joueurs[i] = new Joueur("Joueur " + (i + 1));
@@ -23,4 +27,6 @@ public class Partie {
 
     public Joueur[] getJoueurs()           { return joueurs; }
     public Jeton[]  getJetonsDisponibles() { return jetonsDisponibles; }
+
+
 }
