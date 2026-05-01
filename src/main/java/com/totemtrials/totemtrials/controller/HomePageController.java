@@ -1,11 +1,6 @@
 package com.totemtrials.totemtrials.controller;
 
-<<<<<<< HEAD
-import com.totemtrials.totemtrials.models.Partie;
-import com.totemtrials.totemtrials.models.GameConfig;
-=======
 import com.totemtrials.totemtrials.models.*;
->>>>>>> feat/menus
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.OptionsView;
@@ -16,13 +11,8 @@ import javafx.scene.image.ImageView;
 public class HomePageController {
 
     private final HomePageView view;
-<<<<<<< HEAD
-    private final Partie       model;
-    private GameConfig gameConfig;
-=======
     private final Partie model;
 
->>>>>>> feat/menus
     public HomePageController(HomePageView view, Partie model) {
         this.view  = view;
         this.model = model;
@@ -41,13 +31,8 @@ public class HomePageController {
         view.getPlayButton().setOnMouseClicked(_ -> {
             ChoixJoueursView choixView = new ChoixJoueursView(
                     SceneManager.getStage(), view.getBackground());
-<<<<<<< HEAD
-            new ChoixJoueursController(choixView, model, view,gameConfig);
-            SceneManager.show(choixView.getScene(), "Choix des joueurs");
-=======
             new ChoixJoueursController(choixView, model, view);
-            SceneManager.show(choixView.getScene(), "Player Selection");
->>>>>>> feat/menus
+            SceneManager.show(choixView.getScene(), "Chose your token");
         });
 
         view.getOptionButton().setOnMouseClicked(_ -> {
@@ -57,9 +42,9 @@ public class HomePageController {
         });
 
         view.getTestFinButton().setOnMouseClicked(_ -> {
-            Jeton jetonTest = new Jeton("tigre", "passif test",
-                    "com/totemtrials/totemtrials/Images/tokkens/jetonTigre.png",
-                    "com/totemtrials/totemtrials/Images/tokkens/jetonTigre_anim.gif");
+            Jeton jetonTest = new Jeton("tiger", "passif test",
+                    "images/tokkens/jetonTigre.png",
+                    "images/tokkens/jetonTigre_anim.gif");
 
             Joueur j1 = new Joueur("Player 1"); j1.setJeton(jetonTest);
             Joueur j2 = new Joueur("Player 2"); j2.setJeton(jetonTest);

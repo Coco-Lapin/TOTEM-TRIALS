@@ -19,16 +19,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class InfoPassifView {
-<<<<<<< HEAD
     private final Map<Jeton, ImageView> jetonViews = new LinkedHashMap<>();
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
     private final StackPane backButton;
-=======
-
-    private final Map<Jeton, ImageView> jetonViews = new LinkedHashMap<>();
-    private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
-    private final Button backButton;
->>>>>>> feat/menus
     private final Scene scene;
 
     public InfoPassifView(Stage stage, Image background, Jeton[] jetonsDisponibles) {
@@ -38,12 +31,7 @@ public class InfoPassifView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-<<<<<<< HEAD
         backButton = ViewUtils.createBackButton(stage, 0.15);
-=======
-        backButton = new Button("BACK");
-        backButton.getStyleClass().add("back-button");
->>>>>>> feat/menus
         backButton.setAlignment(Pos.BOTTOM_RIGHT);
 
         //Creating the table
@@ -75,11 +63,6 @@ public class InfoPassifView {
 
     }
 
-    public Scene                 getScene()            { return scene; }
-<<<<<<< HEAD
-    public StackPane             getBackButton(){return backButton;}
-
-=======
-    public Button getBackButton(){return backButton;}
->>>>>>> feat/menus
+    public Scene     getScene()      { return scene; }
+    public StackPane getBackButton() { return backButton; }
 }

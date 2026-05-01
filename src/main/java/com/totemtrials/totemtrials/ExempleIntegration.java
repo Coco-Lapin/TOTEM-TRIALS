@@ -6,15 +6,10 @@
 package com.totemtrials.totemtrials;
 
 import com.totemtrials.totemtrials.controller.FinPartieController;
-<<<<<<< HEAD
 import com.totemtrials.totemtrials.models.Joueur;
 import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.models.StatistiquesJoueur;
 import com.totemtrials.totemtrials.models.StatistiquesPartie;
-=======
-import com.totemtrials.totemtrials.models.*;
-import com.totemtrials.totemtrials.models.Joueur;
->>>>>>> feat/menus
 import com.totemtrials.totemtrials.view.HomePageView;
 
 public class ExempleIntegration {

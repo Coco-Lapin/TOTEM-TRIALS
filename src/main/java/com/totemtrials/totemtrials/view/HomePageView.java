@@ -63,18 +63,11 @@ public class HomePageView {
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-<<<<<<< HEAD
         // ── Boutons et titre ──
         ImageView titre = ViewUtils.createCroppedImageView(stage, "images/Titre-sora.png",          0.45);
         playButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Start-sora.png",   0.45);
         optionButton    = ViewUtils.createCroppedImageView(stage, "images/buttons/Options-sora.png", 0.38);
         quitButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Exit-sora.png",    0.28);
-=======
-        ImageView titre   = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/Titre-sora.png",          0.45);
-        playButton        = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Start-sora.png",   0.45);
-        optionButton      = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Options-sora.png", 0.38);
-        quitButton        = ViewUtils.createCroppedImageView(stage, "com/totemtrials/totemtrials/Images/buttons/Exit-sora.png",    0.28);
->>>>>>> feat/menus
 
         testFinButton = new Button("TEST END GAME");
         testFinButton.getStyleClass().add("back-button");

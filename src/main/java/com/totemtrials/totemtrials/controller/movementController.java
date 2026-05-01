@@ -14,6 +14,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Gère tout ce qui est lié au déplacement physique des pions sur le plateau.
@@ -122,7 +123,7 @@ public class movementController {
 
             // Crée un Circle de rayon 70 comme sprite visuel du joueur
             sprites[i] = new Circle(70);
-            Image imgJeton = new Image(getClass().getResource(cheminImages[i]).toExternalForm());
+            Image imgJeton = new Image(Objects.requireNonNull(getClass().getResource(cheminImages[i])).toExternalForm());
             sprites[i].setFill(new ImagePattern(imgJeton));
             sprites[i].setStroke(Color.BLACK);
             sprites[i].setStrokeWidth(3);

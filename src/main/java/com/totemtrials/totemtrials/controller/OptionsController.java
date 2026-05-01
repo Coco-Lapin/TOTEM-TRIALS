@@ -9,27 +9,12 @@ public class OptionsController {
 
     // ── Menu principal ──────────────────────────────────────────────────────
     public OptionsController(OptionsView view, HomePageView homeView) {
-<<<<<<< HEAD
         view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(homeView.getScene(), "Menu principal")
         );
     }
 
     public OptionsController(OptionsView view, HomePageView homeView, MediaPlayer player) {
-=======
-        // The MediaPlayer is managed in TotemTrialsApp and passed here if necessary.
-
-        // Currently, the volume binding is not connected to the player —
-
-        // See TotemTrialsApp to inject the MediaPlayer.
-
-        view.getBackButton().setOnAction(_ ->
-            SceneManager.show(homeView.getScene(), "Menu principal")
-        );
-    }
-
-    /** Overload allowing the volume to be connected to an existing Media Player. */    public OptionsController(OptionsView view, HomePageView homeView, MediaPlayer player) {
->>>>>>> feat/menus
         this(view, homeView);
         if (player != null) bindVolume(view, player);
     }

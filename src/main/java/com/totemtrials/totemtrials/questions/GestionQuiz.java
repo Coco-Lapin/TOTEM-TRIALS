@@ -2,6 +2,7 @@ package com.totemtrials.totemtrials.questions;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -27,6 +30,7 @@ public class GestionQuiz {
     private boolean correcte = false;
     private StackPane zoneCentrale; // Référence pour les bindings adaptatifs
     private Label LabelPlayerRound;
+    private String tokenImagePath;
     // Largeur réelle du parchemin = 40% de zoneCentrale (popup) * 0.60 (zone sans bordures pierre)
     private static final double POPUP_W = 0.40;
     private static final double POPUP_H = 0.85;
@@ -74,9 +78,9 @@ public class GestionQuiz {
         afficherMenuSelection(); // On commence par le menu
     }
     //Constructor for Versus
-    public GestionQuiz(String themeChoix,int niveauChoisi, StackPane zoneCentrale,String playerName) {
+    public GestionQuiz(String themeChoix, int niveauChoisi, StackPane zoneCentrale, String playerName, String tokenImagePath) {
         this.zoneCentrale = zoneCentrale;
-        this.LabelPlayerRound = creerLabel("", 0.08);
+        this.LabelPlayerRound = creerLabel("", 0.038);
         // ImageView comme vrai fond — taille bindée sur zoneCentrale, 100% adaptatif
         ImageView bgView = new ImageView(
                 new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
@@ -87,16 +91,16 @@ public class GestionQuiz {
 
         // VBox pour le contenu dynamique par dessus l'image
         // maxWidth contraint au parchemin réel — exclut les bordures pierre gauche/droite
-        contenu = new VBox(12);
+        contenu = new VBox(8);
         contenu.setAlignment(Pos.CENTER);
         contenu.prefWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W));
         contenu.maxWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W));
         contenu.prefHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
         contenu.styleProperty().bind(
                 Bindings.concat("-fx-padding: ")
-                        .concat(zoneCentrale.heightProperty().multiply(0.15))
+                        .concat(zoneCentrale.heightProperty().multiply(0.06))
                         .concat(" 0 ")
-                        .concat(zoneCentrale.heightProperty().multiply(0.05))
+                        .concat(zoneCentrale.heightProperty().multiply(0.03))
                         .concat(" 0;")
         );
         // StackPane empile ImageView (fond) + VBox (contenu)
@@ -108,10 +112,9 @@ public class GestionQuiz {
 
         this.themeChoisi = themeChoix;
         this.niveauChoisi = niveauChoisi;
+        this.tokenImagePath = tokenImagePath;
 
         chargerQuestionsDuFichier();
-
-        // CORRECTION 2 : Lancer la génération de l'affichage de la question
         preparerEtAfficherQuestion(playerName);
     }
 
@@ -220,7 +223,7 @@ public class GestionQuiz {
         questionActuelle = possibles.get(new Random().nextInt(possibles.size()));
 
         // 4. Affichage du texte de la question
-        Label qLabel = creerLabel(questionActuelle.getTexte(), 0.065);
+        Label qLabel = creerLabel(questionActuelle.getTexte(), 0.075);
         contenu.getChildren().add(qLabel);
 
         // 5. Affichage des boutons de réponses (mélangés)
@@ -235,15 +238,30 @@ public class GestionQuiz {
     }
     public void preparerEtAfficherQuestion(String titreJoueur) {
         contenu.getChildren().clear();
-        if (titreJoueur != null) {
-            LabelPlayerRound.setText(titreJoueur+" It's your turn !");
-            LabelPlayerRound.setStyle(" -fx-font-weight: bold;");
+        if (titreJoueur != null && !titreJoueur.isEmpty()) {
+            if (tokenImagePath != null) {
+                var urlToken = getClass().getResource(tokenImagePath);
+                if (urlToken != null) {
+                    ImageView ivToken = new ImageView(new Image(urlToken.toExternalForm()));
+                    ivToken.fitWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.18));
+                    ivToken.setPreserveRatio(true);
 
-            VBox.setMargin(LabelPlayerRound, new javafx.geometry.Insets(-50, 0, 20, 0));
-            if (!contenu.getChildren().contains(LabelPlayerRound)) {
-                contenu.getChildren().add(0, LabelPlayerRound);
+                    TranslateTransition bounce = new TranslateTransition(Duration.millis(700), ivToken);
+                    bounce.setFromY(0); bounce.setToY(-6);
+                    bounce.setCycleCount(Animation.INDEFINITE);
+                    bounce.setAutoReverse(true);
+                    bounce.setInterpolator(Interpolator.EASE_BOTH);
+                    bounce.play();
+
+                    contenu.getChildren().add(ivToken);
+                }
             }
-
+            LabelPlayerRound.setText(titreJoueur + " — It's your turn!");
+            LabelPlayerRound.setStyle("-fx-text-fill: #c8a070; -fx-font-family: Impact;");
+            VBox.setMargin(LabelPlayerRound, new javafx.geometry.Insets(2, 0, 8, 0));
+            if (!contenu.getChildren().contains(LabelPlayerRound)) {
+                contenu.getChildren().add(LabelPlayerRound);
+            }
         }
 
         // 1. Filtrer les questions qui ont le bon thème et le bon niveau
@@ -267,7 +285,7 @@ public class GestionQuiz {
         questionActuelle = possibles.get(new Random().nextInt(possibles.size()));
 
         // 4. Affichage du texte de la question (en dessous du titre s'il y en a un)
-        Label qLabel = creerLabel(questionActuelle.getTexte(), 0.065);
+        Label qLabel = creerLabel(questionActuelle.getTexte(), 0.075);
         contenu.getChildren().add(qLabel);
 
         // 5. Affichage des boutons de réponses
@@ -281,23 +299,48 @@ public class GestionQuiz {
         }
     }
 
-    // Crée un bouton texte adaptatif et stylé — largeur contrainte au parchemin
+    private static final String BTN_NORMAL  =
+            "-fx-background-color: #5C3A1E; -fx-text-fill: #F5DEB3; -fx-background-radius: 8; -fx-cursor: hand;";
+    private static final String BTN_HOVER   =
+            "-fx-background-color: #7a4e2a; -fx-text-fill: #FFE97A; -fx-background-radius: 8; -fx-cursor: hand;" +
+            "-fx-effect: dropshadow(gaussian, #c8922a, 10, 0.5, 0, 0);";
+    private static final String BTN_PRESSED =
+            "-fx-background-color: #3d2410; -fx-text-fill: #F5DEB3; -fx-background-radius: 8; -fx-cursor: hand;";
+
     private Button creerBoutonTexte(String texte) {
         Button b = new Button(texte);
-        b.setStyle(
-                "-fx-background-color: #5C3A1E; " +
-                        "-fx-text-fill: #F5DEB3; " +
-                        "-fx-background-radius: 8; " +
-                        "-fx-cursor: hand;"
-        );
+        b.setWrapText(true);
+        b.setTextAlignment(TextAlignment.CENTER);
+        b.setStyle(BTN_NORMAL);
+
+        b.setOnMouseEntered(e -> {
+            b.setStyle(BTN_HOVER);
+            ScaleTransition st = new ScaleTransition(Duration.millis(80), b);
+            st.setToX(1.03); st.setToY(1.03);
+            st.play();
+        });
+        b.setOnMouseExited(e -> {
+            b.setStyle(BTN_NORMAL);
+            ScaleTransition st = new ScaleTransition(Duration.millis(80), b);
+            st.setToX(1.0); st.setToY(1.0);
+            st.play();
+        });
+        b.setOnMousePressed(e -> {
+            b.setStyle(BTN_PRESSED);
+            b.setTranslateY(2);
+        });
+        b.setOnMouseReleased(e -> {
+            b.setStyle(BTN_HOVER);
+            b.setTranslateY(0);
+        });
+
         b.fontProperty().bind(
                 Bindings.createObjectBinding(
-                        () -> Font.font("System", FontWeight.BOLD,
-                                zoneCentrale.getWidth() * PARCHEMIN_W * 0.06),
+                        () -> Font.font("Impact", FontWeight.BOLD,
+                                zoneCentrale.getWidth() * PARCHEMIN_W * 0.055),
                         zoneCentrale.widthProperty()
                 )
         );
-        // Largeur fixée au parchemin
         b.minWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.80));
         b.maxWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.80));
         return b;
@@ -310,13 +353,19 @@ public class GestionQuiz {
 
         Label resultat;
         if (reponseCliquee.equals(questionActuelle.getReponse())) {
-            resultat = creerLabel("Correct Answer !", 0.07);
-            resultat.setStyle("-fx-text-fill: #2E8B57;");
+            resultat = creerLabel("Correct!", 0.08);
+            resultat.setStyle("-fx-text-fill: #2E8B57; -fx-font-family: Impact;");
             setCorrecte(true);
         } else {
-            resultat = creerLabel("Wrong answer...\nCorrect : " + questionActuelle.getReponse(), 0.06);
-            resultat.setStyle("-fx-text-fill: #8B0000;");
+            resultat = creerLabel("Wrong...\nCorrect: " + questionActuelle.getReponse(), 0.06);
+            resultat.setStyle("-fx-text-fill: #8B0000; -fx-font-family: Impact;");
             setCorrecte(false);
+
+            TranslateTransition shake = new TranslateTransition(Duration.millis(55), resultat);
+            shake.setFromX(0); shake.setToX(9);
+            shake.setCycleCount(6); shake.setAutoReverse(true);
+            shake.setOnFinished(e -> resultat.setTranslateX(0));
+            shake.play();
         }
 
         Button boutonSuivant = creerBoutonTexte("Back to game");

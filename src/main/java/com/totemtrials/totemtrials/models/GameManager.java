@@ -53,7 +53,12 @@ public class GameManager {
     }
 
     public void jouerUnTour() {
-        System.out.println("--- C'EST AU TOUR DU JOUEUR " + joueurActuel + " ---");
+        System.out.println("--- IT'S THE TURN OF THE PLAYER " + joueurActuel + " ---");
+        String[] jetons = GameConfig.getInstance().getJetonsChoisis();
+        String[] noms = GameConfig.getInstance().getNomsJoueurs();
+        if (joueurActuel < jetons.length) {
+            boardGameController.setJoueurActuelImage(jetons[joueurActuel], noms[joueurActuel]);
+        }
 
         // Vérifie si le joueur est sur la case de départ (index 0)
         int distance;
@@ -73,7 +78,7 @@ public class GameManager {
 
         // 3. On déplace le bon pion, et une fois arrêté, on analyse la case
         MC.deplacerPion(joueurActuel, distance, () -> {
-            System.out.println("Le pion du joueur " + joueurActuel + " s'est arrêté sur la case n°" + positionsJoueurs[joueurActuel]);
+            System.out.println("THE TOKEN " + joueurActuel + " STOPPED ON THE CASE N°" + positionsJoueurs[joueurActuel]);
             this.analyserCaseArrivee(positionsJoueurs[joueurActuel]);
         });
     }
@@ -134,7 +139,7 @@ public class GameManager {
                     steps +=1 ;
                 }
 
-                System.out.println("Bonne réponse ! Le joueur " + joueurActuel + " avance de " + steps + " cases bonus.");
+                System.out.println("GOOD ANSWER ! THE PLAYER " + joueurActuel + " STEPPED FORWARD OF " + steps + " cases bonus.");
 
                 // On met à jour la position après le bonus
                 positionsJoueurs[joueurActuel] += steps;
@@ -151,7 +156,7 @@ public class GameManager {
 
             } else {
 
-                System.out.println("Mauvaise réponse. Fin du tour pour le joueur " + joueurActuel);
+                System.out.println("WRONG ANSWER ! END OF ROUND FOR PLAYER " + joueurActuel);
                 //-----UPDATE STATS------
                 statsJoueurs[joueurActuel].ajouterMauvaiseReponse();
                 // Si faux, le pion ne bouge pas, on passe juste au suivant
@@ -187,7 +192,7 @@ public class GameManager {
         int distance;
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
-            System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
+            System.out.println("THE PLAYER " + joueurActuel + " DO NOT ACCEPT THE SHORTCUT");
             distance = 1 ;
             MC.deplacerPion(joueurActuel, distance, () -> {
                 if (!verifierFinDePartie()) {
@@ -204,10 +209,10 @@ public class GameManager {
             if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
                 distance++;
             }
-            System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
+            System.out.println("SHORTCUT APPROUVED ! THE PLAYER " + joueurActuel + " STEP FORWARD OF " + distance + " cases");
         } else {
             distance = -3; // Défaite : il recule de 3
-            System.out.println("Raccourci échoué... Le joueur " + joueurActuel + " recule de 3 cases.");
+            System.out.println("SHORTCUT DISAPPROUVED... THE PLAYER " + joueurActuel + " STEP BACKWARD OF 3 cases");
         }
         // 3. Mise à jour de la position dans le tableau
         positionsJoueurs[joueurActuel] += distance;
@@ -305,7 +310,7 @@ public class GameManager {
 
         if (c.getType().equals("FINISH")) {
             gameFinished = true;
-            System.out.println("VICTOIRE de " + playerNames[joueurActuel]);
+            System.out.println("VICTORY OF " + playerNames[joueurActuel]);
 
             long endTime = System.currentTimeMillis();
             long dureeEnSecondes = (endTime - startTime) / 1000;

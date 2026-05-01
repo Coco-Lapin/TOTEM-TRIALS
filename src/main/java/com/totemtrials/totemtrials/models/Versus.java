@@ -73,8 +73,21 @@ public class Versus {
                 Button btnAdversaire = new Button("Player " + playerNames[i]);
 
 
-                btnAdversaire.setStyle("-fx-background-color: rgba(0,0,0,0.5); -fx-text-fill: white; -fx-cursor: hand;");
-                btnAdversaire.prefWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.8));
+                btnAdversaire.setStyle(
+                        "-fx-background-color: #5C3A1E; " +
+                        "-fx-text-fill: #F5DEB3; " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-cursor: hand;"
+                );
+                btnAdversaire.fontProperty().bind(
+                        Bindings.createObjectBinding(
+                                () -> Font.font("System", FontWeight.BOLD,
+                                        zoneCentrale.getWidth() * PARCHEMIN_W * 0.06),
+                                zoneCentrale.widthProperty()
+                        )
+                );
+                btnAdversaire.minWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.80));
+                btnAdversaire.maxWidthProperty().bind(zoneCentrale.widthProperty().multiply(PARCHEMIN_W * 0.80));
 
                 btnAdversaire.setOnAction(e -> {
                     this.idChallenger = gameManager.getJoueurActuel();
@@ -117,50 +130,39 @@ public class Versus {
     }
 
 
-    public GestionQuiz setupQuizVersus(String playerName) {
+    public GestionQuiz setupQuizVersus(String playerName, int playerId) {
         String tileTheme = "";
         Random rand = new Random();
-        int alea = rand.nextInt(1,5);
-
+        int alea = rand.nextInt(1, 5);
         switch (alea) {
-            case 1 -> tileTheme="entertainment";
-            case 2 -> tileTheme="Tourism";
-            case 3 -> tileTheme="Computing";
-            case 4 -> tileTheme="Mystery (Jumanji)";
+            case 1 -> tileTheme = "entertainment";
+            case 2 -> tileTheme = "Tourism";
+            case 3 -> tileTheme = "Computing";
+            case 4 -> tileTheme = "Mystery (Jumanji)";
         }
-        GestionQuiz quiz = new GestionQuiz(tileTheme,4, boardGameController.getZoneCentrale(),playerName);
-        quiz.setOnFinish(q -> {
-            gestionQuiz.preparerEtAfficherQuestion();
-            this.boardGameController.fermerPopUpQuiz(q.getVue());
-        });
+        String tokenPath = GameConfig.getInstance().getJetonsChoisis()[playerId];
+        GestionQuiz quiz = new GestionQuiz(tileTheme, 4, boardGameController.getZoneCentrale(), playerName, tokenPath);
+        quiz.setOnFinish(q -> this.boardGameController.fermerPopUpQuiz(q.getVue()));
         return quiz;
     }
 
     private void lancerTourChallenger() {
-        GestionQuiz quizChallenger = setupQuizVersus("Challenger");
+        GestionQuiz quizChallenger = setupQuizVersus("Challenger", idChallenger);
         quizChallenger.setOnFinish(q -> {
-            // On sauvegarde la réponse du challenger
             this.challengerCorrect = q.isCorrecte();
             this.boardGameController.fermerPopUpQuiz(q.getVue());
-
-            // On enchaîne directement avec le tour de l'adversaire
             lancerTourAdversaire();
         });
-
         this.boardGameController.afficherPopUpQuiz(quizChallenger.getVue());
     }
-    private void lancerTourAdversaire() {
 
-        GestionQuiz quizAdversaire = setupQuizVersus("Opponent");
+    private void lancerTourAdversaire() {
+        GestionQuiz quizAdversaire = setupQuizVersus("Opponent", idAdversaire);
         quizAdversaire.setOnFinish(q -> {
-            // On sauvegarde la réponse du défenseur
             this.adversaireCorrect = q.isCorrecte();
             this.boardGameController.fermerPopUpQuiz(q.getVue());
-
-            // Les deux ont joué, on résout le combat !
             resoudreVersus();
         });
-
         this.boardGameController.afficherPopUpQuiz(quizAdversaire.getVue());
     }
 

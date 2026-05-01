@@ -1,13 +1,7 @@
 package com.totemtrials.totemtrials.controller;
 
-<<<<<<< HEAD
-import com.totemtrials.totemtrials.models.GameConfig;
-import com.totemtrials.totemtrials.models.Jeton;
-import com.totemtrials.totemtrials.models.Joueur;
-import com.totemtrials.totemtrials.models.Partie;
-=======
 import com.totemtrials.totemtrials.models.*;
->>>>>>> feat/menus
+
 import com.totemtrials.totemtrials.view.ChoixJetonsView;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
@@ -19,31 +13,19 @@ import java.util.Map;
 public class ChoixJetonsController {
 
     private int currentPlayerIndex = 0;
-    private GameConfig gameConfig;
 
-<<<<<<< HEAD
     public ChoixJetonsController(ChoixJetonsView view, Partie model,
-                                 ChoixJoueursView joueursView, HomePageView homeView,GameConfig gm) {
-            this.gameConfig = gm;
-        view.getBackButton().setOnMouseClicked(_ ->
-=======
-    public ChoixJetonsController(ChoixJetonsView view,Partie model,
                                  ChoixJoueursView joueursView, HomePageView homeView) {
 
-        view.getBackButton().setOnAction(_ ->
->>>>>>> feat/menus
+        view.getBackButton().setOnMouseClicked(_ ->
                 SceneManager.show(joueursView.getScene(), "Player choice")
         );
 
-        view.getInfoPassiveButton().setOnAction(_ ->
-                goInfoView(homeView,model,view)
+        view.getInfoPassiveButton().setOnMouseClicked(_ ->
+                goInfoView(homeView, model, view)
         );
 
-<<<<<<< HEAD
         view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
-=======
-        view.getLabelInstruction().setText("It is the turn of : " + model.getJoueurs()[0].getNom());
->>>>>>> feat/menus
 
         Map<Jeton, ImageView> jetonViews = view.getJetonViews();
 
@@ -69,7 +51,7 @@ public class ChoixJetonsController {
         currentPlayerIndex++;
 
         if (currentPlayerIndex < joueurs.length) {
-            view.getLabelInstruction().setText("It is the turn of    : " + joueurs[currentPlayerIndex].getNom());
+            view.getLabelInstruction().setText("C'est au tour de : " + joueurs[currentPlayerIndex].getNom());
         } else {
             view.getLabelInstruction().setText("All the players have made their choice!");
         }
@@ -87,9 +69,9 @@ public class ChoixJetonsController {
 
                 // 3. On choisit la bonne image en fonction de ce même nom
                 chemins[i] = switch (nomDuJetonChoisi.toLowerCase()) {
-                    case "tigre"    -> "/images/tokens/jetonTigre.png";
-                    case "serpent"  -> "/images/tokens/jetonSerpent.png";
-                    case "aigle"    -> "/images/tokens/jetonAigle.png";
+                    case "tiger"    -> "/images/tokens/jetonTigre.png";
+                    case "snake"  -> "/images/tokens/jetonSerpent.png";
+                    case "eagle"    -> "/images/tokens/jetonAigle.png";
                     default         -> "/images/tokens/jetonElephant.png";
                 };
             }
@@ -127,8 +109,4 @@ public class ChoixJetonsController {
         SceneManager.show(iView.getScene(), "Infos Passif");
 
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> feat/menus
 }

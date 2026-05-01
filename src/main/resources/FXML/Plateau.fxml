@@ -43,11 +43,12 @@
 
                     <!-- Round button: image background + number label -->
                     <StackPane alignment="CENTER" prefHeight="64" prefWidth="280">
-                        <ImageView fitWidth="270" preserveRatio="true" StackPane.alignment="CENTER">
+                        <ImageView fitWidth="270" preserveRatio="true" StackPane.alignment="CENTER" >
                             <Image url="@/images/buttons/bouton-round.png"/>
                         </ImageView>
                         <!-- translateX pousse le chiffre dans la zone vide à droite du mot ROUND -->
-                        <Label fx:id="labelRound" text="1" translateX="95"
+                        <!-- viewOrder négatif = rendu au premier plan (plus petit = plus devant) -->
+                        <Label fx:id="labelRound" text="1" translateX="95" viewOrder="-1.0"
                                style="-fx-font-family: Impact; -fx-font-size: 26; -fx-text-fill: #ffe97a; -fx-effect: dropshadow(gaussian, black, 4, 1, 0, 0);"/>
                     </StackPane>
                 </HBox>
@@ -79,6 +80,14 @@
                                    style="-fx-font-family: Impact; -fx-font-size: 11; -fx-text-fill: #bbbbbb;"/>
                         </VBox>
 
+                        <!-- ── Current player token ───────────── -->
+                        <HBox alignment="CENTER_RIGHT" spacing="8">
+                            <Label fx:id="labelJoueurActuel" text=""
+                                   style="-fx-font-family: Impact; -fx-font-size: 12; -fx-text-fill: #ffe97a;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <ImageView fx:id="imgJoueurActuel" preserveRatio="true"/>
+                        </HBox>
+
                         <!-- ── Push buttons to bottom ──────────── -->
                         <Region VBox.vgrow="ALWAYS"/>
 
@@ -86,13 +95,13 @@
                         <Region prefHeight="2"
                                 style="-fx-background-color: linear-gradient(to right, transparent, #5c3a00, transparent);"/>
 
-                        <!-- ── Settings button ────────────────── -->
+                        <!-- ── Options button ─────────────────── -->
                         <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#OpenSettings"
                                 maxWidth="Infinity"
                                 style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-cursor: hand;">
                             <graphic>
                                 <ImageView fitWidth="190" preserveRatio="true">
-                                    <Image url="@/images/buttons/bouton-settings.png"/>
+                                    <Image url="@/images/buttons/Options-sora.png"/>
                                 </ImageView>
                             </graphic>
                         </Button>

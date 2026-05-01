@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 public class FinPartieView {
 
-    private static final String IMG = "com/totemtrials/totemtrials/Images/";
+    private static final String IMG = "images/";
 
     // =========================================================
     // VERTICAL RATIOS
@@ -49,7 +49,7 @@ public class FinPartieView {
     public FinPartieView(Stage stage, StatistiquesPartie stats, Image fallbackBackground) {
 
         // FOND PODIUM
-        ImageView bg = new ImageView(loadOrFallback("Images/fond-podium.jpg", fallbackBackground));
+        ImageView bg = new ImageView(loadOrFallback("images/fond-podium.jpg", fallbackBackground));
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
@@ -62,9 +62,9 @@ public class FinPartieView {
         VBox.setVgrow(podiumPane, Priority.ALWAYS);
 
         // BOUTONS IMAGE
-        btnRejouer = ViewUtils.createCroppedImageView(stage, IMG + "buttons/PlayAgain.png", 0.25);
-        btnStats   = ViewUtils.createCroppedImageView(stage, IMG + "buttons/ViewStats.png", 0.25);
-        btnBack = ViewUtils.createCroppedImageView(stage, IMG + "buttons/BackButton.png",      0.18);
+        btnRejouer = ViewUtils.createCroppedImageView(stage,  IMG + "buttons/PlayAgain.png", 0.25);
+        btnStats   = ViewUtils.createCroppedImageView(stage,  IMG + "buttons/ViewStats.png", 0.25);
+        btnBack = ViewUtils.createCroppedImageView(stage, IMG + "buttons/bouton-back.png",      0.18);
 
         btnStats.getStyleClass().add("btn-rejouer");
         btnStats.setStyle("-fx-background-color: #D35400; -fx-text-fill: white; -fx-cursor: hand;");
@@ -172,13 +172,13 @@ public class FinPartieView {
         box.setMaxHeight(Region.USE_PREF_SIZE);
 
         // bgStats bindé directement sur stage — même pattern que les valeurs du tableau
-        ImageView bgStats = new ImageView(loadOrFallback("Images/BackGroundStatistique.png", null));
+        ImageView bgStats = new ImageView(loadOrFallback("images/BackGroundStatistique.png", null));
         bgStats.setPreserveRatio(false);
         bgStats.fitWidthProperty().bind(stage.widthProperty().multiply(0.60));
         bgStats.fitHeightProperty().bind(stage.heightProperty().multiply(0.82));
 
-        // Titre image
-        ImageView titre = ViewUtils.createCroppedImageView(stage, IMG + "statistique.png", 0.38);
+//        // Titre image
+//        ImageView titre = ViewUtils.createCroppedImageView(stage, IMG + "statistique.png", 0.38);
 
         HBox global = new HBox(
                 60,
@@ -189,12 +189,14 @@ public class FinPartieView {
 
         VBox playerList = buildPlayerList(stats.getClassement(), stage);
 
-        btnFermerStats = ViewUtils.createCroppedImageView(stage, IMG + "buttons/BackButton.png", 0.10);
+        btnFermerStats = ViewUtils.createCroppedImageView(stage,IMG + "buttons/bouton-back.png", 0.10);
         btnFermerStats.setStyle("-fx-cursor: hand;");
 
         // content : remplit box entièrement (maxWidth/Height MAX_VALUE)
         // StackPane le redimensionne → Pos.CENTER centre les enfants verticalement
-        VBox content = new VBox(12, titre, global, playerList, btnFermerStats);
+
+        //VBox content = new VBox(12, titre, global, playerList, btnFermerStats); -- version avec titre mais non implementé (ajuster la position du titre
+        VBox content = new VBox(12, global, playerList, btnFermerStats);
         content.setAlignment(Pos.CENTER);
         content.paddingProperty().bind(
                 stage.widthProperty().map(w -> new Insets(w.doubleValue() * 0.025)));
@@ -372,37 +374,19 @@ public class FinPartieView {
     }
 
     private static Image loadOrFallback(String relativePath, Image fallback) {
-        InputStream is = FinPartieView.class.getResourceAsStream(
-                "/com/totemtrials/totemtrials/" + relativePath);
-        return (is != null) ? new Image(is) : fallback;
+        InputStream is = FinPartieView.class.getResourceAsStream("/" + relativePath);
+
+        if (is == null) {
+            System.err.println("[FinPartieView] Image introuvable : " + relativePath);
+            return fallback;
+        }
+
+        return new Image(is);
     }
 
-<<<<<<< HEAD
-    private ImageView buildTokenView(StatistiquesJoueur sj) {
-
-        if (sj.getJoueur().getJeton() == null) {
-            System.err.println("Attention : Le joueur " + sj.getJoueur().getNom() + " n'a pas de jeton !");
-            return new ImageView(); // Retourne une image vide au lieu de planter
-        }
-        InputStream is = FinPartieView.class.getResourceAsStream("/" + sj.getJoueur().getJeton().getImagePath());
-        ImageView iv = new ImageView(is != null ? new Image(is) : null);
-        iv.setFitWidth(90);
-        iv.setPreserveRatio(true);
-        if (sj.getPosition() == 1) {
-            iv.setEffect(new DropShadow(25, Color.GOLD));
-        }
-        return iv;
-    }
-
-    public Scene getScene() { return scene; }
-    public Button getBtnRejouer() { return btnRejouer; }
-    public Button getBtnStats()   { return btnStats; }
-    public Button getBtnQuitter() { return btnQuitter; }
-=======
     public Scene     getScene()          { return scene; }
     public ImageView getBtnRejouer()     { return btnRejouer; }
     public ImageView getBtnStats()       { return btnStats; }
-    public ImageView getBtnBack()     { return btnBack; }
+    public ImageView getBtnBack()        { return btnBack; }
     public ImageView getBtnFermerStats() { return btnFermerStats; }
->>>>>>> feat/menus
 }

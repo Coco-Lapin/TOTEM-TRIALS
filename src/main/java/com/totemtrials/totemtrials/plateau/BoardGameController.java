@@ -23,6 +23,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class BoardGameController {
     public VBox PlateauInfoLeft;
     public Button btnSettings;
     public Label ItemDescription;
+    public Label labelJoueurActuel;
+    public ImageView imgJoueurActuel;
     public Button btnDetailsItem;
     public Button btnStopGame;
     public Label labelRound;
@@ -53,6 +57,7 @@ public class BoardGameController {
 
     private final List<Case> listeCases = new ArrayList<>();
     private movementController MC;
+    private StackPane quizBackdrop;
 
     private static final double LARGEUR_REELLE = 6144.0;
     private static final double HAUTEUR_REELLE = 3584.0;
@@ -80,6 +85,19 @@ public class BoardGameController {
         this.MC.setBoardGame(this);
         this.MC.setPlateauJeu(this.plateauJeu);
         this.MC.setupPlayers(GameConfig.getInstance().getNbJoueurs());
+
+        // Bindings adaptatifs sidebar joueur actuel
+        if (imgJoueurActuel != null) {
+            imgJoueurActuel.fitWidthProperty().bind(PlateauInfoLeft.widthProperty().multiply(0.45));
+        }
+        if (labelJoueurActuel != null) {
+            labelJoueurActuel.fontProperty().bind(
+                Bindings.createObjectBinding(
+                    () -> Font.font("Impact", FontWeight.BOLD, PlateauInfoLeft.getWidth() * 0.09),
+                    PlateauInfoLeft.widthProperty()
+                )
+            );
+        }
 
         Platform.runLater(() -> {
             Rectangle[] cheminDuJeu = {
@@ -200,13 +218,30 @@ public class BoardGameController {
     // ── Quiz popup ──────────────────────────────────────────────────────────
 
     public void afficherPopUpQuiz(StackPane quizVue) {
-        quizVue.setMaxSize(400, 500);
+        if (quizBackdrop == null) {
+            quizBackdrop = new StackPane();
+            quizBackdrop.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
+            quizBackdrop.prefWidthProperty().bind(zoneCentrale.widthProperty());
+            quizBackdrop.prefHeightProperty().bind(zoneCentrale.heightProperty());
+            quizBackdrop.maxWidthProperty().bind(zoneCentrale.widthProperty());
+            quizBackdrop.maxHeightProperty().bind(zoneCentrale.heightProperty());
+        }
+        if (!zoneCentrale.getChildren().contains(quizBackdrop)) {
+            zoneCentrale.getChildren().add(quizBackdrop);
+        }
         StackPane.setAlignment(quizVue, Pos.CENTER);
         zoneCentrale.getChildren().add(quizVue);
     }
 
     public void fermerPopUpQuiz(StackPane window) {
         zoneCentrale.getChildren().remove(window);
+        boolean autrePopupPresent = zoneCentrale.getChildren().stream()
+                .anyMatch(n -> n != quizBackdrop
+                        && !(n instanceof javafx.scene.image.ImageView)
+                        && !(n instanceof javafx.scene.Group));
+        if (!autrePopupPresent) {
+            zoneCentrale.getChildren().remove(quizBackdrop);
+        }
     }
 
     // ── Actions ─────────────────────────────────────────────────────────────
@@ -223,6 +258,14 @@ public class BoardGameController {
         Scene scenePlateau = ((Node) actionEvent.getSource()).getScene();
         new OptionsController(optView, scenePlateau, "Totem Trials", SceneManager.getPlayer());
         SceneManager.show(optView.getScene(), "Options");
+    }
+
+    public void setJoueurActuelImage(String tokenPath, String nomJoueur) {
+        if (imgJoueurActuel != null) {
+            var url = getClass().getResource(tokenPath);
+            if (url != null) imgJoueurActuel.setImage(new Image(url.toExternalForm()));
+        }
+        if (labelJoueurActuel != null) labelJoueurActuel.setText(nomJoueur);
     }
 
     // ── Getters ─────────────────────────────────────────────────────────────
