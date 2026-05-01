@@ -145,9 +145,9 @@ public class FinPartieView {
         iv.setPreserveRatio(true);
 
         if (sj.getJoueur().getJeton() != null) {
-
+            String p = sj.getJoueur().getJeton().getImagePath();
             InputStream is = FinPartieView.class.getResourceAsStream(
-                    "/" + sj.getJoueur().getJeton().getImagePath());
+                    p.startsWith("/") ? p : "/" + p);
             if (is != null) iv.setImage(new Image(is));
         }
 
@@ -282,8 +282,9 @@ public class FinPartieView {
             token.fitWidthProperty().bind(colToken);
             token.setPreserveRatio(true);
             if (sj.getJoueur().getJeton() != null) {
+                String p = sj.getJoueur().getJeton().getImagePath();
                 InputStream is = FinPartieView.class.getResourceAsStream(
-                        "/" + sj.getJoueur().getJeton().getImagePath());
+                        p.startsWith("/") ? p : "/" + p);
                 if (is != null) token.setImage(new Image(is));
             }
             if (sj.getPosition() == 1) token.setEffect(new DropShadow(12, Color.GOLD));
