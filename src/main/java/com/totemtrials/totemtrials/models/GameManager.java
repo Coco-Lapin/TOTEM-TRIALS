@@ -192,8 +192,14 @@ public class GameManager {
         int distance;
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
-            System.out.println("THE PLAYER " + joueurActuel + " DO NOT ACCEPT THE SHORTCUT");
+
             distance = 1 ;
+            positionsJoueurs[joueurActuel] += distance;
+
+            // Sécurité pour ne pas sortir du plateau
+            if (positionsJoueurs[joueurActuel] >= listeCases.size()) {
+                positionsJoueurs[joueurActuel] = listeCases.size() - 1;
+            }
             MC.deplacerPion(joueurActuel, distance, () -> {
                 if (!verifierFinDePartie()) {
                     passerAuJoueurSuivant();
@@ -206,13 +212,16 @@ public class GameManager {
         if (estVictorieux) {
             statsJoueurs[joueurActuel].ajouterBonneReponse();
             distance = 6; // Victoire : il avance de 6
-            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")) {
+
+            System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
+        } else {
+
+            distance = -3; // Défaite : il recule de 3
+            // en cas d'erreur l'elephant recule d'une case en moins
+            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
                 distance++;
             }
-            System.out.println("SHORTCUT APPROUVED ! THE PLAYER " + joueurActuel + " STEP FORWARD OF " + distance + " cases");
-        } else {
-            distance = -3; // Défaite : il recule de 3
-            System.out.println("SHORTCUT DISAPPROUVED... THE PLAYER " + joueurActuel + " STEP BACKWARD OF 3 cases");
+            System.out.println("Raccourci échoué... Le joueur " + joueurActuel + " recule de 3 cases.");
         }
         // 3. Mise à jour de la position dans le tableau
         positionsJoueurs[joueurActuel] += distance;
