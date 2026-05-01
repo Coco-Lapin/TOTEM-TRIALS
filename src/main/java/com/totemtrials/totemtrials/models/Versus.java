@@ -20,6 +20,7 @@ public class Versus {
     private StackPane zoneCentrale;
     private VBox box;
     private GestionQuiz  gestionQuiz;
+    private GameConfig gameConfig;
     private BoardGameController  boardGameController;
     private GameManager gameManager;
     private static final double POPUP_W = 0.40;
@@ -32,16 +33,9 @@ public class Versus {
     private boolean adversaireCorrect;
 
     private int VersusLevel = 4;
-    public Versus (StackPane ZC) {
+    public Versus (StackPane ZC,GameConfig gm) {
         this.zoneCentrale = ZC;
-        /*
-
-        ImageView bgView = new ImageView(new Image(getClass().getResourceAsStream(""))
-        );
-        bgView.fitWidthProperty().bind(contenu.widthProperty().multiply(POPUP_W));
-        bgView.fitHeightProperty().bind(contenu.heightProperty().multiply(POPUP_H));
-        bgView.setPreserveRatio(false);
-        */
+        this.gameConfig=gm;
         box = new VBox(20);
         contenu = new  StackPane();
 
@@ -63,20 +57,20 @@ public class Versus {
             box.setAlignment(Pos.CENTER);
 
             // 2. Titre et instruction
-            Label titre = creerLabel("MODE VERSUS", 0.08); // Gros titre
-            Label instruction = creerLabel("Choisissez votre adversaire :", 0.05);
+            Label titre = creerLabel("VERSUS", 0.08); // Gros titre
+            Label instruction = creerLabel("Choose your opponent :", 0.05);
             box.getChildren().addAll(titre, instruction);
 
             // 3. Récupération des infos du GameManager
             int actualPlayer = gameManager.getJoueurActuel(); // On récupère l'index (0 à 3)
-            String[] nomsCouleurs = {"Bleu", "Rouge", "Vert", "Jaune"};
+            String[] playerNames =GameConfig.getInstance().getNomsJoueurs();
 
             // 4. Création des boutons pour les autres joueurs
         for (int i = 0; i < GameConfig.getInstance().getNbJoueurs(); i++) {
                 if (i == actualPlayer) continue; // On ne peut pas se défier soi-même
 
                 int adversaireId = i;
-                Button btnAdversaire = new Button("Joueur " + nomsCouleurs[i]);
+                Button btnAdversaire = new Button("Player " + playerNames[i]);
 
 
                 btnAdversaire.setStyle("-fx-background-color: rgba(0,0,0,0.5); -fx-text-fill: white; -fx-cursor: hand;");
@@ -85,7 +79,7 @@ public class Versus {
                 btnAdversaire.setOnAction(e -> {
                     this.idChallenger = gameManager.getJoueurActuel();
                     this.idAdversaire = adversaireId; // L'index du joueur cliqué
-                    System.out.println("Défi lancé ! " + idChallenger + " VS " + idAdversaire);
+                    System.out.println("Challenge launched ! " + idChallenger + " VS " + idAdversaire);
                     // On ferme la sélection d'adversaire
                     boardGameController.fermerPopUpQuiz(contenu);
                     // On lance la séquence
@@ -131,7 +125,7 @@ public class Versus {
         switch (alea) {
             case 1 -> tileTheme="entertainment";
             case 2 -> tileTheme="Tourism";
-            case 3 -> tileTheme="Informatics";
+            case 3 -> tileTheme="Computing";
             case 4 -> tileTheme="Mystery (Jumanji)";
         }
         GestionQuiz quiz = new GestionQuiz(tileTheme,4, boardGameController.getZoneCentrale(),playerName);

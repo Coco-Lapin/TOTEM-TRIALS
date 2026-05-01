@@ -1,4 +1,4 @@
-package com.totemtrials.totemtrials.model;
+package com.totemtrials.totemtrials.models;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.Comparator;
 public class StatistiquesPartie {
 
     private final StatistiquesJoueur[] statsJoueurs;
-    private final long dureeSecondes; // durée totale de la partie
+    private long dureeSecondes; // durée totale de la partie
 
     /**
      * @param statsJoueurs  un StatistiquesJoueur par joueur, position déjà renseignée
@@ -48,5 +48,9 @@ public class StatistiquesPartie {
         return Arrays.stream(statsJoueurs)
                      .mapToInt(s -> s.getBonnesReponses() + s.getMauvaisesReponses())
                      .sum();
+    }
+
+    public void setDureeSecondes(long dureeEnSecondes) {
+        this.dureeSecondes=dureeEnSecondes;
     }
 }

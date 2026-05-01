@@ -12,11 +12,12 @@ import javafx.stage.Stage;
 
 public class ChoixJoueursView {
 
-    private final Button backButton;
+    private final StackPane backButton;
     private final ImageView btn2Joueurs;
     private final ImageView btn3Joueurs;
     private final ImageView btn4Joueurs;
     private final Scene  scene;
+    final double PLAYER_BTN_RATIO = 0.25;
 
     public ChoixJoueursView(Stage stage, Image background) {
         ImageView bg = new ImageView(background);
@@ -25,29 +26,27 @@ public class ChoixJoueursView {
         bg.setPreserveRatio(false);
 
         //----------------Creation des images pour les boutons----------
-        btn2Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/2Players.png",0.25);
-        btn3Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/3Players.png",0.3);
-        btn4Joueurs = ViewUtils.createCroppedImageView(stage,"com/totemtrials/totemtrials/Images/buttons/4Players.png",0.25);
+        btn2Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/2Players.png",PLAYER_BTN_RATIO);
+        btn3Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/3Players.png",PLAYER_BTN_RATIO);
+        btn4Joueurs = ViewUtils.createCroppedImageView(stage, "images/buttons/4Players.png",PLAYER_BTN_RATIO);
 
-        backButton   = new Button("BACK");
+        backButton = ViewUtils.createBackButton(stage, 0.20);
 
-        backButton.getStyleClass().add("back-button");
-
-        HBox boutons = new HBox(10, btn2Joueurs, btn3Joueurs, btn4Joueurs);
+        HBox boutons = new HBox(50, btn2Joueurs, btn3Joueurs, btn4Joueurs);
         boutons.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(10,boutons ,backButton );
+        VBox layout = new VBox(30,boutons ,backButton );
         layout.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        var css = getClass().getResource("/styleSheet/homepage.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 
     public Scene  getScene()       { return scene; }
-    public Button getBackButton()  { return backButton; }
+    public StackPane getBackButton() { return backButton; }
     public ImageView getBtn2Joueurs() { return btn2Joueurs; }
     public ImageView getBtn3Joueurs() { return btn3Joueurs; }
     public ImageView getBtn4Joueurs() { return btn4Joueurs; }

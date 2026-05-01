@@ -1,6 +1,6 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.Jeton;
+import com.totemtrials.totemtrials.models.Jeton;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -17,20 +17,24 @@ import java.util.Map;
 
 public class ChoixJetonsView {
 
-    private final Button backButton;
+    private final Button infoPassiveButton;
+    private final StackPane backButton;
     private final Scene scene;
     private final Label labelInstruction;
     private final Map<Jeton, ImageView> jetonViews = new LinkedHashMap<>();
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
 
     public ChoixJetonsView(Stage stage, Image background, Jeton[] jetons) {
+        ImageView icon = ViewUtils.createCroppedImageView(stage, "images/buttons/bouton-abilities.png", 0.20);
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
-        backButton = new Button("BACK");
-        backButton.getStyleClass().add("back-button");
+        infoPassiveButton = new Button("");
+        infoPassiveButton.setGraphic(icon);
+
+        backButton = ViewUtils.createBackButton(stage, 0.15);
 
         labelInstruction = new Label("");
         labelInstruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
@@ -46,22 +50,17 @@ public class ChoixJetonsView {
             Rectangle2D fixeViewport = base.getViewport();
             Image animImage     = anim.getImage();
 
-            Label labelPassif = new Label("");
-            labelPassif.setTextFill(Color.WHITE);
-            labelPassif.setStyle("-fx-font-weight: bold; -fx-background-color: rgba(0,0,0,0.5);");
 
             base.setOnMouseEntered(_ -> {
                 base.setImage(animImage);
                 base.setViewport(null);
-                labelPassif.setText(jeton.getPassif());
             });
             base.setOnMouseExited(_ -> {
                 base.setImage(fixeImage);
                 base.setViewport(fixeViewport);
-                labelPassif.setText("");
             });
 
-            VBox groupe = new VBox(10, base, labelPassif);
+            VBox groupe = new VBox(10, base);
             groupe.setAlignment(Pos.CENTER);
 
             jetonViews.put(jeton, base);
@@ -69,14 +68,17 @@ public class ChoixJetonsView {
             row.getChildren().add(groupe);
         }
 
-        VBox layout = new VBox(10, labelInstruction, row, backButton);
+        StackPane.setAlignment(infoPassiveButton, Pos.TOP_RIGHT);
+        StackPane.setMargin(infoPassiveButton, new javafx.geometry.Insets(20));
+
+        VBox layout = new VBox(10, labelInstruction, row, backButton, infoPassiveButton);
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
         StackPane root = new StackPane(bg, layout);
         scene = new Scene(root, 600, 500);
 
-        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        var css = getClass().getResource("/styleSheet/homepage.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 
@@ -88,8 +90,9 @@ public class ChoixJetonsView {
         }
     }
 
-    public Scene                 getScene()            { return scene; }
-    public Button                getBackButton()       { return backButton; }
-    public Map<Jeton, ImageView> getJetonViews()       { return jetonViews; }
-    public Label                 getLabelInstruction() { return labelInstruction; }
+    public Scene getScene() { return scene; }
+    public StackPane getBackButton() { return backButton; }
+    public Button getInfoPassiveButton() {return infoPassiveButton; }
+    public Map<Jeton, ImageView> getJetonViews() { return jetonViews; }
+    public Label getLabelInstruction() { return labelInstruction; }
 }

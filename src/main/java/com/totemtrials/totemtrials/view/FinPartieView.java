@@ -1,7 +1,7 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.StatistiquesJoueur;
-import com.totemtrials.totemtrials.model.StatistiquesPartie;
+import com.totemtrials.totemtrials.models.StatistiquesJoueur;
+import com.totemtrials.totemtrials.models.StatistiquesPartie;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -82,7 +82,7 @@ public class FinPartieView {
         root = new StackPane(bg, mainContent, statsOverlay);
         scene = new Scene(root, 1100, 750);
 
-        var css = FinPartieView.class.getResource("/com/totemtrials/totemtrials/styles/finpartie.css");
+        var css = FinPartieView.class.getResource("/styleSheet/finpartie.css");
         if (css != null) scene.getStylesheets().add(css.toExternalForm());
     }
 
@@ -201,6 +201,11 @@ public class FinPartieView {
     }
 
     private ImageView buildTokenView(StatistiquesJoueur sj) {
+
+        if (sj.getJoueur().getJeton() == null) {
+            System.err.println("Attention : Le joueur " + sj.getJoueur().getNom() + " n'a pas de jeton !");
+            return new ImageView(); // Retourne une image vide au lieu de planter
+        }
         InputStream is = FinPartieView.class.getResourceAsStream("/" + sj.getJoueur().getJeton().getImagePath());
         ImageView iv = new ImageView(is != null ? new Image(is) : null);
         iv.setFitWidth(90);

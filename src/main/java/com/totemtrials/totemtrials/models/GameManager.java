@@ -1,9 +1,12 @@
 package com.totemtrials.totemtrials.models;
 
+import com.totemtrials.totemtrials.controller.FinPartieController;
 import com.totemtrials.totemtrials.controller.movementController;
 import com.totemtrials.totemtrials.plateau.BoardGameController;
 import com.totemtrials.totemtrials.plateau.Case;
 import com.totemtrials.totemtrials.questions.GestionQuiz;
+import com.totemtrials.totemtrials.view.FinPartieView;
+import com.totemtrials.totemtrials.view.HomePageView;
 import javafx.animation.PauseTransition;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -13,24 +16,34 @@ import java.util.List;
 public class GameManager {
     private BoardGameController boardGameController;
     private movementController MC;
+    private GameConfig gameConfig;
+    private FinPartieController FPC ;
+    private FinPartieView finPartieView;
+    private HomePageView homePageView;
+    private StatistiquesPartie statistiquesPartie;
+    private StatistiquesJoueur[] statsJoueurs;
+    private Partie partie;
+    private long startTime; // Pour stocker le moment du départ
     private List<Case> listeCases;
     private Shortcut shortcut;
     private StackPane zoneCentrale;
+    private boolean gameFinished = false;
     private int ActualRound=0 ;
     // 1. Nouvelles variables pour le multijoueur
     private int[] positionsJoueurs = new int[GameConfig.getInstance().getNbJoueurs()]; // La position exacte de chaque joueur
     private int joueurActuel = 0; // 0 = Bleu, 1 = Rouge, 2 = Vert, 3 = Jaune
+    String[] playerNames = GameConfig.getInstance().getNomsJoueurs();
 
-    public GameManager(BoardGameController bg, movementController mc, List<Case> cases) {
+    public GameManager(BoardGameController bg, movementController mc, List<Case> cases, StatistiquesJoueur[] sj) {
         this.boardGameController = bg;
         this.MC = mc;
         this.listeCases = cases;
-        // CORRECTION 1 : Initialiser l'objet Shortcut ici !
+        this.statsJoueurs= sj;
         this.shortcut = new Shortcut(this.boardGameController, this);
-
     }
 
     public void demarrerPartie() {
+        this.startTime = System.currentTimeMillis();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(event -> {
             MC.initialiserPions(); // Fait apparaître les 4 pions
@@ -73,7 +86,7 @@ public class GameManager {
         // --------------------------------VERSUS GAMEPLAY ------------------------------------
         //-------------------------------------------------------------------------------------
         if(tileTheme.equals("VERSUS") ) {
-            Versus v = new Versus(boardGameController.getZoneCentrale());
+            Versus v = new Versus(boardGameController.getZoneCentrale(),this.gameConfig);
             v.setGameManager(this); // On lie le GameManager
             v.setBoardGameController(this.boardGameController);
             // ... set les controllers ...
@@ -88,9 +101,16 @@ public class GameManager {
             // CORRECTION 2 : Afficher la pop-up de raccourci à l'écran
             this.boardGameController.afficherPopUpQuiz(shortcut.displayBox());
 
-            // CORRECTION 3 : Faire un 'return' pour stopper la méthode ici.
-            // Sinon le code continue et lance un Quiz normal par dessus ton raccourci !
             return;
+        }
+        if(tileTheme.equals("BONUS")) {
+            tileTheme="Mystery (Jumanji)";
+        }
+        //-----------------------
+        // --- START ENDGAME-----
+        //-----------------------
+        if(tileTheme.equals("FINISH") || verifierFinDePartie()) {
+            return; // Le jeu s'arrête ici si on est sur Finish
         }
 
         GestionQuiz nouveauQuiz = setupQuiz(tileTheme);
@@ -106,7 +126,14 @@ public class GameManager {
             this.boardGameController.fermerPopUpQuiz(q.getVue());
 
             if (q.isCorrecte()) {
+                //-----UPDATE STATS------
+                statsJoueurs[joueurActuel].ajouterBonneReponse();
+
                 int steps = q.getNiveauChoisi();
+                if(playerNames[joueurActuel].equalsIgnoreCase("aigle")){
+                    steps +=1 ;
+                }
+
                 System.out.println("Bonne réponse ! Le joueur " + joueurActuel + " avance de " + steps + " cases bonus.");
 
                 // On met à jour la position après le bonus
@@ -117,13 +144,20 @@ public class GameManager {
 
                 // On déplace le pion pour le bonus, puis on passe au joueur suivant
                 MC.deplacerPion(joueurActuel, steps, () -> {
-                    passerAuJoueurSuivant();
+                    if (!verifierFinDePartie()) {
+                        passerAuJoueurSuivant();
+                    }
                 });
 
             } else {
+
                 System.out.println("Mauvaise réponse. Fin du tour pour le joueur " + joueurActuel);
+                //-----UPDATE STATS------
+                statsJoueurs[joueurActuel].ajouterMauvaiseReponse();
                 // Si faux, le pion ne bouge pas, on passe juste au suivant
-                passerAuJoueurSuivant();
+                if (!verifierFinDePartie()) {
+                    passerAuJoueurSuivant();
+                }
             }
         });
 
@@ -132,6 +166,9 @@ public class GameManager {
 
     // 4. La méthode qui gère le roulement des tours
     private void passerAuJoueurSuivant() {
+        if (gameFinished) return;
+        //---- UPDATE STATS -----
+        statsJoueurs[joueurActuel].incrementerTour();
         joueurActuel++;
 
         // Si on dépasse le joueur 3 (le 4ème joueur), on revient au joueur 0
@@ -147,16 +184,26 @@ public class GameManager {
     }
 
     public void EndingHop(boolean aJoue, boolean estVictorieux) {
+        int distance;
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
             System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
-            passerAuJoueurSuivant();
+            distance = 1 ;
+            MC.deplacerPion(joueurActuel, distance, () -> {
+                if (!verifierFinDePartie()) {
+                    passerAuJoueurSuivant();
+                }
+            });
             return; // On arrête la méthode ici
         }
         // 2. Si le joueur a accepté de jouer (il a cliqué sur "Yes")
-        int distance;
+
         if (estVictorieux) {
+            statsJoueurs[joueurActuel].ajouterBonneReponse();
             distance = 6; // Victoire : il avance de 6
+            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
+                distance++;
+            }
             System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
         } else {
             distance = -3; // Défaite : il recule de 3
@@ -173,7 +220,9 @@ public class GameManager {
         // 5. On lance l'animation de déplacement
         // Une fois l'animation terminée, on appelle passerAuJoueurSuivant()
         MC.deplacerPion(joueurActuel, distance, () -> {
-            passerAuJoueurSuivant();
+            if (!verifierFinDePartie()) {
+                passerAuJoueurSuivant();
+            }
         });
     }
 
@@ -185,6 +234,33 @@ public class GameManager {
         System.out.println("Versus result");
         int distChallenger = challengerOk ? 4 : -4;
         int distOpponent = adversaireOk ? 4 : -4;
+
+        if(challengerOk) {
+            statsJoueurs[idChallenger].ajouterBonneReponse();
+        }else if(!challengerOk) {
+            statsJoueurs[idChallenger].ajouterMauvaiseReponse();
+        }
+        if(adversaireOk) {
+            statsJoueurs[idOpponent].ajouterBonneReponse();
+        }else if(!adversaireOk) {
+            statsJoueurs[idOpponent].ajouterMauvaiseReponse();
+        }
+        if(playerNames[idChallenger].equalsIgnoreCase("tigre") && challengerOk){
+
+            distChallenger++;
+        }
+
+        if(playerNames[idOpponent].equalsIgnoreCase("tigre") && adversaireOk){
+            distChallenger++;
+        }
+
+        if(playerNames[idChallenger].equalsIgnoreCase("serpent") && !challengerOk){
+            distOpponent++;
+        }
+
+        if(playerNames[idOpponent].equalsIgnoreCase("serpent") && !adversaireOk){
+            distOpponent++;
+        }
 
         // 2. Update of the different positions
         positionsJoueurs[idChallenger] += distChallenger;
@@ -199,19 +275,64 @@ public class GameManager {
         if (positionsJoueurs[idOpponent] > Maxtile) positionsJoueurs[idOpponent] = Maxtile;
        // ONE BY ONE
         //The challenger moves first
+        int finalDistOpponent = distOpponent;
         MC.deplacerPion(idChallenger, distChallenger, () -> {
-            // when the challenger finish his move then the opponent can be deplaced
-            MC.deplacerPion(idOpponent, distOpponent, () -> {
-                // when the two players moved then the game continues
-                passerAuJoueurSuivant();
+            MC.deplacerPion(idOpponent, finalDistOpponent, () -> {
+                // On vérifie si l'un des deux a atteint la fin
+                boolean finChallenger = listeCases.get(positionsJoueurs[idChallenger]).getType().equals("FINISH");
+                boolean finOpponent = listeCases.get(positionsJoueurs[idOpponent]).getType().equals("FINISH");
+
+                if (finChallenger || finOpponent) {
+                    // On force le joueur actuel sur celui qui a gagné pour les stats
+                    if (finOpponent && !finChallenger) joueurActuel = idOpponent;
+                    else joueurActuel = idChallenger;
+
+                    verifierFinDePartie();
+                } else {
+                    passerAuJoueurSuivant();
+                }
             });
         });
 
 
 
     }
+    private boolean verifierFinDePartie() {
+        if (gameFinished) return true;
+
+        int posActuelle = positionsJoueurs[joueurActuel];
+        Case c = this.listeCases.get(posActuelle);
+
+        if (c.getType().equals("FINISH")) {
+            gameFinished = true;
+            System.out.println("VICTOIRE de " + playerNames[joueurActuel]);
+
+            long endTime = System.currentTimeMillis();
+            long dureeEnSecondes = (endTime - startTime) / 1000;
+
+            if (this.statistiquesPartie != null) {
+                this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
+            }
+
+            // On affiche l'écran de fin
+            FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
+            return true;
+        }
+        return false;
+    }
     public void setLabelRound(){
         this.ActualRound++;
         boardGameController.labelRound.setText(""+ActualRound);
     }
+
+    public void setPartie(Partie partie) {
+        this.partie = partie;
+    }
+
+    public void setHomeView(HomePageView homeView) {
+        this.homePageView=homeView;
+    }
+   public void setStatistiquesPartie(StatistiquesPartie statistiquesPartie) {
+        this.statistiquesPartie = statistiquesPartie;
+   }
 }

@@ -1,4 +1,4 @@
-package com.totemtrials.totemtrials.model;
+package com.totemtrials.totemtrials.models;
 
 /**
  * Statistiques accumulées pour un joueur sur toute la partie.

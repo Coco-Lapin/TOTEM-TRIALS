@@ -2,7 +2,7 @@ package com.totemtrials.totemtrials;
 
 import com.totemtrials.totemtrials.controller.HomePageController;
 import com.totemtrials.totemtrials.controller.SceneManager;
-import com.totemtrials.totemtrials.model.Partie;
+import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.view.HomePageView;
 import javafx.application.Application;
 import javafx.scene.media.Media;
@@ -16,12 +16,14 @@ public class TotemTrialsApp extends Application {
         SceneManager.init(stage);
 
         Partie partie = new Partie();
-
         HomePageView homeView = new HomePageView(stage);
-
+        SceneManager.setHomePageView(homeView);
         new HomePageController(homeView, partie);
 
-        var audioRes = getClass().getResource("/com/totemtrials/totemtrials/sounds/Agrual.mp3");
+        // Stocke la scène du menu — utilisée par StopGame pour revenir
+        SceneManager.setHomeScene(homeView.getScene());
+
+        var audioRes = getClass().getResource("/sounds/Agrual.mp3");
         if (audioRes != null) {
             try {
                 MediaPlayer player = new MediaPlayer(new Media(audioRes.toURI().toString()));
