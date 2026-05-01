@@ -135,7 +135,7 @@ public class GameManager {
                 statsJoueurs[joueurActuel].ajouterBonneReponse();
 
                 int steps = q.getNiveauChoisi();
-                if(playerNames[joueurActuel].equalsIgnoreCase("aigle")){
+                if(playerNames[joueurActuel].equalsIgnoreCase("eagle")){
                     steps +=1 ;
                 }
 
@@ -206,7 +206,7 @@ public class GameManager {
         if (estVictorieux) {
             statsJoueurs[joueurActuel].ajouterBonneReponse();
             distance = 6; // Victoire : il avance de 6
-            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
+            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")) {
                 distance++;
             }
             System.out.println("SHORTCUT APPROUVED ! THE PLAYER " + joueurActuel + " STEP FORWARD OF " + distance + " cases");
@@ -250,20 +250,19 @@ public class GameManager {
         }else if(!adversaireOk) {
             statsJoueurs[idOpponent].ajouterMauvaiseReponse();
         }
-        if(playerNames[idChallenger].equalsIgnoreCase("tigre") && challengerOk){
-
+        if(playerNames[idChallenger].equalsIgnoreCase("tiger") && challengerOk){
             distChallenger++;
         }
 
-        if(playerNames[idOpponent].equalsIgnoreCase("tigre") && adversaireOk){
-            distChallenger++;
-        }
-
-        if(playerNames[idChallenger].equalsIgnoreCase("serpent") && !challengerOk){
+        if(playerNames[idOpponent].equalsIgnoreCase("tiger") && adversaireOk){
             distOpponent++;
         }
 
-        if(playerNames[idOpponent].equalsIgnoreCase("serpent") && !adversaireOk){
+        if(playerNames[idChallenger].equalsIgnoreCase("snake") && !challengerOk){
+            distChallenger++;
+        }
+
+        if(playerNames[idOpponent].equalsIgnoreCase("snake") && !adversaireOk){
             distOpponent++;
         }
 

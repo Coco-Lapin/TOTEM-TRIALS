@@ -31,7 +31,7 @@ public class movementController {
 
     // ── Données joueurs ──────────────────────────────────────────────────────
 
-    /** Chemins vers les images des jetons choisis par les joueurs (ex: /images/tokens/jetonTigre.png) */
+    /** Chemins vers les images des jetons choisis par les joueurs (ex: /images/tokens/TigerToken.png) */
     private String[] cheminImages;
 
     /** Noms des joueurs récupérés depuis GameConfig */
@@ -113,7 +113,7 @@ public class movementController {
             // d'initialisation du premier vrai play() pendant la partie
             sonDeplacement.play(0.0);
         } else {
-            System.err.println("[movementController] Son introuvable : /sounds/piece_move.mp3");
+            System.err.println("[movementController] SOUND CANNOT BE FOUND : /sounds/piece_move.mp3");
         }
 
         // Récupère la case de départ (index 0) pour y placer tous les pions

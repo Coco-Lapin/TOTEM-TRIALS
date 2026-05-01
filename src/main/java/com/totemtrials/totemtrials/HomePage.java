@@ -40,10 +40,10 @@ public class HomePage extends Application {
         this.stage = stage;
 
         //-------- Token creation ---------
-        tiger = new Token("tiger", "Advances 1 extra space upon winning a versus", createCroppedImageView("Images/tokkens/jetonTigre.png", 0.10), createCroppedImageView("Images/tokkens/jetonTigre_anim.gif", 0.10));
-        eagle = new Token("eagle", "Advances 1 extra space for a correct answer", createCroppedImageView("Images/tokkens/jetonAigle.png", 0.10), createCroppedImageView("Images/tokkens/jetonAigle_anim.gif", 0.10));
-        snake = new Token("snake", "Moves back 1 less space upon losing a versus", createCroppedImageView("Images/tokkens/jetonSerpent.png", 0.10), createCroppedImageView("Images/tokkens/jetonSerpent_anim.gif", 0.10));
-        elephant = new Token("elephant", "Moves back 1 less space for a wrong answer", createCroppedImageView("Images/tokkens/jetonElephant.png", 0.10), createCroppedImageView("Images/tokkens/jetonElephant_anim.gif", 0.10));
+        tiger = new Token("tiger", "Advances 1 extra space upon winning a versus", createCroppedImageView("Images/tokkens/TigerToken.png", 0.10), createCroppedImageView("Images/tokkens/TigerToken-Animation.gif", 0.10));
+        eagle = new Token("eagle", "Advances 1 extra space for a correct answer", createCroppedImageView("Images/tokkens/EagleToken.png", 0.10), createCroppedImageView("Images/tokkens/EagleToken-Animation.gif", 0.10));
+        snake = new Token("snake", "Moves back 1 less space upon losing a versus", createCroppedImageView("Images/tokkens/SnakeToken.png", 0.10), createCroppedImageView("Images/tokkens/SnakeToken-Animation.gif", 0.10));
+        elephant = new Token("elephant", "Moves back 1 less space for a wrong answer", createCroppedImageView("Images/tokkens/ElephantToken.png", 0.10), createCroppedImageView("Images/tokkens/ElephantToken-Animation.gif", 0.10));
 
         //--------- Put tokens in a list --------
         myTokens = new Token[]{tiger, eagle, snake, elephant};

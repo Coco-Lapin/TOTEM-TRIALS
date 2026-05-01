@@ -42,9 +42,9 @@ public class HomePageController {
         });
 
         view.getTestFinButton().setOnMouseClicked(_ -> {
-            Jeton jetonTest = new Jeton("tiger", "passif test",
-                    "images/tokkens/jetonTigre.png",
-                    "images/tokkens/jetonTigre_anim.gif");
+            Jeton jetonTest = new Jeton("tiger", "passive test",
+                    "images/tokkens/TigerToken.png",
+                    "images/tokkens/TigerToken-Animation.gif");
 
             Joueur j1 = new Joueur("Player 1"); j1.setJeton(jetonTest);
             Joueur j2 = new Joueur("Player 2"); j2.setJeton(jetonTest);

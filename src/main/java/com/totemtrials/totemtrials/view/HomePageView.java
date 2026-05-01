@@ -41,7 +41,7 @@ public class HomePageView {
                 cheminUtilise = chemin;
                 break;
             }
-            System.out.println("[HomePageView] Introuvable : " + chemin);
+            System.out.println("[HomePageView] CANNOT BE FIND : " + chemin);
         }
 
         if (is == null) {
@@ -51,11 +51,11 @@ public class HomePageView {
 
         if (is == null) {
             throw new IllegalStateException(
-                    "[HomePageView] backgroundMenu.png introuvable."
+                    "[HomePageView] backgroundMenu.png CANNOT BE FIND."
             );
         }
 
-        System.out.println("[HomePageView] Background chargé via : " + cheminUtilise);
+        System.out.println("[HomePageView] BACKGROUND PATH : " + cheminUtilise);
         backgroundImage = new Image(is);
 
         ImageView bg = new ImageView(backgroundImage);
@@ -88,7 +88,7 @@ public class HomePageView {
             URL cssUrl = getClass().getResource(cssChemin);
             if (cssUrl != null) {
                 scene.getStylesheets().add(cssUrl.toExternalForm());
-                System.out.println("[HomePageView] CSS chargé via : " + cssChemin);
+                System.out.println("[HomePageView] CSS PATH : " + cssChemin);
                 break;
             }
         }

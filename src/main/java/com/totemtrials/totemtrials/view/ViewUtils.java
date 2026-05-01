@@ -25,7 +25,7 @@ public class ViewUtils {
         InputStream is = ViewUtils.class.getResourceAsStream("/" + imagePath);
 
         if (is == null) {
-            System.err.println("[ViewUtils] Image introuvable : " + imagePath);
+            System.err.println("[ViewUtils] CANNOT FIND THE IMAGE : " + imagePath);
             return iv;
         }
 

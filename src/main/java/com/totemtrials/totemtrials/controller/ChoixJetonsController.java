@@ -25,7 +25,7 @@ public class ChoixJetonsController {
                 goInfoView(homeView, model, view)
         );
 
-        view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
+        view.getLabelInstruction().setText("It's " + model.getJoueurs()[0].getNom() + "'s turn to choose" );
 
         Map<Jeton, ImageView> jetonViews = view.getJetonViews();
 
@@ -43,7 +43,7 @@ public class ChoixJetonsController {
         if (currentPlayerIndex >= joueurs.length) return;
 
         joueurs[currentPlayerIndex].setJeton(jeton);
-        System.out.printf("[ChoixJetons] %s -> %s%n",
+        System.out.printf("[TOKEN] %s -> %s%n",
                 joueurs[currentPlayerIndex].getNom(), jeton.getNom());
 
         view.cacherJeton(jeton);
@@ -51,7 +51,7 @@ public class ChoixJetonsController {
         currentPlayerIndex++;
 
         if (currentPlayerIndex < joueurs.length) {
-            view.getLabelInstruction().setText("C'est au tour de : " + joueurs[currentPlayerIndex].getNom());
+            view.getLabelInstruction().setText("It's " + joueurs[currentPlayerIndex].getNom() +"'s turn to choose");
         } else {
             view.getLabelInstruction().setText("All the players have made their choice!");
         }
@@ -69,10 +69,10 @@ public class ChoixJetonsController {
 
                 // 3. On choisit la bonne image en fonction de ce même nom
                 chemins[i] = switch (nomDuJetonChoisi.toLowerCase()) {
-                    case "tiger"    -> "/images/tokens/jetonTigre.png";
-                    case "snake"  -> "/images/tokens/jetonSerpent.png";
-                    case "eagle"    -> "/images/tokens/jetonAigle.png";
-                    default         -> "/images/tokens/jetonElephant.png";
+                    case "tiger"    -> "/images/tokens/TigerToken.png";
+                    case "snake"  -> "/images/tokens/SnakeToken.png";
+                    case "eagle"    -> "/images/tokens/EagleToken.png";
+                    default         -> "/images/tokens/ElephantToken.png";
                 };
             }
 
@@ -106,7 +106,8 @@ public class ChoixJetonsController {
         );
 
         new InfoPassifController(iView, cView);
-        SceneManager.show(iView.getScene(), "Infos Passif");
+        SceneManager.show(iView.getScene(), "Passives information" +
+                "s");
 
     }
 }

@@ -43,13 +43,11 @@
 
                     <!-- Round button: image background + number label -->
                     <StackPane alignment="CENTER" prefHeight="64" prefWidth="280">
-                        <ImageView fitWidth="270" preserveRatio="true" StackPane.alignment="CENTER" >
+                        <ImageView fitWidth="270" preserveRatio="true" StackPane.alignment="CENTER" translateX="-60">
                             <Image url="@/images/buttons/bouton-round.png"/>
                         </ImageView>
-                        <!-- translateX pousse le chiffre dans la zone vide à droite du mot ROUND -->
-                        <!-- viewOrder négatif = rendu au premier plan (plus petit = plus devant) -->
-                        <Label fx:id="labelRound" text="1" translateX="95" viewOrder="-1.0"
-                               style="-fx-font-family: Impact; -fx-font-size: 26; -fx-text-fill: #ffe97a; -fx-effect: dropshadow(gaussian, black, 4, 1, 0, 0);"/>
+                        <Label fx:id="labelRound" text="1" translateX="95" translateY="-5" viewOrder="-1.0"
+                               style="-fx-font-family: Impact; -fx-font-size: 50; -fx-text-fill: #ffe97a; -fx-effect: dropshadow(gaussian, black, 4, 1, 0, 0);"/>
                     </StackPane>
                 </HBox>
             </top>

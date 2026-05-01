@@ -36,7 +36,7 @@ public class TotemTrialsApp extends Application {
             }
         }
 
-        SceneManager.show(homeView.getScene(), "Menu principal");
+        SceneManager.show(homeView.getScene(), "MAIN MENU");
         stage.show();
     }
 }

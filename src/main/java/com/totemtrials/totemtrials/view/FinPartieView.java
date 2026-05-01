@@ -377,7 +377,7 @@ public class FinPartieView {
         InputStream is = FinPartieView.class.getResourceAsStream("/" + relativePath);
 
         if (is == null) {
-            System.err.println("[FinPartieView] Image introuvable : " + relativePath);
+            System.err.println("[FinPartieView] CANNOT FIND THE IMAGE : " + relativePath);
             return fallback;
         }
 

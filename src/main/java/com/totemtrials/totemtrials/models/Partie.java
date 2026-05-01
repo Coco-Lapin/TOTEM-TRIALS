@@ -6,13 +6,13 @@ public class Partie {
 
     private final Jeton[] jetonsDisponibles = {
             new Jeton("tiger",    "Move forward one extra space in case of a win in a versus",
-                    "images/tokens/jetonTigre.png",    "images/tokens/jetonTigre_anim.gif"),
+                    "images/tokens/TigerToken.png", "images/tokens/TigerToken-Animation.gif"),
             new Jeton("eagle",    "Move forward one extra space in case of a correct answer",
-                    "images/tokens/jetonAigle.png",    "images/tokens/jetonAigle_anim.gif"),
+                    "images/tokens/EagleToken.png", "images/tokens/EagleToken-Animation.gif"),
             new Jeton("snake",  "Move back one space less in case of a defeat in a versus",
-                    "images/tokens/jetonSerpent.png",  "images/tokens/jetonSerpent_anim.gif"),
+                    "images/tokens/SnakeToken.png", "images/tokens/SnakeToken-Animation.gif"),
             new Jeton("elephant", "Move back one space less for a wrong answer",
-                    "images/tokens/jetonElephant.png", "images/tokens/jetonElephant_anim.gif"),
+                    "images/tokens/ElephantToken.png", "images/tokens/ElephantToken-Animation.gif"),
     };
 
     public void initJoueurs(int count) {
