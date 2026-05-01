@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.LinkedHashMap;
@@ -18,23 +17,39 @@ import java.util.Map;
 public class ChoixJetonsView {
 
     private final Button infoPassiveButton;
+<<<<<<< HEAD
     private final StackPane backButton;
+=======
+    private final Button backButton;
+>>>>>>> feat/menus
     private final Scene scene;
     private final Label labelInstruction;
     private final Map<Jeton, ImageView> jetonViews = new LinkedHashMap<>();
     private final Map<Jeton, VBox> jetonGroupes = new LinkedHashMap<>();
 
     public ChoixJetonsView(Stage stage, Image background, Jeton[] jetons) {
+<<<<<<< HEAD
         ImageView icon = ViewUtils.createCroppedImageView(stage, "images/buttons/bouton-abilities.png", 0.20);
+=======
+
+>>>>>>> feat/menus
         ImageView bg = new ImageView(background);
         bg.fitWidthProperty().bind(stage.widthProperty());
         bg.fitHeightProperty().bind(stage.heightProperty());
         bg.setPreserveRatio(false);
 
+<<<<<<< HEAD
         infoPassiveButton = new Button("");
         infoPassiveButton.setGraphic(icon);
 
         backButton = ViewUtils.createBackButton(stage, 0.15);
+=======
+        infoPassiveButton = new Button("PASSIVE INFORMATION");
+        infoPassiveButton.getStyleClass().add("back-button");
+
+        backButton = new Button("BACK");
+        backButton.getStyleClass().add("back-button");
+>>>>>>> feat/menus
 
         labelInstruction = new Label("");
         labelInstruction.setStyle("-fx-font-size: 24px; -fx-text-fill: white;");
@@ -50,11 +65,15 @@ public class ChoixJetonsView {
             Rectangle2D fixeViewport = base.getViewport();
             Image animImage     = anim.getImage();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feat/menus
             base.setOnMouseEntered(_ -> {
                 base.setImage(animImage);
                 base.setViewport(null);
             });
+
             base.setOnMouseExited(_ -> {
                 base.setImage(fixeImage);
                 base.setViewport(fixeViewport);
@@ -71,11 +90,15 @@ public class ChoixJetonsView {
         StackPane.setAlignment(infoPassiveButton, Pos.TOP_RIGHT);
         StackPane.setMargin(infoPassiveButton, new javafx.geometry.Insets(20));
 
+<<<<<<< HEAD
         VBox layout = new VBox(10, labelInstruction, row, backButton, infoPassiveButton);
+=======
+        VBox layout = new VBox(10, labelInstruction, row, backButton);
+>>>>>>> feat/menus
         layout.setAlignment(Pos.CENTER);
         layout.setFillWidth(false);
 
-        StackPane root = new StackPane(bg, layout);
+        StackPane root = new StackPane(bg, layout, infoPassiveButton);
         scene = new Scene(root, 600, 500);
 
         var css = getClass().getResource("/styleSheet/homepage.css");
@@ -90,9 +113,17 @@ public class ChoixJetonsView {
         }
     }
 
+<<<<<<< HEAD
     public Scene getScene() { return scene; }
     public StackPane getBackButton() { return backButton; }
     public Button getInfoPassiveButton() {return infoPassiveButton; }
     public Map<Jeton, ImageView> getJetonViews() { return jetonViews; }
     public Label getLabelInstruction() { return labelInstruction; }
+=======
+    public Scene                 getScene()            { return scene; }
+    public Button                getBackButton()       { return backButton; }
+    public Button getInfoPassiveButton() {return infoPassiveButton; }
+    public Map<Jeton, ImageView> getJetonViews()       { return jetonViews; }
+    public Label                 getLabelInstruction() { return labelInstruction; }
+>>>>>>> feat/menus
 }

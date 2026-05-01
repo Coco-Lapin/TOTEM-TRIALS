@@ -6,6 +6,16 @@ import javafx.scene.Scene;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+<<<<<<< HEAD
+=======
+/**
+
+ * Single navigation point between scenes.
+
+ * Avoids passing scene references between controllers.
+
+ */
+>>>>>>> feat/menus
 public class SceneManager {
 
     private static Stage       stage;

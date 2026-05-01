@@ -13,6 +13,7 @@ public class Jeton {
         this.imagePath     = imagePath;
         this.animationPath = animationPath;
     }
+<<<<<<< HEAD
     public Jeton(String imagePath) {
         // On appelle le constructeur principal avec des valeurs par défaut
         // On essaie d'extraire le nom depuis le chemin de l'image
@@ -27,11 +28,14 @@ public class Jeton {
         if (path.contains("Tigre"))    return "Tigre";
         return "Inconnu";
     }
+=======
+>>>>>>> feat/menus
 
     public String getNom()           { return nom; }
     public String getImagePath()     { return imagePath; }
     public String getAnimationPath() { return animationPath; }
     public String getPassif()       { return passif; }
+<<<<<<< HEAD
 
     @Override
     public boolean equals(Object obj) {
@@ -40,4 +44,6 @@ public class Jeton {
         }
         return false;
     }
+=======
+>>>>>>> feat/menus
 }

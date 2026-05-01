@@ -1,14 +1,19 @@
 package com.totemtrials.totemtrials.controller;
 
+<<<<<<< HEAD
 import com.totemtrials.totemtrials.models.GameConfig;
 import com.totemtrials.totemtrials.models.Jeton;
 import com.totemtrials.totemtrials.models.Joueur;
 import com.totemtrials.totemtrials.models.Partie;
+=======
+import com.totemtrials.totemtrials.models.*;
+>>>>>>> feat/menus
 import com.totemtrials.totemtrials.view.ChoixJetonsView;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.InfoPassifView;
 import javafx.scene.image.ImageView;
+
 import java.util.Map;
 
 public class ChoixJetonsController {
@@ -16,10 +21,17 @@ public class ChoixJetonsController {
     private int currentPlayerIndex = 0;
     private GameConfig gameConfig;
 
+<<<<<<< HEAD
     public ChoixJetonsController(ChoixJetonsView view, Partie model,
                                  ChoixJoueursView joueursView, HomePageView homeView,GameConfig gm) {
             this.gameConfig = gm;
         view.getBackButton().setOnMouseClicked(_ ->
+=======
+    public ChoixJetonsController(ChoixJetonsView view,Partie model,
+                                 ChoixJoueursView joueursView, HomePageView homeView) {
+
+        view.getBackButton().setOnAction(_ ->
+>>>>>>> feat/menus
                 SceneManager.show(joueursView.getScene(), "Player choice")
         );
 
@@ -27,7 +39,11 @@ public class ChoixJetonsController {
                 goInfoView(homeView,model,view)
         );
 
+<<<<<<< HEAD
         view.getLabelInstruction().setText("C'est au tour de : " + model.getJoueurs()[0].getNom());
+=======
+        view.getLabelInstruction().setText("It is the turn of : " + model.getJoueurs()[0].getNom());
+>>>>>>> feat/menus
 
         Map<Jeton, ImageView> jetonViews = view.getJetonViews();
 
@@ -53,9 +69,9 @@ public class ChoixJetonsController {
         currentPlayerIndex++;
 
         if (currentPlayerIndex < joueurs.length) {
-            view.getLabelInstruction().setText("C'est au tour de : " + joueurs[currentPlayerIndex].getNom());
+            view.getLabelInstruction().setText("It is the turn of    : " + joueurs[currentPlayerIndex].getNom());
         } else {
-            view.getLabelInstruction().setText("Tous les joueurs ont choisi !");
+            view.getLabelInstruction().setText("All the players have made their choice!");
         }
 
         if (currentPlayerIndex >= joueurs.length) {
@@ -86,6 +102,11 @@ public class ChoixJetonsController {
                 javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                         getClass().getResource("/FXML/Plateau.fxml")
                 );
+
+                //debug
+                java.net.URL url = getClass().getResource("/com/totemtrials/totemtrials/FXML/Plateau.fxml");
+                System.out.println("[DEBUG] Plateau.fxml URL = " + url);
+
                 javafx.scene.layout.AnchorPane root = loader.load();
                 SceneManager.show(new javafx.scene.Scene(root), "Totem Trials");
             } catch (Exception e) {
@@ -106,5 +127,8 @@ public class ChoixJetonsController {
         SceneManager.show(iView.getScene(), "Infos Passif");
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> feat/menus
 }
