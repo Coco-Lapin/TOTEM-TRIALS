@@ -89,7 +89,7 @@ public class GameManager {
             Versus v = new Versus(boardGameController.getZoneCentrale(),this.gameConfig);
             v.setGameManager(this); // On lie le GameManager
             v.setBoardGameController(this.boardGameController);
-            // ... set les controllers ...
+
             v.choosePlayer(); // Prépare les boutons
             this.boardGameController.afficherPopUpQuiz(v.getContenu()); // Affiche la liste des adversaires
             return;
@@ -187,8 +187,14 @@ public class GameManager {
         int distance;
         // 1. Si le joueur a refusé d'utiliser le raccourci (il a cliqué sur "No")
         if (!aJoue) {
-            System.out.println("Le joueur " + joueurActuel + " a refusé le raccourci.");
+
             distance = 1 ;
+            positionsJoueurs[joueurActuel] += distance;
+
+            // Sécurité pour ne pas sortir du plateau
+            if (positionsJoueurs[joueurActuel] >= listeCases.size()) {
+                positionsJoueurs[joueurActuel] = listeCases.size() - 1;
+            }
             MC.deplacerPion(joueurActuel, distance, () -> {
                 if (!verifierFinDePartie()) {
                     passerAuJoueurSuivant();
@@ -201,12 +207,15 @@ public class GameManager {
         if (estVictorieux) {
             statsJoueurs[joueurActuel].ajouterBonneReponse();
             distance = 6; // Victoire : il avance de 6
+
+            System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
+        } else {
+
+            distance = -3; // Défaite : il recule de 3
+            // en cas d'erreur l'elephant recule d'une case en moins
             if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
                 distance++;
             }
-            System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
-        } else {
-            distance = -3; // Défaite : il recule de 3
             System.out.println("Raccourci échoué... Le joueur " + joueurActuel + " recule de 3 cases.");
         }
         // 3. Mise à jour de la position dans le tableau
@@ -245,15 +254,14 @@ public class GameManager {
         }else if(!adversaireOk) {
             statsJoueurs[idOpponent].ajouterMauvaiseReponse();
         }
+        // le tigre avance d'une case en plus dans un versus
         if(playerNames[idChallenger].equalsIgnoreCase("tigre") && challengerOk){
-
             distChallenger++;
         }
-
         if(playerNames[idOpponent].equalsIgnoreCase("tigre") && adversaireOk){
             distChallenger++;
         }
-
+        // le serpent recule d'une cases en moins en cas d'échec d'un Versus
         if(playerNames[idChallenger].equalsIgnoreCase("serpent") && !challengerOk){
             distOpponent++;
         }
