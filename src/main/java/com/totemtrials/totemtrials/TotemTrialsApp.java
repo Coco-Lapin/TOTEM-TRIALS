@@ -2,7 +2,7 @@ package com.totemtrials.totemtrials;
 
 import com.totemtrials.totemtrials.controller.HomePageController;
 import com.totemtrials.totemtrials.controller.SceneManager;
-import com.totemtrials.totemtrials.model.Partie;
+import com.totemtrials.totemtrials.models.Partie;
 import com.totemtrials.totemtrials.view.HomePageView;
 import javafx.application.Application;
 import javafx.scene.media.Media;

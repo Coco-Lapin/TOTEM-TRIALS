@@ -1,12 +1,11 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.StatistiquesJoueur;
-import com.totemtrials.totemtrials.model.StatistiquesPartie;
+import com.totemtrials.totemtrials.models.StatistiquesJoueur;
+import com.totemtrials.totemtrials.models.StatistiquesPartie;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;

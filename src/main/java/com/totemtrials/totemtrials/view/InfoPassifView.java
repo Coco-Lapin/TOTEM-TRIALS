@@ -1,6 +1,6 @@
 package com.totemtrials.totemtrials.view;
 
-import com.totemtrials.totemtrials.model.Jeton;
+import com.totemtrials.totemtrials.models.Jeton;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

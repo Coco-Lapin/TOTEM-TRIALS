@@ -6,8 +6,8 @@
 package com.totemtrials.totemtrials;
 
 import com.totemtrials.totemtrials.controller.FinPartieController;
-import com.totemtrials.totemtrials.model.*;
-import com.totemtrials.totemtrials.model.Joueur;
+import com.totemtrials.totemtrials.models.*;
+import com.totemtrials.totemtrials.models.Joueur;
 import com.totemtrials.totemtrials.view.HomePageView;
 
 public class ExempleIntegration {
