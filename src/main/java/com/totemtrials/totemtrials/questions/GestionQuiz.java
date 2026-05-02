@@ -83,7 +83,7 @@ public class GestionQuiz {
         this.LabelPlayerRound = creerLabel("", 0.038);
         // ImageView comme vrai fond — taille bindée sur zoneCentrale, 100% adaptatif
         ImageView bgView = new ImageView(
-                new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png")))
         );
         bgView.fitWidthProperty().bind(zoneCentrale.widthProperty().multiply(POPUP_W));
         bgView.fitHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
@@ -127,7 +127,8 @@ public class GestionQuiz {
     // Charge le JSON une seule fois au début
     private void chargerQuestionsDuFichier() {
         try {
-            var flux = getClass().getResourceAsStream("/Json/question.json");
+            var flux = getClass().getResourceAsStream("/Json/Question.json");
+            assert flux != null;
             listeComplete = new Gson().fromJson(
                     new InputStreamReader(flux),
                     new TypeToken<List<Question>>(){}.getType()
@@ -173,7 +174,7 @@ public class GestionQuiz {
             int n = i;
 
             Image imgNiveau = new Image(
-                    getClass().getResourceAsStream("/images/questions/level" + i + ".png")
+                    Objects.requireNonNull(getClass().getResourceAsStream("/images/questions/level" + i + ".png"))
             );
 
             // Boutons niveau
