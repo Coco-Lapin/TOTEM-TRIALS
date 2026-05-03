@@ -21,7 +21,7 @@ public class FinPartieController {
 
         view.getBtnStats().setOnMouseClicked(_ -> view.toggleStats(true));
 
-        view.getBtnBack().setOnMouseClicked(_ -> Platform.exit());
+        view.getBtnBack().setOnMouseClicked(_ -> SceneManager.show(SceneManager.getHomeScene(), "Main menu"));
 
         view.getBtnFermerStats().setOnMouseClicked(_ -> view.toggleStats(false));
     }
