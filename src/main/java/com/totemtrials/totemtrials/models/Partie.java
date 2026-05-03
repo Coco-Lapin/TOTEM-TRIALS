@@ -11,7 +11,7 @@ public class Partie {
                     "images/tokens/EagleToken.png", "images/tokens/EagleToken-Animation.gif"),
             new Jeton("snake",  "Move back one space less in case of a defeat in a versus",
                     "images/tokens/SnakeToken.png", "images/tokens/SnakeToken-Animation.gif"),
-            new Jeton("elephant", "Move back one space less for a wrong answer",
+            new Jeton("elephant", "Move forward one extra space in case of a win in a shortcut",
                     "images/tokens/ElephantToken.png", "images/tokens/ElephantToken-Animation.gif"),
     };
 
