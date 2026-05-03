@@ -159,10 +159,24 @@ public class GameManager {
                 System.out.println("WRONG ANSWER ! END OF ROUND FOR PLAYER " + joueurActuel);
                 //-----UPDATE STATS------
                 statsJoueurs[joueurActuel].ajouterMauvaiseReponse();
-                // Si faux, le pion ne bouge pas, on passe juste au suivant
-                if (!verifierFinDePartie()) {
-                    passerAuJoueurSuivant();
+
+                int steps = (q.getNiveauChoisi() <= 2) ? -1 : -2;
+                if (playerNames[joueurActuel].equalsIgnoreCase("elephant")) {
+                    steps++;
                 }
+
+                positionsJoueurs[joueurActuel] += steps;
+                if (positionsJoueurs[joueurActuel] < 0) {
+                    positionsJoueurs[joueurActuel] = 0;
+                }
+
+                System.out.println("WRONG ANSWER ! THE PLAYER " + joueurActuel + " STEPS BACK OF " + Math.abs(steps) + " cases.");
+
+                MC.deplacerPion(joueurActuel, steps, () -> {
+                    if (!verifierFinDePartie()) {
+                        passerAuJoueurSuivant();
+                    }
+                });
             }
         });
 
