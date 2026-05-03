@@ -1,10 +1,12 @@
 package com.totemtrials.totemtrials.plateau;
 
+import com.totemtrials.totemtrials.controller.InfoPassifController;
 import com.totemtrials.totemtrials.controller.OptionsController;
 import com.totemtrials.totemtrials.controller.SceneManager;
 import com.totemtrials.totemtrials.controller.movementController;
 import com.totemtrials.totemtrials.models.*;
 import com.totemtrials.totemtrials.view.HomePageView;
+import com.totemtrials.totemtrials.view.InfoPassifView;
 import com.totemtrials.totemtrials.view.OptionsView;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -258,6 +260,13 @@ public class BoardGameController {
         Scene scenePlateau = ((Node) actionEvent.getSource()).getScene();
         new OptionsController(optView, scenePlateau, "Totem Trials", SceneManager.getPlayer());
         SceneManager.show(optView.getScene(), "Options");
+    }
+
+    public void OpenPassiv(ActionEvent actionEvent){
+        InfoPassifView pasView = new InfoPassifView(SceneManager.getStage(), imageFond.getImage());
+        Scene scenePlateau = ((Node) actionEvent.getSource()).getScene();
+        new InfoPassifController(pasView, scenePlateau);
+        SceneManager.show(pasView.getScene(), "PassiveInfo");
     }
 
     public void setJoueurActuelImage(String tokenPath, String nomJoueur) {

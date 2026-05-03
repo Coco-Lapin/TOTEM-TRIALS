@@ -63,6 +63,57 @@ public class InfoPassifView {
 
     }
 
+    public InfoPassifView(Stage stage, Image background) {
+        
+         Jeton[] jetonsDisponibles = {
+
+                new Jeton("tiger",    "Move forward one extra space in case of a win in a versus",
+                        "images/tokens/TigerToken.png", "images/tokens/TigerToken-Animation.gif"),
+                new Jeton("eagle",    "Move forward one extra space in case of a correct answer",
+                        "images/tokens/EagleToken.png", "images/tokens/EagleToken-Animation.gif"),
+                new Jeton("snake",  "Move back one space less in case of a defeat in a versus",
+                        "images/tokens/SnakeToken.png", "images/tokens/SnakeToken-Animation.gif"),
+                new Jeton("elephant", "Move forward one extra space in case of a win in a shortcut",
+                        "images/tokens/ElephantToken.png", "images/tokens/ElephantToken-Animation.gif"),
+        };
+
+        ImageView bg = new ImageView(background);
+        bg.fitWidthProperty().bind(stage.widthProperty());
+        bg.fitHeightProperty().bind(stage.heightProperty());
+        bg.setPreserveRatio(false);
+
+        backButton = ViewUtils.createBackButton(stage, 0.15);
+        backButton.setAlignment(Pos.BOTTOM_RIGHT);
+
+        //Creating the table
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+
+        for(Jeton j : jetonsDisponibles){
+            HBox hBox = new HBox(20); // Espacement de 20px entre les colonnes
+            hBox.setAlignment(Pos.CENTER);
+
+            ImageView base = ViewUtils.createCroppedImageView(stage, j.getImagePath(), 0.10);
+            Label passif = new Label(j.getPassif());
+            passif.setFont(Font.font("System", FontWeight.BOLD, 18));
+            passif.setTextFill(Color.WHITE);
+
+            hBox.getChildren().addAll(base, passif);
+
+            // Adding the HBox to the VBox
+            vBox.getChildren().add(hBox);
+        }
+
+        vBox.getChildren().add(backButton);
+        StackPane root = new StackPane(bg,vBox);
+
+        scene = new Scene(root, 600, 500);
+
+        var css = getClass().getResource("/com/totemtrials/totemtrials/styles/homepage.css");
+        if (css != null) scene.getStylesheets().add(css.toExternalForm());
+
+    }
+
     public Scene     getScene()      { return scene; }
     public StackPane getBackButton() { return backButton; }
 }
