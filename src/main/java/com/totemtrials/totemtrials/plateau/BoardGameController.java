@@ -70,7 +70,7 @@ public class BoardGameController {
         if (id.startsWith("RDiv"))    return "entertainment";
         if (id.startsWith("RTour"))   return "Tourism";
         if (id.startsWith("RInfo"))   return "Computing";
-        if (id.startsWith("RMyst"))   return "Mystery (Jumanji)";
+        if (id.startsWith("RMyst"))   return "Mystery";
         if (id.startsWith("RVersus")) return "VERSUS";
         if (id.startsWith("RHop"))    return "HOP";
         if (id.equals("RStart"))      return "DEPART";
@@ -140,7 +140,7 @@ public class BoardGameController {
             applyPattern(new Rectangle[]{RDiv1,RDiv2,RDiv3,RDiv4,RDiv5,RDiv6,RDiv7,RDiv8},
                     IMG_TILES + "Divert.png");
             applyPattern(new Rectangle[]{RMyst1,RMyst2,RMyst3,RMyst4,RMyst5,RMyst6,RMyst7,RMyst8},
-                    IMG_TILES + "Mistery.png");
+                    IMG_TILES + "Mystery.png");
             applyPattern(new Rectangle[]{RInfo1,RInfo2,RInfo3,RInfo4,RInfo5,RInfo6,RInfo7,RInfo8},
                     IMG_TILES + "Computing.png");   // FIX: Informatic.png → computing.png
             applyPattern(new Rectangle[]{RVersus1,RVersus2,RVersus3,RVersus4},
@@ -160,7 +160,7 @@ public class BoardGameController {
             int k = 1;
             for (Case c : listeCases) {
                 System.out.println("Case n°" + k++ + " " + c.getId()
-                        + " centre: " + c.getCenterX() + ", " + c.getCenterY());
+                        + " center: " + c.getCenterX() + ", " + c.getCenterY());
             }
         });
 // 1. Récupération des données du menu (GameConfig)
@@ -200,7 +200,7 @@ public class BoardGameController {
     private Image load(String path) {
         var url = getClass().getResource(path);
         if (url == null) {
-            System.err.println("[BoardGameController] Image introuvable : " + path);
+            System.err.println("[BoardGameController] Image CANNOT BE FOUND : " + path);
             return null;
         }
         return new Image(url.toExternalForm());
@@ -250,7 +250,7 @@ public class BoardGameController {
 
     public void StopGame(ActionEvent actionEvent) {
         // Retour au menu principal au lieu de fermer la fenêtre
-        SceneManager.show(SceneManager.getHomeScene(), "Menu principal");
+        SceneManager.show(SceneManager.getHomeScene(), "Main menu");
     }
 
     public void OpenSettings(ActionEvent actionEvent) {

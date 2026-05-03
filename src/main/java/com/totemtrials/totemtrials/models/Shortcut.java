@@ -167,7 +167,7 @@ public class Shortcut {
             case 1 -> tileTheme = "entertainment";
             case 2 -> tileTheme = "Tourism";
             case 3 -> tileTheme = "Computing";
-            case 4 -> tileTheme = "Mystery (Jumanji)";
+            case 4 -> tileTheme = "Mystery";
         }
 
         GestionQuiz quiz = new GestionQuiz(tileTheme, 4, boardGameController.getZoneCentrale(), "", null);

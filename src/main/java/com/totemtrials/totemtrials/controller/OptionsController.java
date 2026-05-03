@@ -10,7 +10,7 @@ public class OptionsController {
     // ── Menu principal ──────────────────────────────────────────────────────
     public OptionsController(OptionsView view, HomePageView homeView) {
         view.getBackButton().setOnMouseClicked(_ ->
-                SceneManager.show(homeView.getScene(), "Menu principal")
+                SceneManager.show(homeView.getScene(), "Main menu")
         );
     }
 
