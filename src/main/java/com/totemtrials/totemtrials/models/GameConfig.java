@@ -2,7 +2,7 @@ package com.totemtrials.totemtrials.models;
 
 public class GameConfig {
     private static final GameConfig INSTANCE = new GameConfig();
-    private String[] nomsJoueurs = {"Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4"}; // Valeurs par défaut
+    private String[] nomsJoueurs = {"Player 1", "Player 2", "Player 3", "Player 4"}; // Valeurs par défaut
 
 
     public String[] getNomsJoueurs() { return nomsJoueurs; }

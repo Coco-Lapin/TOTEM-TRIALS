@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Versus {
@@ -102,7 +103,7 @@ public class Versus {
             }
             if (contenu.getChildren().size() == 1) {
                 ImageView bgView = new ImageView(
-                        new Image(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png"))
+                        new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/questions/backgroundQuestions.png")))
                 );
                 bgView.fitWidthProperty().bind(zoneCentrale.widthProperty().multiply(POPUP_W));
                 bgView.fitHeightProperty().bind(zoneCentrale.heightProperty().multiply(POPUP_H));
@@ -138,7 +139,7 @@ public class Versus {
             case 1 -> tileTheme = "entertainment";
             case 2 -> tileTheme = "Tourism";
             case 3 -> tileTheme = "Computing";
-            case 4 -> tileTheme = "Mystery (Jumanji)";
+            case 4 -> tileTheme = "Mystery";
         }
         String tokenPath = GameConfig.getInstance().getJetonsChoisis()[playerId];
         GestionQuiz quiz = new GestionQuiz(tileTheme, 4, boardGameController.getZoneCentrale(), playerName, tokenPath);

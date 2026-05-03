@@ -109,7 +109,7 @@ public class GameManager {
             return;
         }
         if(tileTheme.equals("BONUS")) {
-            tileTheme="Mystery (Jumanji)";
+            tileTheme="Mystery";
         }
         //-----------------------
         // --- START ENDGAME-----
