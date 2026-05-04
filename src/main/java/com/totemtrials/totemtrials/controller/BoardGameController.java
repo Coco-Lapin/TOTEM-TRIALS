@@ -1,10 +1,8 @@
-package com.totemtrials.totemtrials.plateau;
+package com.totemtrials.totemtrials.controller;
 
-import com.totemtrials.totemtrials.controller.InfoPassifController;
-import com.totemtrials.totemtrials.controller.OptionsController;
-import com.totemtrials.totemtrials.controller.SceneManager;
-import com.totemtrials.totemtrials.controller.movementController;
 import com.totemtrials.totemtrials.models.*;
+import com.totemtrials.totemtrials.models.Case;
+import com.totemtrials.totemtrials.view.RulesPopup;
 import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.InfoPassifView;
 import com.totemtrials.totemtrials.view.OptionsView;
@@ -27,12 +25,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.totemtrials.totemtrials.questions.GestionQuiz;
 
 public class BoardGameController {
 
@@ -60,6 +55,7 @@ public class BoardGameController {
     private final List<Case> listeCases = new ArrayList<>();
     private movementController MC;
     private StackPane quizBackdrop;
+    private GameManager gameManager;
 
     private static final double LARGEUR_REELLE = 6144.0;
     private static final double HAUTEUR_REELLE = 3584.0;
@@ -179,7 +175,8 @@ public class BoardGameController {
         }
 
 // 3. Initialisation du GameManager avec le tableau de stats
-        GameManager gm = new GameManager(this, this.MC, this.listeCases, tableauStats);
+        gameManager = new GameManager(this, this.MC, this.listeCases, tableauStats);
+        GameManager gm = gameManager;
 
 // 4. Préparation des objets pour la Fin de Partie
         StatistiquesPartie lesStats = new StatistiquesPartie(tableauStats, 0);
@@ -260,6 +257,17 @@ public class BoardGameController {
         Scene scenePlateau = ((Node) actionEvent.getSource()).getScene();
         new OptionsController(optView, scenePlateau, "Totem Trials", SceneManager.getPlayer());
         SceneManager.show(optView.getScene(), "Options");
+    }
+
+    public void OpenRules(ActionEvent actionEvent) {
+        StackPane[] holder = { null };
+        RulesPopup popup = new RulesPopup(zoneCentrale, () -> fermerPopUpQuiz(holder[0]));
+        holder[0] = popup.getVue();
+        afficherPopUpQuiz(holder[0]);
+    }
+
+    public void EndGame(ActionEvent actionEvent) {
+        if (gameManager != null) gameManager.forceEndGame();
     }
 
     public void OpenPassiv(ActionEvent actionEvent){

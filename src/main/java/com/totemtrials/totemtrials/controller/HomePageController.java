@@ -4,9 +4,11 @@ import com.totemtrials.totemtrials.models.*;
 import com.totemtrials.totemtrials.view.ChoixJoueursView;
 import com.totemtrials.totemtrials.view.HomePageView;
 import com.totemtrials.totemtrials.view.OptionsView;
+import com.totemtrials.totemtrials.view.RulesPopup;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public class HomePageController {
 
@@ -20,7 +22,7 @@ public class HomePageController {
     }
 
     private void bindEvents() {
-        for (ImageView iv : new ImageView[]{view.getPlayButton(), view.getOptionButton(), view.getQuitButton()}) {
+        for (ImageView iv : new ImageView[]{view.getPlayButton(), view.getOptionButton(), view.getQuitButton(), view.getRulesButton()}) {
             iv.setCursor(Cursor.HAND);
             iv.setOnMouseEntered(_ -> iv.setOpacity(0.8));
             iv.setOnMouseExited(_  -> iv.setOpacity(1.0));
@@ -41,20 +43,27 @@ public class HomePageController {
             SceneManager.show(optView.getScene(), "Settings");
         });
 
-        view.getTestFinButton().setOnMouseClicked(_ -> {
-            Jeton jetonTest = new Jeton("tiger", "passive test",
-                    "images/tokkens/TigerToken.png",
-                    "images/tokkens/TigerToken-Animation.gif");
+        view.getRulesButton().setOnMouseClicked(_ -> showRules());
+    }
 
-            Joueur j1 = new Joueur("Player 1"); j1.setJeton(jetonTest);
-            Joueur j2 = new Joueur("Player 2"); j2.setJeton(jetonTest);
+    private void showRules() {
+        StackPane root = view.getRootPane();
 
-            StatistiquesJoueur[] stats = new StatistiquesJoueur[2];
-            stats[0] = new StatistiquesJoueur(j1); stats[0].setPosition(1); stats[0].incrementerTour();
-            stats[1] = new StatistiquesJoueur(j2); stats[1].setPosition(2); stats[1].incrementerTour();
+        StackPane backdrop = new StackPane();
+        backdrop.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
+        backdrop.prefWidthProperty().bind(root.widthProperty());
+        backdrop.prefHeightProperty().bind(root.heightProperty());
+        backdrop.maxWidthProperty().bind(root.widthProperty());
+        backdrop.maxHeightProperty().bind(root.heightProperty());
 
-            StatistiquesPartie statsPartie = new StatistiquesPartie(stats, 300);
-            FinPartieController.lancerFinPartie(statsPartie, model, view);
+        StackPane[] holder = { null };
+        RulesPopup popup = new RulesPopup(root, () -> {
+            root.getChildren().remove(holder[0]);
+            root.getChildren().remove(backdrop);
         });
+        holder[0] = popup.getVue();
+
+        root.getChildren().add(backdrop);
+        root.getChildren().add(holder[0]);
     }
 }

@@ -2,7 +2,6 @@ package com.totemtrials.totemtrials.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -17,9 +16,10 @@ public class HomePageView {
     private final ImageView playButton;
     private final ImageView optionButton;
     private final ImageView quitButton;
-    private final Button testFinButton;
+    private final ImageView rulesButton;
     private final Scene scene;
     private final Image backgroundImage;
+    private StackPane rootPane;
 
     public HomePageView(Stage stage) {
 
@@ -64,19 +64,17 @@ public class HomePageView {
         bg.setPreserveRatio(false);
 
         // ── Boutons et titre ──
-        ImageView titre = ViewUtils.createCroppedImageView(stage, "images/Titre-sora.png",          0.45);
+        ImageView titre = ViewUtils.createCroppedImageView(stage, "images/Titre-sora.png",           0.45);
         playButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Start-sora.png",   0.45);
         optionButton    = ViewUtils.createCroppedImageView(stage, "images/buttons/Options-sora.png", 0.38);
         quitButton      = ViewUtils.createCroppedImageView(stage, "images/buttons/Exit-sora.png",    0.28);
+        rulesButton     = ViewUtils.createCroppedImageView(stage, "images/buttons/bouton-rules.png", 0.15);
 
-        testFinButton = new Button("TEST END GAME");
-        testFinButton.getStyleClass().add("back-button");
-
-        VBox layout = new VBox(10, titre, playButton, optionButton, quitButton, testFinButton);
+        VBox layout = new VBox(10, titre, playButton, optionButton, quitButton, rulesButton);
         layout.setAlignment(Pos.CENTER);
 
-        StackPane root = new StackPane(bg, layout);
-        scene = new Scene(root, 600, 500);
+        rootPane = new StackPane(bg, layout);
+        scene = new Scene(rootPane, 600, 500);
 
         String[] cssCandidats = {
                 "/styles/homepage.css",
@@ -99,5 +97,6 @@ public class HomePageView {
     public ImageView getPlayButton()      { return playButton; }
     public ImageView getOptionButton()    { return optionButton; }
     public ImageView getQuitButton()      { return quitButton; }
-    public Button    getTestFinButton()   { return testFinButton; }
+    public ImageView getRulesButton()     { return rulesButton; }
+    public StackPane getRootPane()        { return rootPane; }
 }

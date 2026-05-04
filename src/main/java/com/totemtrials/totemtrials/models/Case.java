@@ -1,4 +1,4 @@
-package com.totemtrials.totemtrials.plateau;
+package com.totemtrials.totemtrials.models;
 
 import javafx.scene.shape.Rectangle;
 

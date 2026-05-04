@@ -19,7 +19,7 @@
 <AnchorPane prefHeight="700.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.totemtrials.totemtrials.plateau.BoardGameController">
+            fx:controller="com.totemtrials.totemtrials.controller.BoardGameController">
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -33,10 +33,15 @@
                       BorderPane.alignment="CENTER">
                     <padding><Insets left="12" right="12" top="6" bottom="6"/></padding>
 
-                    <!-- Title image (horizontal version) -->
-                    <ImageView fitWidth="420" preserveRatio="true">
-                        <Image url="@/images/TitreLong.png"/>
-                    </ImageView>
+                    <!-- Title image — hidden EndGame trigger -->
+                    <Button onAction="#EndGame"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-cursor: hand;">
+                        <graphic>
+                            <ImageView fitWidth="420" preserveRatio="true">
+                                <Image url="@/images/TitreLong.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
 
                     <!-- Push round button to the right -->
                     <Region HBox.hgrow="ALWAYS"/>
@@ -92,6 +97,17 @@
                         <!-- ── Separator ───────────────────────── -->
                         <Region prefHeight="2"
                                 style="-fx-background-color: linear-gradient(to right, transparent, #5c3a00, transparent);"/>
+
+                        <!-- ── Rules button ───────────────────── -->
+                        <Button fx:id="btnRules" mnemonicParsing="false" onAction="#OpenRules"
+                                maxWidth="Infinity"
+                                style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-cursor: hand;">
+                            <graphic>
+                                <ImageView fitWidth="190" preserveRatio="true">
+                                    <Image url="@/images/buttons/bouton-rules.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
 
                         <!-- ── Options button ─────────────────── -->
                         <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#OpenSettings"

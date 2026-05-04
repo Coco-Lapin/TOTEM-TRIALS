@@ -1,6 +1,6 @@
 package com.totemtrials.totemtrials.models;
 
-import com.totemtrials.totemtrials.plateau.BoardGameController;
+import com.totemtrials.totemtrials.controller.BoardGameController;
 import com.totemtrials.totemtrials.questions.GestionQuiz;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;

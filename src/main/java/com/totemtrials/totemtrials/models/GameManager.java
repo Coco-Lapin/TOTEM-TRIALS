@@ -2,8 +2,7 @@ package com.totemtrials.totemtrials.models;
 
 import com.totemtrials.totemtrials.controller.FinPartieController;
 import com.totemtrials.totemtrials.controller.movementController;
-import com.totemtrials.totemtrials.plateau.BoardGameController;
-import com.totemtrials.totemtrials.plateau.Case;
+import com.totemtrials.totemtrials.controller.BoardGameController;
 import com.totemtrials.totemtrials.questions.GestionQuiz;
 import com.totemtrials.totemtrials.view.FinPartieView;
 import com.totemtrials.totemtrials.view.HomePageView;
@@ -231,10 +230,6 @@ public class GameManager {
         } else {
 
             distance = -3; // Défaite : il recule de 3
-            // en cas d'erreur l'elephant recule d'une case en moins
-            if(playerNames[joueurActuel].equalsIgnoreCase("elephant")){
-                distance++;
-            }
             System.out.println("Raccourci échoué... Le joueur " + joueurActuel + " recule de 3 cases.");
         }
         // 3. Mise à jour de la position dans le tableau
@@ -347,6 +342,17 @@ public class GameManager {
         }
         return false;
     }
+    public void forceEndGame() {
+        if (gameFinished) return;
+        gameFinished = true;
+        long endTime = System.currentTimeMillis();
+        long dureeEnSecondes = (endTime - startTime) / 1000;
+        if (this.statistiquesPartie != null) {
+            this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
+        }
+        FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
+    }
+
     public void setLabelRound(){
         this.ActualRound++;
         boardGameController.labelRound.setText(""+ActualRound);
