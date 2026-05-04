@@ -10,6 +10,7 @@ import javafx.animation.PauseTransition;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GameManager {
@@ -134,8 +135,8 @@ public class GameManager {
                 statsJoueurs[joueurActuel].ajouterBonneReponse();
 
                 int steps = q.getNiveauChoisi();
-                if(playerNames[joueurActuel].equalsIgnoreCase("eagle")){
-                    steps +=1 ;
+                if (getJetonNom(joueurActuel).equalsIgnoreCase("eagle")) {
+                    steps += 1;
                 }
 
                 System.out.println("GOOD ANSWER ! THE PLAYER " + joueurActuel + " STEPPED FORWARD OF " + steps + " cases bonus.");
@@ -160,7 +161,7 @@ public class GameManager {
                 statsJoueurs[joueurActuel].ajouterMauvaiseReponse();
 
                 int steps = (q.getNiveauChoisi() <= 2) ? -1 : -2;
-                if (playerNames[joueurActuel].equalsIgnoreCase("elephant")) {
+                if (getJetonNom(joueurActuel).equalsIgnoreCase("elephant")) {
                     steps++;
                 }
 
@@ -224,12 +225,11 @@ public class GameManager {
 
         if (estVictorieux) {
             statsJoueurs[joueurActuel].ajouterBonneReponse();
-            distance = 6; // Victoire : il avance de 6
-
+            distance = 6;
             System.out.println("Raccourci réussi ! Le joueur " + joueurActuel + " avance de " + distance + " cases.");
         } else {
-
-            distance = -3; // Défaite : il recule de 3
+            statsJoueurs[joueurActuel].ajouterMauvaiseReponse();
+            distance = -3;
             System.out.println("Raccourci échoué... Le joueur " + joueurActuel + " recule de 3 cases.");
         }
         // 3. Mise à jour de la position dans le tableau
@@ -253,6 +253,11 @@ public class GameManager {
         return joueurActuel;
     }
 
+    private String getJetonNom(int idx) {
+        Jeton j = statsJoueurs[idx].getJoueur().getJeton();
+        return j != null ? j.getNom() : "";
+    }
+
     public void EndingVersus(int idChallenger, int idOpponent, boolean challengerOk, boolean adversaireOk) {
         System.out.println("Versus result");
         int distChallenger = challengerOk ? 4 : -4;
@@ -268,19 +273,16 @@ public class GameManager {
         }else if(!adversaireOk) {
             statsJoueurs[idOpponent].ajouterMauvaiseReponse();
         }
-        if(playerNames[idChallenger].equalsIgnoreCase("tiger") && challengerOk){
+        if (getJetonNom(idChallenger).equalsIgnoreCase("tiger") && challengerOk) {
             distChallenger++;
         }
-
-        if(playerNames[idOpponent].equalsIgnoreCase("tiger") && adversaireOk){
+        if (getJetonNom(idOpponent).equalsIgnoreCase("tiger") && adversaireOk) {
             distOpponent++;
         }
-
-        if(playerNames[idChallenger].equalsIgnoreCase("snake") && !challengerOk){
+        if (getJetonNom(idChallenger).equalsIgnoreCase("snake") && !challengerOk) {
             distChallenger++;
         }
-
-        if(playerNames[idOpponent].equalsIgnoreCase("snake") && !adversaireOk){
+        if (getJetonNom(idOpponent).equalsIgnoreCase("snake") && !adversaireOk) {
             distOpponent++;
         }
 
@@ -336,7 +338,14 @@ public class GameManager {
                 this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
             }
 
-            // On affiche l'écran de fin
+            // Assign final rankings: sort by board position descending
+            Integer[] indices = new Integer[statsJoueurs.length];
+            for (int i = 0; i < indices.length; i++) indices[i] = i;
+            Arrays.sort(indices, (a, b) -> positionsJoueurs[b] - positionsJoueurs[a]);
+            for (int rank = 0; rank < indices.length; rank++) {
+                statsJoueurs[indices[rank]].setPosition(rank + 1);
+            }
+
             FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
             return true;
         }
@@ -349,6 +358,12 @@ public class GameManager {
         long dureeEnSecondes = (endTime - startTime) / 1000;
         if (this.statistiquesPartie != null) {
             this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
+        }
+        Integer[] indices = new Integer[statsJoueurs.length];
+        for (int i = 0; i < indices.length; i++) indices[i] = i;
+        Arrays.sort(indices, (a, b) -> positionsJoueurs[b] - positionsJoueurs[a]);
+        for (int rank = 0; rank < indices.length; rank++) {
+            statsJoueurs[indices[rank]].setPosition(rank + 1);
         }
         FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
     }

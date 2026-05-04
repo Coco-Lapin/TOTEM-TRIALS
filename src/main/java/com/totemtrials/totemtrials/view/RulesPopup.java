@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -35,7 +34,7 @@ public class RulesPopup {
         // ── Titre ────────────────────────────────────────────────────
         Label title = new Label("TOTEM TRIALS — RULES");
         title.setFont(Font.font("Impact", FontWeight.BOLD, 20));
-        title.setTextFill(Color.web("#3d1c00"));
+        title.setStyle("-fx-text-fill: #FFE97A;");
         VBox.setMargin(title, new Insets(0, 0, 8, 0));
 
         // ── Colonne gauche ───────────────────────────────────────────
@@ -111,7 +110,7 @@ public class RulesPopup {
     private VBox section(String headerText, Label... rows) {
         Label h = new Label(headerText);
         h.setFont(Font.font("Impact", FontWeight.BOLD, 12));
-        h.setTextFill(Color.web("#5a2d00"));
+        h.setStyle("-fx-text-fill: #c8a070;");
         VBox box = new VBox(2, h);
         box.getChildren().addAll(rows);
         return box;
@@ -120,7 +119,7 @@ public class RulesPopup {
     private Label row(String text) {
         Label l = new Label(text);
         l.setFont(Font.font("System", 11));
-        l.setTextFill(Color.web("#3d1c00"));
+        l.setStyle("-fx-text-fill: #F5DEB3;");
         l.setWrapText(true);
         l.setMaxWidth(COL_W);
         return l;
