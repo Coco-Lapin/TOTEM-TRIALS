@@ -321,6 +321,31 @@ public class GameManager {
 
 
     }
+    private java.util.Comparator<Integer> comparateurClassement() {
+        return (a, b) -> {
+            // 1. Position sur le plateau (décroissant)
+            int cmp = positionsJoueurs[b] - positionsJoueurs[a];
+            if (cmp != 0) return cmp;
+            // 2. Bonnes réponses (décroissant)
+            cmp = statsJoueurs[b].getBonnesReponses() - statsJoueurs[a].getBonnesReponses();
+            if (cmp != 0) return cmp;
+            // 3. Taux de réussite (décroissant)
+            cmp = statsJoueurs[b].getPourcentageReussite() - statsJoueurs[a].getPourcentageReussite();
+            if (cmp != 0) return cmp;
+            // 4. Nombre de tours (croissant — moins de tours = plus efficace)
+            return statsJoueurs[a].getNombreTours() - statsJoueurs[b].getNombreTours();
+        };
+    }
+
+    private void assignerRangs() {
+        Integer[] indices = new Integer[statsJoueurs.length];
+        for (int i = 0; i < indices.length; i++) indices[i] = i;
+        Arrays.sort(indices, comparateurClassement());
+        for (int rank = 0; rank < indices.length; rank++) {
+            statsJoueurs[indices[rank]].setPosition(rank + 1);
+        }
+    }
+
     private boolean verifierFinDePartie() {
         if (gameFinished) return true;
 
@@ -338,19 +363,13 @@ public class GameManager {
                 this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
             }
 
-            // Assign final rankings: sort by board position descending
-            Integer[] indices = new Integer[statsJoueurs.length];
-            for (int i = 0; i < indices.length; i++) indices[i] = i;
-            Arrays.sort(indices, (a, b) -> positionsJoueurs[b] - positionsJoueurs[a]);
-            for (int rank = 0; rank < indices.length; rank++) {
-                statsJoueurs[indices[rank]].setPosition(rank + 1);
-            }
-
+            assignerRangs();
             FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
             return true;
         }
         return false;
     }
+
     public void forceEndGame() {
         if (gameFinished) return;
         gameFinished = true;
@@ -359,12 +378,7 @@ public class GameManager {
         if (this.statistiquesPartie != null) {
             this.statistiquesPartie.setDureeSecondes(dureeEnSecondes);
         }
-        Integer[] indices = new Integer[statsJoueurs.length];
-        for (int i = 0; i < indices.length; i++) indices[i] = i;
-        Arrays.sort(indices, (a, b) -> positionsJoueurs[b] - positionsJoueurs[a]);
-        for (int rank = 0; rank < indices.length; rank++) {
-            statsJoueurs[indices[rank]].setPosition(rank + 1);
-        }
+        assignerRangs();
         FinPartieController.lancerFinPartie(this.statistiquesPartie, this.partie, this.homePageView);
     }
 

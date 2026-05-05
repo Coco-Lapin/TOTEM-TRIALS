@@ -14,10 +14,10 @@ import java.util.Objects;
 
 public class RulesPopup {
 
-    private static final double W = 620;
-    private static final double H = 430;
+    private static final double W = 860;
+    private static final double H = 640;
     // zone parchemin (hors bordures pierre)
-    private static final double PARCH_W = W * 0.60;
+    private static final double PARCH_W = W * 0.65;
     private static final double COL_W   = PARCH_W * 0.46;
 
     private final StackPane vue;
@@ -33,8 +33,8 @@ public class RulesPopup {
 
         // ── Titre ────────────────────────────────────────────────────
         Label title = new Label("TOTEM TRIALS — RULES");
-        title.setFont(Font.font("Impact", FontWeight.BOLD, 20));
-        title.setStyle("-fx-text-fill: #FFE97A;");
+        title.setFont(Font.font("Impact", FontWeight.BOLD, 24));
+        title.setStyle("-fx-text-fill: #3D1C02;");
         VBox.setMargin(title, new Insets(0, 0, 8, 0));
 
         // ── Colonne gauche ───────────────────────────────────────────
@@ -109,8 +109,8 @@ public class RulesPopup {
 
     private VBox section(String headerText, Label... rows) {
         Label h = new Label(headerText);
-        h.setFont(Font.font("Impact", FontWeight.BOLD, 12));
-        h.setStyle("-fx-text-fill: #c8a070;");
+        h.setFont(Font.font("Impact", FontWeight.BOLD, 15));
+        h.setStyle("-fx-text-fill: #6B2E00;");
         VBox box = new VBox(2, h);
         box.getChildren().addAll(rows);
         return box;
@@ -118,8 +118,8 @@ public class RulesPopup {
 
     private Label row(String text) {
         Label l = new Label(text);
-        l.setFont(Font.font("System", 11));
-        l.setStyle("-fx-text-fill: #F5DEB3;");
+        l.setFont(Font.font("System", 13));
+        l.setStyle("-fx-text-fill: #2D1A0A;");
         l.setWrapText(true);
         l.setMaxWidth(COL_W);
         return l;

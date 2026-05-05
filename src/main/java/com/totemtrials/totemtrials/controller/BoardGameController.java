@@ -55,6 +55,7 @@ public class BoardGameController {
     private final List<Case> listeCases = new ArrayList<>();
     private movementController MC;
     private StackPane quizBackdrop;
+    private StackPane rulesPopupNode;
     private GameManager gameManager;
 
     private static final double LARGEUR_REELLE = 6144.0;
@@ -230,6 +231,10 @@ public class BoardGameController {
         }
         StackPane.setAlignment(quizVue, Pos.CENTER);
         zoneCentrale.getChildren().add(quizVue);
+        // Rules popup reste toujours au-dessus du quiz
+        if (rulesPopupNode != null && zoneCentrale.getChildren().contains(rulesPopupNode)) {
+            rulesPopupNode.toFront();
+        }
     }
 
     public void fermerPopUpQuiz(StackPane window) {
@@ -260,10 +265,16 @@ public class BoardGameController {
     }
 
     public void OpenRules(ActionEvent actionEvent) {
-        StackPane[] holder = { null };
-        RulesPopup popup = new RulesPopup(zoneCentrale, () -> fermerPopUpQuiz(holder[0]));
-        holder[0] = popup.getVue();
-        afficherPopUpQuiz(holder[0]);
+        if (rulesPopupNode != null) {
+            rulesPopupNode.toFront();
+            return;
+        }
+        RulesPopup popup = new RulesPopup(zoneCentrale, () -> {
+            zoneCentrale.getChildren().remove(rulesPopupNode);
+            rulesPopupNode = null;
+        });
+        rulesPopupNode = popup.getVue();
+        zoneCentrale.getChildren().add(rulesPopupNode);
     }
 
     public void EndGame(ActionEvent actionEvent) {
