@@ -77,12 +77,6 @@
                             </graphic>
                         </Button>
 
-                        <!-- ── Ability description ─────────────── -->
-                        <VBox style="-fx-background-color: rgba(0,0,0,0.45); -fx-border-color: #5c3a00; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 8;">
-                            <Label fx:id="ItemDescription" text="..." wrapText="true" prefWidth="170"
-                                   style="-fx-font-family: Impact; -fx-font-size: 11; -fx-text-fill: #bbbbbb;"/>
-                        </VBox>
-
                         <!-- ── Current player token ───────────── -->
                         <HBox alignment="CENTER_RIGHT" spacing="8">
                             <Label fx:id="labelJoueurActuel" text=""
