@@ -1,163 +1,170 @@
-# 🌿 Totem Trials — La Conquête de Jumanji
+# Totem Trials — La Conquête de Jumanji
 
 <div align="center">
 
 ![Totem Trials Banner](docs/assets/banner.png)
 
-> **A multiplayer trivia board game built in Java/JavaFX, inspired by the Jumanji universe.**
+> **Multiplayer trivia board game — Java 17 / JavaFX 25, Jumanji universe.**
 
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-17+-1E90FF?style=for-the-badge)](https://openjfx.io/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-25-1E90FF?style=for-the-badge)](https://openjfx.io/)
 [![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
 [![JUnit](https://img.shields.io/badge/JUnit-5-25A162?style=for-the-badge&logo=junit5&logoColor=white)](https://junit.org/junit5/)
-[![Design Pattern](https://img.shields.io/badge/Pattern-STATE-8A2BE2?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Sprint-2%20%2F%203-F4A900?style=for-the-badge)]()
+[![Pattern](https://img.shields.io/badge/Pattern-STATE-8A2BE2?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Completed-00C853?style=for-the-badge)]()
 
 </div>
 
 ---
 
-## 📌 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Gameplay](#-gameplay)
-- [Characters & Passives](#-characters--passives)
-- [Special Tiles](#-special-tiles)
-- [Architecture](#-architecture)
-- [Data Format](#-data-format)
-- [Setup & Run](#️-setup--run)
-- [Project Structure](#-project-structure)
-- [Release Plan](#-release-plan)
-- [Backlog](#-backlog)
-- [Team](#-team)
+- [Overview](#overview)
+- [Gameplay](#gameplay)
+- [Board Layout](#board-layout)
+- [Characters & Passives](#characters--passives)
+- [Special Tiles](#special-tiles)
+- [Architecture](#architecture)
+- [Data Format](#data-format)
+- [Setup & Run](#setup--run)
+- [Project Structure](#project-structure)
+- [Release Plan](#release-plan)
+- [Team](#team)
 
 ---
 
-## 🗺️ Overview
+## Overview
 
-**Totem Trials** is a 2–4 player trivia board game developed as a Java integration project at [HELHa](https://www.helha.be/) (Haute École Louvain en Hainaut, Mons).
+**Totem Trials** is a 2–4 player trivia board game developed as a Java integration project at [HELHa](https://www.helha.be/) (Haute École Louvain en Hainaut, Mons), academic year 2025–2026.
 
-The game blends TTMC-style trivia mechanics with a **pixel-art Jumanji aesthetic**. Players choose a character, each with a unique passive ability, and race across a jungle board toward the center — answering questions, triggering duels, and navigating traps along the way.
+TTMC-style trivia mechanics wrapped in a pixel-art Jumanji aesthetic. Players pick a character with a unique passive, race across a jungle board toward the finish tile, answer questions by difficulty bracket, trigger duels, and use abilities at the right moment.
 
 <div align="center">
 
-![Board Prototype](docs/assets/Prototypeplateau.png)
-
-*Pixel-art board prototype — subject to change*
+![Board](docs/assets/plateau-jeu-javaFX.png)
 
 </div>
 
 ---
 
-## 🎮 Gameplay
+## Gameplay
 
 ### Objective
 
-Be the first player to reach the **center of the board** and answer a final question to claim victory.
+Be the first player to reach the **finish tile** and correctly answer the final question to claim victory.
 
 ### Question Themes
 
-| Theme | Description |
-|-------|-------------|
-| 🎬 Entertainment | Movies, TV series, video games |
-| 💻 Informatics | Programming, computer science concepts |
-| ✈️ Tourism | Geography, landmarks, world travel |
-| 🔍 Mystery – Jumanji | Trivia from the Jumanji universe |
+| Theme | Content |
+|-------|---------|
+| Divertissement | Movies, TV series, video games |
+| Informatique | CS concepts, programming |
+| Tourisme | Geography, landmarks, world travel |
+| Mystère Jumanji | Jumanji universe trivia |
 
-Questions range from difficulty **1** (easy) to **4** (expert).
+Difficulty ranges from **1** (easy) to **4** (expert), declared by the player before seeing the question.
 
 ### Turn Flow
 
 ```
-1. THEME      → Tile color dictates the question category
-2. SELF-EVAL  → Player declares confidence: 1–4 (= difficulty + tiles to advance)
-3. QUESTION   → 4 choices displayed
-4. RESULT     → Correct: advance N tiles | Incorrect: stay or retreat 1 tile
+1. LAND       → tile color determines available themes
+2. SELF-EVAL  → player declares confidence 1–4 (= difficulty + tiles to advance if correct)
+3. QUESTION   → 4 shuffled choices displayed
+4. RESULT     → Correct: advance N tiles | Wrong: stay or retreat
 ```
 
 ---
 
-## 🐾 Characters & Passives
+## Board Layout
 
-Each character has a **unique passive ability**, usable **once per game**.
+Spiral path of **42 tiles** on a 6144×3584 px pixel-art image.
 
-> 📁 **Where to put token images for GitHub:**  
-> Copy your token `.png` files into `docs/assets/tokens/` at the root of the repo.  
-> GitHub renders images using relative paths — as long as the files exist there, the table below will display them correctly.
+| Type | Count | Color |
+|------|-------|-------|
+| Start | 1 | Pink |
+| Divertissement | 8 | Blue |
+| Informatique | 8 | Blue |
+| Mystère | 8 | Blue |
+| Tourisme | 8 | Blue |
+| Versus | 4 | Yellow |
+| HOP (shortcut) | 2 | Green |
+| Bonus | 2 | Green |
+| Finish | 1 | Pink |
 
-<div align="center">
-
-| Token | Character | Passive |
-|-------|-----------|---------|
-| <img src="docs/assets/tokens/jetonElephan.png" width="48"/> | **Elephant** | Skip the current question → receive a new one at the same theme & difficulty |
-| <img src="docs/assets/tokens/jetonSnake.png" width="48"/> | **Snake** | Change the question's theme to any of the other 3 themes |
-| <img src="docs/assets/tokens/jetonAigle.png" width="48"/> | **Eagle** | Places a hidden trap tile on the board; opponents who land on it trigger a group penalty question |
-| <img src="docs/assets/tokens/jetonTigre.png" width="48"/> | **Tiger** | Reduces answer choices from 4 down to 2 |
-
-</div>
-
-> All passives are **single-use** — choose the right moment wisely.
+The board view is a zoomable/scrollable `StackPane > Group > Pane`. Pawns are `ImageView` nodes positioned by absolute coordinates matching each tile's `layoutX`/`layoutY`.
 
 ---
 
-## 🧩 Special Tiles
+## Characters & Passives
+
+Each character has a **single-use passive ability** activated from the in-game sidebar.
+
+| Character | Passive |
+|-----------|---------|
+| **Elephant** | Skip current question → receive a new one at same theme & difficulty |
+| **Snake** | Switch question theme to any of the other 3 |
+| **Eagle** | Place a hidden trap on the board; opponent who lands on it triggers a group penalty question |
+| **Tiger** | Reduce answer choices from 4 to 2 |
+
+---
+
+## Special Tiles
 
 | Tile | Effect |
 |------|--------|
-| ⚔️ **VS — Duel** | Land here to challenge any opponent. Each player picks the other's theme. Loser retreats 3 tiles. Draw = no effect. |
-| 🌿 **Liane — Shortcut** | Faster route to center. Must accept a question (min difficulty 3). Correct → shortcut taken. Wrong → retreat N tiles equal to difficulty attempted. |
-| ⭐ **Bonus Tile** | Freely choose theme + difficulty. No penalty on failure; advance = difficulty on success. |
-| 💀 **Trap Tile** | Draw a malus card or lose next turn. Positions are randomized each game. |
-| 🔴 **Last Tile** | Landing here forces a mandatory retreat before the final question. |
+| **VS — Versus** | Challenge any opponent. Each picks the other's theme. Loser retreats 3 tiles. Draw = no effect. |
+| **HOP — Shortcut** | Accept a question at min difficulty 3. Correct → shortcut. Wrong → retreat N tiles = difficulty chosen. |
+| **Bonus** | Freely pick theme + difficulty. No penalty on failure; advance = difficulty on success. |
+| **Finish** | Must answer a final question to win. Landing alone is not enough. |
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Design Pattern: STATE
 
-The game lifecycle is fully managed through the **State** design pattern. Each state encapsulates its own logic, transitions, and UI rendering.
+The entire game lifecycle runs through the **State** pattern. Each state owns its transitions, UI updates, and business rules.
 
 ```
         ●
         │
         ▼
-┌─────────────────────┐
-│  InitialisationPartie│ ◄──────────────────────────┐
-└─────────┬───────────┘                             │ [RestartPartie]
-          │ [FinChargement]                         │
-          ▼                                         │
-     ┌─────────┐   [JoueurAppuieSurPause]   ┌───────────┐
-     │ EnCours │ ──────────────────────────► │   Pause   │
-     │         │ ◄────────────────────────── │           │
-     └────┬────┘   [JoueurAppuieSurReprendre]└─────┬─────┘
-          │ [JoueurAtteintCentre]                  │
-          ▼                                        │ [JoueurAppuieSurQuitter]
-     ┌──────────┐                                  │
-     │ FinPartie│ ─────────────────────────────────┘
-     └──────────┘
-          │ [JoueurAppuieSurQuitter / RestartPartie]
-          ▼
-          ●
+┌──────────────────────┐
+│ InitialisationPartie │ ◄──────────────────────────┐
+└──────────┬───────────┘                             │ [RestartPartie]
+           │ [FinChargement]                         │
+           ▼                                         │
+      ┌─────────┐   [JoueurAppuieSurPause]   ┌───────────┐
+      │ EnCours │ ──────────────────────────► │   Pause   │
+      │         │ ◄────────────────────────── │           │
+      └────┬────┘   [JoueurAppuieSurReprendre]└─────┬─────┘
+           │ [JoueurAtteintCentre]                  │
+           ▼                                        │ [JoueurAppuieSurQuitter]
+      ┌──────────┐                                  │
+      │ FinPartie│ ─────────────────────────────────┘
+      └──────────┘
+           │ [JoueurAppuieSurQuitter / RestartPartie]
+           ▼
+           ●
 ```
 
-### MVC Overview
+### MVC Package Structure
 
 ```
-src/main/java/
+src/main/java/com/totemtrials/totemtrials/
 ├── model/
-│   ├── Plateau.java                  # Board: grid of Case objects
+│   ├── Plateau.java                  # 42-tile board
 │   ├── Case.java                     # Base tile
 │   │   ├── CaseBonus.java
-│   │   ├── CasePiege.java
+│   │   ├── CasePiege.java            # Trap (Eagle passive target)
 │   │   ├── CaseDepart.java
 │   │   ├── CaseFin.java
 │   │   └── CaseRegle.java
-│   ├── Joueur.java                   # Player: pseudo, position, character
-│   ├── Personnage.java               # Character + passive
-│   ├── Tour.java                     # Single turn logic
+│   ├── Joueur.java                   # Player: pseudo, position, character, passive state
+│   ├── Personnage.java               # Character + passive logic
+│   ├── Tour.java                     # Single turn: theme, difficulty, Q&A, result
 │   ├── Manche.java                   # Round across all players
-│   ├── DeroulementPartie.java        # Game loop (couples State + players)
+│   ├── DeroulementPartie.java        # Game loop (State machine host)
 │   ├── EtatPartie.java               # State interface
 │   │   ├── EtatInitialisationPartie.java
 │   │   ├── EtatEnCours.java
@@ -166,20 +173,46 @@ src/main/java/
 │   ├── Question.java
 │   ├── Reponse.java
 │   ├── Theme.java
-│   └── GestionnaireDeCartes.java     # JSON loader + dispatcher
+│   └── GestionnaireDeCartes.java     # JSON loader + question dispatcher
+├── plateau/
+│   └── BoardGameController.java      # Plateau.fxml controller
+│                                     # Tile logic, pawn rendering,
+│                                     # round counter, abilities sidebar,
+│                                     # settings (sound), back navigation
 ├── view/
 │   └── (JavaFX FXML scenes)
 ├── controller/
-│   └── (JavaFX controllers)
+│   └── (menu, questions, stats, end screen controllers)
 └── exception/
     └── (custom business exceptions)
 ```
 
+### Scene Flow
+
+```
+Main Menu
+├── Player count selection  (2 / 3 / 4 Players)
+├── Character selection
+└── Board  (Plateau.fxml)
+    ├── Top bar: title image + round counter
+    ├── Center: zoomable board (ScrollPane › Group › Pane 6144×3584)
+    │   └── Tile rectangles + pawn ImageViews at absolute positions
+    └── Right sidebar
+        ├── Abilities button + description
+        ├── Rules button
+        ├── Options button (sound slider)
+        └── Back button
+            ├── Question overlay
+            ├── Statistics screen  (BackGroundStatistique)
+            └── End screen / Podium  (fondpodium.jpg)
+                └── 1st / 2nd / 3rd with player tokens + Credits button
+```
+
 ---
 
-## 📦 Data Format
+## Data Format
 
-Questions are loaded from `.json` files, one per theme. The format is a flat array:
+Questions are stored in `.json` files (one per theme) and loaded by `GestionnaireDeCartes`.
 
 ```json
 [
@@ -190,41 +223,32 @@ Questions are loaded from `.json` files, one per theme. The format is a flat arr
         "question": "What is the most visited country in the world?",
         "answer": "France",
         "choices": ["France", "Spain", "USA", "China"]
-    },
-    {
-        "theme": "Tourism",
-        "subject": "Tourism",
-        "difficulty": 4,
-        "question": "Which of these countries has no Roman amphitheater in its territory?",
-        "answer": "Norway",
-        "choices": ["Norway", "Tunisia", "Croatia", "Bulgaria"]
     }
 ]
 ```
 
-**Rules:**
-- `answer` must be one of the values present in `choices`
-- `difficulty` is an integer from `1` to `4`
-- `choices` always contains exactly **4 options**
+**Constraints:**
+- `answer` must be one of the values in `choices`
+- `difficulty` ∈ `{1, 2, 3, 4}`
+- `choices` always has exactly **4 entries**
 - Display order is shuffled at runtime — no hardcoded correct-answer position
 
 ---
 
-## ⚙️ Setup & Run
+## Setup & Run
 
 ### Prerequisites
 
 | Tool | Version |
 |------|---------|
 | JDK | 17+ |
-| JavaFX SDK | 17+ |
+| JavaFX SDK | 25 |
 | Maven | 3.8+ |
-| JUnit | 5 |
 
 ### Clone & Build
 
 ```bash
-git clone https://github.com//totem-trials.git
+git clone https://github.com/<your-org>/totem-trials.git
 cd totem-trials
 mvn clean package
 ```
@@ -237,97 +261,70 @@ java --module-path /path/to/javafx-sdk/lib \
      -jar target/totem-trials.jar
 ```
 
-> Using IntelliJ or Eclipse? Configure the JavaFX SDK as a module dependency and add the `--add-modules` flag to your VM options.
+> IntelliJ / Eclipse: add JavaFX SDK as module dependency, set `--add-modules javafx.controls,javafx.fxml` in VM options.
 
 ### Tests
 
 ```bash
 mvn test
+# Coverage → target/site/jacoco/index.html
 ```
-
-Coverage report generated at `target/site/jacoco/index.html`.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 totem-trials/
 ├── src/
 │   ├── main/
-│   │   ├── java/                  # Application source
+│   │   ├── java/com/totemtrials/totemtrials/
 │   │   └── resources/
-│   │       ├── fxml/              # JavaFX layout files
-│   │       └── css/               # Stylesheets
-│   └── test/
-│       └── java/                  # JUnit 5 tests
+│   │       ├── fxml/
+│   │       │   ├── Plateau.fxml
+│   │       │   └── menu-fin.fxml
+│   │       ├── images/
+│   │       │   ├── plateau-jeu-javaFX.png
+│   │       │   ├── TitreLong.png
+│   │       │   ├── buttons/
+│   │       │   │   ├── bouton-abilities.png
+│   │       │   │   ├── bouton-settings.png
+│   │       │   │   ├── bouton-round.png
+│   │       │   │   └── bouton-back.png
+│   │       │   └── tokens/
+│   │       │       ├── jetonElephan.png
+│   │       │       ├── jetonSnake.png
+│   │       │       ├── jetonAigle.png
+│   │       │       └── jetonTigre.png
+│   │       └── css/
+│   └── test/java/
 ├── data/
 │   └── questions/
-│       ├── entertainment.json
-│       ├── informatics.json
-│       ├── tourism.json
-│       └── mystery.json
-├── docs/
-│   └── assets/
-│       ├── tokens/
-│       │   ├── jetonElephan.png   ← token images go HERE
-│       │   ├── jetonSnake.png
-│       │   ├── jetonAigle.png
-│       │   └── jetonTigre.png
-│       ├── Prototypeplateau.png
-│       └── banner.png             ← optional banner image
+│       ├── divertissement.json
+│       ├── informatique.json
+│       ├── tourisme.json
+│       └── mystere.json
+├── docs/assets/
+│   ├── plateau-jeu-javaFX.png
+│   └── banner.png
 ├── pom.xml
 └── README.md
 ```
 
 ---
 
-## 🗓️ Release Plan
+## Release Plan
 
-| Sprint | Deadline | Goal | Status |
-|--------|----------|------|--------|
-| **Sprint 0** | Done | Questions JSON · Backlog · Class diagram · Board prototype | ✅ Done |
-| **Sprint 1** | 24/02/2026 | MVC skeleton · State pattern · `Card` / `Theme` / `Question` classes | ✅ Done |
-| **Sprint 2** | 30/03/2026 | Playable 1-player prototype: board rendering, movement, Q&A flow | 🔄 In progress |
-| **Sprint Final** | 04/05/2026 | Full multiplayer · Character passives · Special tiles · Victory screen · Test report | ⏳ Planned |
-
-**Total backlog: 76 pts** — Must (42 pts) · Should (28 pts) · Could (6 pts)
+| Sprint | Deadline | Deliverables | Status |
+|--------|----------|-------------|--------|
+| **Sprint 0** | — | Questions JSON · Backlog · Class diagram · Board prototype | ✅ Done |
+| **Sprint 1** | 24/02/2026 | MVC skeleton · State pattern · `Question` / `Theme` / `GestionnaireDeCartes` | ✅ Done |
+| **Sprint 2** | 30/03/2026 | Playable prototype: board rendering, pawn movement, Q&A flow | ✅ Done |
+| **Sprint Final** | 04/05/2026 | Full multiplayer · Character passives · Special tiles · End screen · Podium · Stats · Test report | ✅ Done |
 
 ---
 
-## 📋 Backlog
-
-<details>
-<summary>View full prioritized backlog</summary>
-
-| # | User Story | Role | Priority | Points |
-|---|-----------|------|----------|--------|
-| US-01 | Custom exception handling | ADMIN | Must | 3 |
-| US-02 | Theme-color auto-assignment | ADMIN | Must | 2 |
-| US-03 | Question content creator | USER | Must | 5 |
-| US-04 | 2–4 player selection | USER | Must | 5 |
-| US-05 | Game flow management | ADMIN | Must | 5 |
-| US-06 | Turn management | ADMIN | Must | 3 |
-| US-07 | Difficulty level selection | USER | Must | 2 |
-| US-08 | Pawn movement on board | ADMIN | Must | 5 |
-| US-09 | Rules display | USER | Must | 3 |
-| US-10 | Character display | USER | Must | 2 |
-| US-11 | Character passives | USER | Must | 2 |
-| US-12 | Unit tests | ADMIN | Must | 5 |
-| US-13 | Victory screen + statistics | USER | Should | 5 |
-| US-14 | Special tiles | USER | Should | 5 |
-| US-15 | Options menu | USER | Should | 5 |
-| US-16 | Back navigation | USER | Should | 3 |
-| US-17 | Capacity adjustment | ADMIN | Could | 3 |
-| US-18 | Fluid pawn animation | USER | Should | 5 |
-| US-19 | Show answer after question | USER | Should | 5 |
-| US-20 | External JSON card import | ADMIN | Could | 3 |
-
-</details>
-
----
-
-## 👥 Team
+## Team
 
 | Name |
 |------|
@@ -339,6 +336,21 @@ totem-trials/
 **Academic year:** 2025–2026 &nbsp;·&nbsp; **Class:** 2BI B1  
 **Supervisors:** Laurent Godefroid · Audrey Kindermans · Alice Delzenne  
 **Institution:** [HELHa](https://www.helha.be/) — Haute École Louvain en Hainaut, Mons
+
+---
+
+## Credits & Assets
+
+### Board Tileset
+
+The pixel-art assets used for the game board background are created by **[Cainos](https://cainos.itch.io/)** and were generously provided for free.
+
+| Pack | Link |
+|------|------|
+| Pixel Art Top Down – Village | [cainos.itch.io/pixel-art-top-down-village](https://cainos.itch.io/pixel-art-top-down-village) |
+| Pixel Art Top Down – Basic | [cainos.itch.io/pixel-art-top-down-basic](https://cainos.itch.io/pixel-art-top-down-basic) |
+
+Huge thanks to Cainos for the quality work and for sharing it freely with the community. Go check out and support their work on itch.io.
 
 ---
 
